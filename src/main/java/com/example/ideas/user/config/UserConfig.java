@@ -20,11 +20,11 @@ public class UserConfig {
     }
     @Bean
     CommandLineRunner commandLineRunnerUser(UserRepository repository) {
-        return args -> {
-            User jowita = new User(999L,"Jowita", "jowita@test.com","123", roleRepository.findById(1L).get(), departmentRepository.findById(5L).get());
-            User alex = new User(999L, "Alex", "alex@test.com", "321", roleRepository.findById(4L).get(), departmentRepository.findById(9L).get());
-            User tomek = new User(999L, "Tomek", "tomek@test.com", "555", roleRepository.findById(3L).get(), departmentRepository.findById(3L).get());
-            User piotr = new User(999L, "Piotr", "piotr@test.com", "987", roleRepository.findById(2L).get(), departmentRepository.findById(4L).get());
+        return args -> {   // Don't worry about missing Optional, those are just mockups for later
+            User jowita = new User("Jowita", "jowita@test.com","123", roleRepository.findById(1L).get(), departmentRepository.findById(5L).get());
+            User alex = new User("Alex", "alex@test.com", "321", roleRepository.findById(4L).get(), departmentRepository.findById(9L).get());
+            User tomek = new User("Tomek", "tomek@test.com", "555", roleRepository.findById(3L).get(), departmentRepository.findById(3L).get());
+            User piotr = new User( "Piotr", "piotr@test.com", "987", roleRepository.findById(2L).get(), departmentRepository.findById(4L).get());
             repository.saveAll(List.of(jowita, alex, tomek, piotr));
         };
     }

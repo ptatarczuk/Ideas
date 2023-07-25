@@ -9,13 +9,16 @@ import com.example.ideas.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class UserService {
@@ -32,7 +35,7 @@ public class UserService {
     }
 
     public List<User> getUsers() {
-        return userRepository.findAll(/*Sort.by(Sort.Direction.ASC, "user_name")*/);
+        return userRepository.findAll(Sort.by(Sort.Direction.ASC, "email"));
     }
 
     public Optional<User> getUserById(Long userId) {
@@ -43,26 +46,30 @@ public class UserService {
         return userRepository.findUserByEmail(email);
     }
 
-    public  void addUser(@Valid User user) {
+    public ResponseEntity<String> addUser(@Valid User user) {
         String email = user.getEmail();
         Optional<User> userOptional = userRepository.findUserByEmail(email);
         if (userOptional.isPresent()) {
-            throw new ResponseStatusException(HttpStatus.CONFLICT, "Email is already taken");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email is already taken");
+        }
+        if (!isEmailValid(user.getEmail())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid email format");
         }
         Long roleId = user.getRole().getRoleId();
         Optional<Role> roleOptional = roleRepository.findById(roleId);
         if (roleOptional.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Role with id: " + roleId + " doesn't exist");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Role with id: " + roleId + " doesn't exist");
         }
         Long departmentId = user.getDepartment().getDepartmentId();
         Optional<Department> departmentOptional = departmentRepository.findById(departmentId);
         if (departmentOptional.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Department with id: " + departmentId + " doesn't exist");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Department with id: " + departmentId + " doesn't exist");
         }
         Role role = roleOptional.get();
         Department department = departmentOptional.get();
 
         userRepository.save(new User(user.getName(), email, user.getPassword(), role, department));
+        return ResponseEntity.ok("User added successfully");
     }
 
     public void deleteUser(Long userId) {
@@ -74,36 +81,57 @@ public class UserService {
     }
 
     @Transactional
-    public void updateUserById(Long userId, String name, String email, String password, Long roleId, Long departmentId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new IllegalStateException("User with id: " + userId + " does not exist"));
-        validation(email, name, password, roleId, departmentId, user);
+    public ResponseEntity<String> updateUserById(Long userId, User updatedUser) {
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with id: " + userId + " not found");
+        }
+        return validation(updatedUser.getEmail(), updatedUser.getName(), updatedUser.getPassword(), updatedUser.getRole().getRoleId(), updatedUser.getDepartment().getDepartmentId(), user);
     }
-
     @Transactional
-    public void updateUserByEmail(String email, String name, String password, Long roleId, Long departmentId) {
-        User user = userRepository.findUserByEmail(email).orElseThrow(() -> new IllegalStateException("User with email: " + email + " does not exist"));
-        validation(email, name, password, roleId, departmentId, user);
+    public ResponseEntity<String> updateUserByEmail(String email, User updatedUser) {
+        User user = userRepository.findUserByEmail(email).orElse(null);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User with id: " + email + " not found");
+        }
+        return validation(updatedUser.getEmail(), updatedUser.getName(), updatedUser.getPassword(), updatedUser.getRole().getRoleId(), updatedUser.getDepartment().getDepartmentId(), user);
     }
 
-    private void validation(String email, String name, String password, Long roleId, Long departmentId, User user) {
+    private ResponseEntity<String> validation(String email, String name, String password, Long roleId, Long departmentId, User user) {
         if (email != null && email.length() > 0 && !Objects.equals(user.getEmail(), email)) { // user.getEmail().equals(email)
             Optional<User> userOptional = userRepository.findUserByEmail(email);
             if (userOptional.isPresent()) {
-                throw new IllegalStateException("email is already taken");
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Email is already taken");
             }
             user.setEmail(email);
         }
-        if (name != null && name.length() > 0 && !Objects.equals(user.getName(), name)) { user.setName(name);  }
-        if (password != null && password.length() > 0 && !Objects.equals(user.getPassword(), password)) { user.setPassword(password); }
-        if (roleId != null && !Objects.equals(user.getRole().getRoleId(), roleId)) {
+        if (name != null && name.length() > 0 && !Objects.equals(user.getName(), name)) {
+            user.setName(name);
+        }
+        if (password != null && password.length() > 0 && !Objects.equals(user.getPassword(), password)) {
+            user.setPassword(password);
+        }
+        if (roleId != null && roleId > 0 && !Objects.equals(user.getRole().getRoleId(), roleId)) {
             Optional<Role> roleOptional = roleRepository.findById(roleId);
-            Role role = roleOptional.orElseThrow(() -> new IllegalStateException("Role with id: " + roleId + " does not exist"));
-            user.setRole(role);
+            if (roleOptional.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Role with id: " + roleId + " doesn't exist");
+            }
+            user.setRole(roleOptional.get());
         }
-        if (departmentId != null && !Objects.equals(user.getDepartment().getDepartmentId(), departmentId)) {
+        if (departmentId != null && departmentId > 0 && !Objects.equals(user.getDepartment().getDepartmentId(), departmentId)) {
             Optional<Department> departmentOptional = departmentRepository.findById(departmentId);
-            Department department = departmentOptional.orElseThrow(() -> new IllegalStateException("Department with id: " + departmentId + " does not exist"));
-            user.setDepartment(department);
+            if (departmentOptional.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Department with id: " + departmentId + " doesn't exist");
+            }
+            user.setDepartment(departmentOptional.get());
         }
+        return ResponseEntity.ok("Validation successful");
+    }
+
+    private boolean isEmailValid(String email) {
+        String emailRegex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+        Pattern pattern = Pattern.compile(emailRegex);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
     }
 }
