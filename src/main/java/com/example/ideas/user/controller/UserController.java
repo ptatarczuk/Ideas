@@ -37,32 +37,47 @@ public class UserController {
 
     @PostMapping("/addUser")
     public ResponseEntity<String> addUser(@Valid @RequestBody User user) {
-        userService.addUser(user);
-        return ResponseEntity.ok("User added successfully");
+        return userService.addUser(user);
     }
 
     @PutMapping("/id/{user_id}")
-    public void updateUserById(
+    public ResponseEntity<String> updateUserById(
             @PathVariable("user_id") Long userId,
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) String email,
-            @RequestParam(required = false) String password,
-            @RequestParam(required = false) Long roleId,
-            @RequestParam(required = false) Long departmentId
-    ){
-        userService.updateUserById(userId, name, email, password, roleId, departmentId);
+            @RequestBody User updatedUser
+    ) {
+        return userService.updateUserById(userId, updatedUser);
     }
 
     @PutMapping("/email/{user_email}")
-    public void updateUserByEmail(
+    public ResponseEntity<String> updateUserByEmail(
             @PathVariable("user_email") String email,
-            @RequestParam(required = false) String name,
-            @RequestParam(required = false) String password,
-            @RequestParam(required = false) Long roleId,
-            @RequestParam(required = false) Long departmentId
+            @RequestBody User updatedUser
     ) {
-        userService.updateUserByEmail(email, name, password, roleId, departmentId);
+        return userService.updateUserByEmail(email, updatedUser);
     }
+
+//    @PutMapping("/id/{user_id}")
+//    public void updateUserById(
+//            @PathVariable("user_id") Long userId,
+//            @RequestParam(required = false) String name,
+//            @RequestParam(required = false) String email,
+//            @RequestParam(required = false) String password,
+//            @RequestParam(required = false) Long roleId,
+//            @RequestParam(required = false) Long departmentId
+//    ){
+//        userService.updateUserById(userId, name, email, password, roleId, departmentId);
+//    }
+//
+//    @PutMapping("/email/{user_email}")
+//    public void updateUserByEmail(
+//            @PathVariable("user_email") String email,
+//            @RequestParam(required = false) String name,
+//            @RequestParam(required = false) String password,
+//            @RequestParam(required = false) Long roleId,
+//            @RequestParam(required = false) Long departmentId
+//    ) {
+//        userService.updateUserByEmail(email, name, password, roleId, departmentId);
+//    }
 
     @DeleteMapping("/{user_id}")
     public void deleteUser(@PathVariable("user_id") Long userId) {
