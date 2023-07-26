@@ -4,6 +4,8 @@ import com.example.ideas.thread.service.ThreadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequestMapping("/threads")
 @RestController
 public class ThreadController {
@@ -16,8 +18,8 @@ public class ThreadController {
     }
 
     @GetMapping("/")
-    public void getThreads() {  // TODO: zmienic void na List<Thread>
-
+    public List<Thread> getThreads() {  // TODO: zmienic void na List<Thread>
+    return null;
     }
 
     @GetMapping("/{thread_id}")
