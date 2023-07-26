@@ -1,7 +1,9 @@
 package com.example.ideas.thread.service;
 
+import com.example.ideas.thread.model.Thread;
 import com.example.ideas.thread.repository.ThreadRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,11 +27,11 @@ public class ThreadService {
         return threadRepository.findById(id);
     }
 
-    public void addThread(String title, Long userId) {
-        User user = userRepository.getUserById(userId)
-
-        Thread thread = new Thread(title, user);
-        threadRepository.save(thread);
-    }
+//    public ResponseEntity<Thread> addThread(Thread thread) {
+//        User user = userRepository.getUserById(userId)
+//
+//        Thread thread = new Thread(title, user);
+//        threadRepository.save(thread);
+//    }
 
 }

@@ -1,5 +1,6 @@
 package com.example.ideas.thread.controller;
 
+import com.example.ideas.thread.model.Thread;
 import com.example.ideas.thread.service.ThreadService;
 import com.example.ideas.user.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class ThreadController {
         return threadService.getThreads();
     }
 
-    @GetMapping("/{thread_id}")
+    @GetMapping("/id/{thread_id}")
     public ResponseEntity<Thread> getThreadById(
             @PathVariable("thread_id") Long id
     )
@@ -36,8 +37,8 @@ public class ThreadController {
     // czy tu beda potrzebne getByStatus getByCategory getByStage itp ?
 
     @PostMapping("/addThread")
-    public void addThread() {
-
+    public ResponseEntity<Thread> addThread(@RequestBody Thread thread) {
+        return threadService.addThread(thread);
     }
 
     @PutMapping("/update_thread/{thread_id}")

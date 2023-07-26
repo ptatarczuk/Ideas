@@ -19,18 +19,19 @@ public class Thread {
     private Long userId;
 
     private String title;
-    private String description;
-    private String Justification;
-    private String photo;
+//    private String description;
+//    private String Justification;
+//    private String photo;
     private int points;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne
-    @JoinColumn(name = "category_id")
-    private Category category;
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "category_id")
+//    private Category category;
+
 
 //    @OneToOne
 //    @JoinColumn(name = "TODO") //TODO
@@ -53,4 +54,10 @@ public class Thread {
     //@JoinColumn -  czy join column sie pisze tylko tam gdzie jest foreign key czy wszedzie ?
     //categoryId jako pole czy obiekt ?
 
+
+    public Thread(String title, int points, User user) {
+        this.title = title;
+        this.points = points;
+        this.user = user;
+    }
 }
