@@ -1,6 +1,5 @@
 package com.example.ideas.opinionTwo.controller;
 
-import com.example.ideas.opinionOne.service.OpinionOneService;
 import com.example.ideas.opinionTwo.service.OpinionTwoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
