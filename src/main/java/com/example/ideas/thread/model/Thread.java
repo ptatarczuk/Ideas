@@ -1,9 +1,6 @@
 package com.example.ideas.thread.model;
 
 import com.example.ideas.category.model.Category;
-import com.example.ideas.department.model.Department;
-import com.example.ideas.opinionOne.model.OpinionOne;
-import com.example.ideas.opinionTwo.model.OpinionTwo;
 import com.example.ideas.user.model.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
