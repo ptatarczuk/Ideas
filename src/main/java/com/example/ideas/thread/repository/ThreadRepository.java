@@ -1,6 +1,8 @@
 package com.example.ideas.thread.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface ThreadRepository {
+@Repository
+public interface ThreadRepository extends JpaRepository<Thread, Long>{
 }
