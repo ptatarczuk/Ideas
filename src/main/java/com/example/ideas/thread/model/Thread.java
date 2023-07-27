@@ -22,8 +22,10 @@ public class Thread {
 
     private String title;
 
+    @Lob //powoduje zapisu w SQL jako TEXT, umożliwiając wprowadzanie długich opisów
     private String description;
 
+    @Column(columnDefinition = "TEXT") //robi to samo co @Lob, użyte jako alternatywa
     private String Justification;
 
     private String photo;

@@ -2,7 +2,7 @@ package com.example.ideas.thread.controller;
 
 import com.example.ideas.thread.model.Thread;
 import com.example.ideas.thread.service.ThreadService;
-import com.example.ideas.user.model.User;
+import com.example.ideas.thread.utils.EmailSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,10 +14,22 @@ import java.util.List;
 public class ThreadController {
 
     private final ThreadService threadService;
+    private EmailSender emailSender;
 
     @Autowired
-    public ThreadController(ThreadService threadService) {
+    public ThreadController(ThreadService threadService, EmailSender emailSender) {
         this.threadService = threadService;
+        this.emailSender = emailSender;
+    }
+
+    @GetMapping("/email")
+    public boolean sendEmail() {
+        String from = "emailsender666666@gmail.com";
+        String recipientEmail = "emailsender666666@gmail.com";
+        String subject = "Test Email";
+        String text = "This is a test email sent using Spring Boot Mail.";
+        emailSender.sendEmail(from, recipientEmail, subject, text);
+        return true;
     }
 
     @GetMapping("/")

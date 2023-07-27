@@ -4,11 +4,12 @@ INSERT INTO users (user_id, user_name, user_email, user_password, role_id, depar
 (3, 'Tomek', 'tomek@test.com', '555', 3, 3),
 (4, 'Piotr', 'piotr@test.com', '987', 2, 4);
 
-INSERT INTO threads (thread_id, thread_author, thread_title, thread_description, thread_justification, thread_photo, thread_points, category_id, status_id, stage_id, admission_id, conclusion_id) VALUES
-(1, 1, 'Title 1', 'Description', 'Justificaton 1', 'photo 1', 100, 1, 1, 1, 1, 1 ),
-(1, 1, 'Title 2', 'Description', 'Justificaton 2', 'photo 2', 100, 1, 1, 1, 1, 1 ),
-(1, 1, 'Title 3', 'Description', 'Justificaton 3', 'photo 3', 100, 1, 1, 1, 1, 1 ),
-(1, 1, 'Title 4', 'Description', 'Justificaton 4', 'photo 4', 100, 1, 1, 1, 1, 1 );
+INSERT INTO threads (thread_id, justification, description, photo, points, title, admission_id, category_id, stage_id, user_id) VALUES
+
+(1,'Poprawa motywacji pracowników', 'Owoce w każdym dziale', './sadkfas/sdfa/aa.jpg', 10, 'Owocowy poniedziałek', 1, 12, 1, 1),
+(2,'Zwiększenie atrakcyjności firmy', 'Proponuję nowy profil na Facebooku', './sadkfas/sdfa/aa.jpg', 10, 'Nowy profil na Facebooku', 1, 10, 1, 1),
+(3,'Klienci wolą treści w internecie', 'Większość klientów nie korzysta z gazetek reklamowych', './sadkfas/sdfa/aa.jpg', 10, 'Rezygnacja z gazetek reklamowych', 1, 10, 1, 1);
+
 
 INSERT INTO comments (comment_id, author_id, comment_date, comment_text, thread_id) VALUES
 (1, 1, '2023-07-26', 'To jest pierwszy komentarz.', 1),
