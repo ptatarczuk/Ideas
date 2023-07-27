@@ -1,29 +1,35 @@
-package com.example.ideas.admission.model;
+package com.example.ideas.conclusion.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+
 @Entity
-@Table(name="admission")
+@Table(name="conclusion")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Admission {
+public class Conclusion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long admissionId;
+    private Long conclusionId;
 
     @Column(name = "content")
-    @NotBlank(message = "Content of admission information is mandatory")
+    @NotBlank(message = "Content of conclusion information is mandatory")
     private String content;
+
+    @Column(name = "conclusion_points")
+    private Integer points;
 
     @Column(name = "date_of_post")
     private final LocalDate dateOfPost = LocalDate.now();
 
-    public Admission(String content) {
+    public Conclusion(String content, Integer points) {
         this.content = content;
     }
 }

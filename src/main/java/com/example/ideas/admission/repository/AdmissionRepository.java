@@ -7,7 +7,4 @@ import java.util.Optional;
 
 public interface AdmissionRepository extends JpaRepository<Admission, Long> {
 
-    // prawdopodobnie trzeba usunąć
-//    Optional<Admission> findAdmissionByThreadId(Long admissionId);
-
 }

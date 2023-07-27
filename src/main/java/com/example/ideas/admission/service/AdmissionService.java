@@ -25,10 +25,6 @@ public class AdmissionService {
         return admissionRepository.findById(admissionId);
     }
 
-    // To do zmiany
-//    public Optional<Admission> findAdmissionByThreadId(Long admissionId) {
-//        return admissionRepository.findAdmissionByThreadId(admissionId);
-//    }
 
     public ResponseEntity<String> addAdmission(@Valid Admission admission) {
         // czy można zapisać to jako .isPresent()
