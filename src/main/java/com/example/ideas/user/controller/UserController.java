@@ -56,8 +56,6 @@ public class UserController {
         return userService.updateUserByEmail(email, updatedUser);
     }
 
-
-
     @DeleteMapping("/{user_id}")
     public void deleteUser(@PathVariable("user_id") Long userId) {
         userService.deleteUser(userId);

@@ -11,25 +11,25 @@ import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
-@Configuration
-public class ThreadConfig {
-
-    private final UserRepository userRepository;
-//    private final CategoryRepository categoryRepository;
-
-    @Autowired
-    public ThreadConfig(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
-
-    @Bean
-    CommandLineRunner commandLineRunnerThread(ThreadRepository repository) {
-        return args -> {
-            Thread thread1 = new Thread("Owocowy poniedziałek", 10, userRepository.findById(1L).get());
-            Thread thread2 = new Thread("Owocowy wtorek", 10, userRepository.findById(2L).get());
-            Thread thread3 = new Thread("Owocowy czwartek", 10, userRepository.findById(3L).get());
-
-            repository.saveAll(List.of(thread1, thread2, thread3));
-        };
-    }
-}
+//@Configuration
+//public class ThreadConfig {
+//
+//    private final UserRepository userRepository;
+////    private final CategoryRepository categoryRepository;
+//
+//    @Autowired
+//    public ThreadConfig(UserRepository userRepository) {
+//        this.userRepository = userRepository;
+//    }
+//
+//    @Bean
+//    CommandLineRunner commandLineRunnerThread(ThreadRepository repository) {
+//        return args -> {
+//            Thread thread1 = new Thread("Owocowy poniedziałek", 10, userRepository.findById(1L).get());
+//            Thread thread2 = new Thread("Owocowy wtorek", 10, userRepository.findById(2L).get());
+//            Thread thread3 = new Thread("Owocowy czwartek", 10, userRepository.findById(3L).get());
+//
+//            repository.saveAll(List.of(thread1, thread2, thread3));
+//        };
+//    }
+//}

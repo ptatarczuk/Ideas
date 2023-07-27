@@ -1,6 +1,8 @@
 package com.example.ideas.thread.model;
 
+import com.example.ideas.admission.model.Admission;
 import com.example.ideas.category.model.Category;
+import com.example.ideas.stage.model.Stage;
 import com.example.ideas.user.model.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,21 +18,36 @@ public class Thread {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
+    private Long threadId;
 
     private String title;
-//    private String description;
-//    private String Justification;
-//    private String photo;
+
+    private String description;
+
+    private String Justification;
+
+    private String photo;
+
     private int points;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
 
-//    @ManyToOne(fetch = FetchType.EAGER)
-//    @JoinColumn(name = "category_id")
-//    private Category category;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "category_id")
+    private Category category;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "stage_id")
+    private Stage stage;
+
+    @OneToOne
+    @JoinColumn(name = "admission_id")
+    private Admission admission;
+
+
+
 
 
 //    @OneToOne

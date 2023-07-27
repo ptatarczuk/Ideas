@@ -13,7 +13,7 @@ import java.util.List;
 @RestController
 public class ThreadController {
 
-    private ThreadService threadService;
+    private final ThreadService threadService;
 
     @Autowired
     public ThreadController(ThreadService threadService) {
@@ -27,10 +27,10 @@ public class ThreadController {
 
     @GetMapping("/id/{thread_id}")
     public ResponseEntity<Thread> getThreadById(
-            @PathVariable("thread_id") Long id
+            @PathVariable("thread_id") Long threadId
     )
     {
-        Thread thread = threadService.getThreadById(id).orElse(null);
+        Thread thread = threadService.getThreadById(threadId).orElse(null);
         return thread != null ? ResponseEntity.ok(thread) : ResponseEntity.notFound().build();
     }
 
@@ -41,14 +41,15 @@ public class ThreadController {
         return threadService.addThread(thread);
     }
 
-    @PutMapping("/update_thread/{thread_id}")
-    public void updateThreadById() {
-
-    }
-
     @DeleteMapping("/{thread_id}")
-    public void deleteThreadById() {
-
+    public ResponseEntity<Thread> deleteThread(@PathVariable("thread_id") Long threadId) {
+        return threadService.deleteThread(threadId);
     }
+
+//    @PutMapping("/update_thread/{thread_id}")
+//    public void updateThreadById() {
+//
+//    }
+
 
 }
