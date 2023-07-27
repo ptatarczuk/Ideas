@@ -23,10 +23,6 @@ public class Admission {
     @Column(name = "date_of_post")
     private final LocalDate dateOfPost = LocalDate.now();
 
-    //sprawdzić czy to będzie potrzebne
-//    @OneToOne(mappedBy = "admission")
-//    private final Thread thread;
-
     public Admission(String content) {
         this.content = content;
     }
