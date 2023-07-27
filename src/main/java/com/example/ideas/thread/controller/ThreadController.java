@@ -3,6 +3,7 @@ package com.example.ideas.thread.controller;
 import com.example.ideas.thread.model.Thread;
 import com.example.ideas.thread.service.ThreadService;
 import com.example.ideas.thread.utils.EmailSender;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -49,7 +50,7 @@ public class ThreadController {
     // czy tu beda potrzebne getByStatus getByCategory getByStage itp ?
 
     @PostMapping("/addThread")
-    public ResponseEntity<Thread> addThread(@RequestBody Thread thread) {
+    public ResponseEntity<Thread> addThread(@Valid @RequestBody Thread thread) {
         return threadService.addThread(thread);
     }
 
@@ -58,10 +59,11 @@ public class ThreadController {
         return threadService.deleteThread(threadId);
     }
 
-//    @PutMapping("/update_thread/{thread_id}")
-//    public void updateThreadById() {
-//
-//    }
-
-
+    @PutMapping("/id/{thread_id}")
+    public ResponseEntity<String> updateThreadById(
+            @PathVariable("thread_id") Long threadId,
+            @RequestBody Thread updatedThread
+    ) {
+        return threadService.updateThreadById(threadId, updatedThread);
+    }
 }
