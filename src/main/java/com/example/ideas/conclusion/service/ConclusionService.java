@@ -42,7 +42,11 @@ public class ConclusionService {
         if (updatedConclusion.getContent().isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Content cannot be empty");
         }
+        if (updatedConclusion.getPoints() < 0) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Awarded points cannot be lower than 0");
+        }
         searchedConclusion.setContent(updatedConclusion.getContent());
+        searchedConclusion.setPoints(updatedConclusion.getPoints());
         return ResponseEntity.ok("Conclusion updated successfully");
     }
 

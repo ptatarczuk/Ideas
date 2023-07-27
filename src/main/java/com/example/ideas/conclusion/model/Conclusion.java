@@ -30,6 +30,8 @@ public class Conclusion {
     private final LocalDate dateOfPost = LocalDate.now();
 
     public Conclusion(String content, Integer points) {
+
         this.content = content;
+        this.points = points;
     }
 }

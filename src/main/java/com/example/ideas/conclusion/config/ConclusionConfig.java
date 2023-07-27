@@ -4,9 +4,11 @@ import com.example.ideas.conclusion.model.Conclusion;
 import com.example.ideas.conclusion.repository.ConclusionRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 import java.util.List;
 
+@Configuration
 public class ConclusionConfig {
     @Bean
     CommandLineRunner commandLineRunnerConclusion(ConclusionRepository repository) {
