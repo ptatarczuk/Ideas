@@ -26,15 +26,6 @@ public class AdmissionController {
         return admission != null ? ResponseEntity.ok(admission) : ResponseEntity.notFound().build();
     }
 
-
-    // To do zmiany
-
-//    @GetMapping("/thread/{thread_id}")
-//    public ResponseEntity<Admission> getAdmissionByThreadId(@PathVariable("thread_id") Long threadId) {
-//        Admission admission = admissionService.findAdmissionByThreadId(threadId).orElse(null);
-//        return admission != null ? ResponseEntity.ok(admission) : ResponseEntity.notFound().build();
-//    }
-
     @PostMapping("/add")
     public ResponseEntity<String> addAdmission(@Valid @RequestBody Admission admission) {
         return admissionService.addAdmission(admission);
