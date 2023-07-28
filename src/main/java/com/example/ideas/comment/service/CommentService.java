@@ -33,4 +33,8 @@ public class CommentService {
     public Optional<Comment> findCommentByUserId(Long userId) {
         return commentRepository.findCommentByUser_UserId(userId);
     }
+
+    public List<Comment> getCommentsByThreadId(Long threadId) {
+        return commentRepository.findCommentsByThreadId(threadId);
+    }
 }
