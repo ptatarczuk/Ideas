@@ -1,5 +1,7 @@
 package com.example.ideas.conclusion.model;
 
+import com.example.ideas.thread.model.Thread;
+import com.example.ideas.user.model.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -19,15 +21,23 @@ public class Conclusion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long conclusionId;
 
-    @Column(name = "content")
+    @Column(name = "conclusion_text")
     @NotBlank(message = "Content of conclusion information is mandatory")
     private String content;
 
     @Column(name = "conclusion_points")
     private Integer points;
 
-    @Column(name = "date_of_post")
+    @Column(name = "conclusion_date")
     private final LocalDate dateOfPost = LocalDate.now();
+
+    @OneToOne
+    @JoinColumn(name = "conclusion_author")
+    private User user;
+
+    @OneToOne
+    @JoinColumn(name = "thread_id")
+    private Thread thread;
 
     public Conclusion(String content, Integer points) {
 

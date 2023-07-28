@@ -37,30 +37,30 @@ public class StatusController {
         return status != null ? ResponseEntity.ok(status) : ResponseEntity.notFound().build();
     }
 
-    @PostMapping("/addStatus")
-    public ResponseEntity<String> addStatus(@Valid @RequestBody Status status) {
-        return statusService.addStatus(status);
-    }
-
-    @PutMapping("/name/{status_name}")
-    public ResponseEntity<String> updateStatusByName(
-            @PathVariable("status_name") String statusName,
-            @RequestBody Status updatedStatus
-    ) {
-        return statusService.updateStatusByName(statusName, updatedStatus );
-    }
-
-    @PutMapping("/id/{status_id}")
-    public ResponseEntity<String> updateStatusById(
-            @PathVariable("status_id") Long statusId,
-            @RequestBody Status updatedStatus
-    ) {
-        return statusService.updateStatusById(statusId, updatedStatus );
-    }
-
-    @DeleteMapping("/{status_id}")
-    public ResponseEntity<String> deleteStatusById(@PathVariable("status_id") Long statusId) {
-        return statusService.deleteStatusById(statusId);
-    }
+//    @PostMapping("/addStatus")
+//    public ResponseEntity<String> addStatus(@Valid @RequestBody Status status) {
+//        return statusService.addStatus(status);
+//    }
+//
+//    @PutMapping("/name/{status_name}")
+//    public ResponseEntity<String> updateStatusByName(
+//            @PathVariable("status_name") String statusName,
+//            @RequestBody Status updatedStatus
+//    ) {
+//        return statusService.updateStatusByName(statusName, updatedStatus );
+//    }
+//
+//    @PutMapping("/id/{status_id}")
+//    public ResponseEntity<String> updateStatusById(
+//            @PathVariable("status_id") Long statusId,
+//            @RequestBody Status updatedStatus
+//    ) {
+//        return statusService.updateStatusById(statusId, updatedStatus );
+//    }
+//
+//    @DeleteMapping("/{status_id}")
+//    public ResponseEntity<String> deleteStatusById(@PathVariable("status_id") Long statusId) {
+//        return statusService.deleteStatusById(statusId);
+//    }
 
 }

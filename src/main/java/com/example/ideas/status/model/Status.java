@@ -18,7 +18,7 @@ public class Status {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long statusId;
 
-    @Column(name = "name")
+    @Column(name = "status_name")
     @NotBlank(message = "Each status needs a name")
     private String name;
 

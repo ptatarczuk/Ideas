@@ -41,10 +41,14 @@ public class CommentController {
     }
 
     @GetMapping("/user/{user_id}")
-
     public ResponseEntity<Comment> getCommentByUserId(@PathVariable("user_id") Long userId) {
         Comment comment = commentService.findCommentByUserId(userId).orElse(null);
         return comment != null ? ResponseEntity.ok(comment) : ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/thread/{thread_id}")
+    public List<Comment> getCommentByThreadId(@PathVariable("thread_id") Long threadId) {
+        return commentService.getCommentsByThreadId(threadId);
     }
 
     @PostMapping("/addComment")
