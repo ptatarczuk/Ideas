@@ -1,42 +1,3 @@
-INSERT INTO users (user_id, user_name, user_email, user_password, role_id, department_id) VALUES
-(1, 'Jowita', 'jowita@test.com', '123', 1, 5),
-(2, 'Alex', 'alex@test.com', '321', 4, 6),
-(3, 'Tomek', 'tomek@test.com', '555', 3, 3),
-(4, 'Piotr', 'piotr@test.com', '987', 2, 4);
-
-INSERT INTO threads (thread_id, justification, description, photo, points, title, admission_id, category_id, stage_id, user_id) VALUES
-
-(1,'Poprawa motywacji pracowników', 'Owoce w każdym dziale', './sadkfas/sdfa/aa.jpg', 10, 'Owocowy poniedziałek', 1, 12, 1, 1),
-(2,'Zwiększenie atrakcyjności firmy', 'Proponuję nowy profil na Facebooku', './sadkfas/sdfa/aa.jpg', 10, 'Nowy profil na Facebooku', 1, 10, 1, 1),
-(3,'Klienci wolą treści w internecie', 'Większość klientów nie korzysta z gazetek reklamowych', './sadkfas/sdfa/aa.jpg', 10, 'Rezygnacja z gazetek reklamowych', 1, 10, 1, 1);
-
-
-INSERT INTO comments (comment_id, author_id, comment_date, comment_text, thread_id) VALUES
-(1, 1, '2023-07-26', 'To jest pierwszy komentarz.', 1),
-(2, 2, '2023-07-26', 'Świetna idea, zgadzam się!', 1),
-(3, 3, '2023-07-27', 'Czekam na więcej informacji.', 2),
-(4, 4, '2023-07-28', 'Dobrze, że zwróciliście uwagę na ten problem.', 2),
-(5, 1, '2023-07-28', 'Co myślicie o wprowadzeniu tej funkcji?', 3),
-(6, 3, '2023-07-29', 'Mam pytanie dotyczące tego tematu.', 3),
-(7, 2, '2023-07-29', 'Brawo dla autora za kreatywność!', 4),
-(8, 4, '2023-07-30', 'Niestety, nie zgadzam się z tym podejściem.', 4),
-(9, 3, '2023-07-30', 'Cieszę się, że jesteście zainteresowani moim projektem.', 5),
-(10, 1, '2023-07-30', 'Dajcie mi znać, jeśli macie jakieś sugestie.', 5);
-
-INSERT INTO admissions (admission_id, admission_author, admission_text, admission_date) VALUES
-(1, 'Adam', 'To jest pierwsze przyznanie.', '2023-07-26'),
-(2, 'Ewa', 'To jest drugie przyznanie.', '2023-07-27'),
-(3, 'Piotr', 'To jest trzecie przyznanie.', '2023-07-28'),
-(4, 'Anna', 'To jest czwarte przyznanie.', '2023-07-29'),
-(5, 'Jan', 'To jest piąte przyznanie.', '2023-07-30');
-
-INSERT INTO conclusions (conclusion_id, conclusion_author, conclusion_text, conclusion_date, conclusion_points) VALUES
-(1, 'Marta', 'To jest pierwsze podsumowanie.', '2023-07-26', 7),
-(2, 'Kamil', 'To jest drugie podsumowanie.', '2023-07-27', 5),
-(3, 'Aleksandra', 'To jest trzecie podsumowanie.', '2023-07-28', 9),
-(4, 'Bartosz', 'To jest czwarte podsumowanie.', '2023-07-29', 8),
-(5, 'Natalia', 'To jest piąte podsumowanie.', '2023-07-30', 6);
-
 INSERT INTO roles (role_id, role_name) VALUES
 (1, 'Admin'),
 (2, 'HumanResources'),
@@ -82,4 +43,64 @@ INSERT INTO statuses (status_id, status_name) VALUES
 (1, 'closed'),
 (2, 'open');
 
+INSERT INTO users (user_id, user_name, user_email, user_password, role_id, department_id) VALUES
+(1, 'Jowita', 'jowita@test.com', '123', 1, 5),
+(2, 'Alex', 'alex@test.com', '321', 4, 6),
+(3, 'Tomek', 'tomek@test.com', '555', 3, 3),
+(4, 'Piotr', 'piotr@test.com', '987', 2, 4),
+(5, 'test', 'a@a.pl', '000', 1 ,1);
+
+INSERT INTO threads (thread_title, thread_description, thread_justification, thread_photo, thread_points, user_id, category_id, stage_id, status_id, admission_id, conclusion_id) VALUES
+('Thread 1', 'Description for Thread 1', 'Justification for Thread 1', 'photo1.jpg', 10, 1, 1, 1, 1, null, null),
+('Thread 2', 'Description for Thread 2', 'Justification for Thread 2', 'photo2.jpg', 20, 2, 2, 2, 1, null, null),
+('Thread 3', 'Description for Thread 3', 'Justification for Thread 3', 'photo3.jpg', 15, 3, 1, 1, 2, null, null),
+('Thread 4', 'Description for Thread 4', 'Justification for Thread 4', 'photo4.jpg', 25, 4, 2, 2, 2, null, null),
+('Thread 5', 'Description for Thread 5', 'Justification for Thread 5', 'photo5.jpg', 18, 1, 1, 1, 1, null, null),
+('Thread 6', 'Description for Thread 6', 'Justification for Thread 6', 'photo6.jpg', 12, 2, 2, 2, 1, null, null),
+('Thread 7', 'Description for Thread 7', 'Justification for Thread 7', 'photo7.jpg', 30, 3, 1, 1, 2, null, null),
+('Thread 8', 'Description for Thread 8', 'Justification for Thread 8', 'photo8.jpg', 22, 4, 2, 2, 2, null, null),
+('Thread 9', 'Description for Thread 9', 'Justification for Thread 9', 'photo9.jpg', 17, 1, 1, 1, 1, null, null),
+('Thread 10', 'Description for Thread 10', 'Justification for Thread 10', 'photo10.jpg', 28, 2, 2, 2, 1, null, null);
+
+INSERT INTO admissions (admission_id, admission_author, admission_text, admission_date, thread_id) VALUES
+
+(1, 1, 'Admission 1', '2023-07-26', 1),
+(2, 2, 'Admission 2', '2023-07-27', 2),
+(3, 3, 'Admission 3', '2023-07-28', 3),
+(4, 1, 'Admission 4', '2023-07-28', 4),
+(5, 2, 'Admission 5', '2023-07-29', 5),
+(6, 3, 'Admission 6', '2023-07-30', 6),
+(7, 4, 'Admission 7', '2023-07-30', 7),
+(8, 1, 'Admission 8', '2023-07-31', 8),
+(9, 2, 'Admission 9', '2023-07-31', 9),
+(10, 3, 'Admission 10', '2023-08-01', 10);
+
+
+INSERT INTO conclusions (conclusion_id, conclusion_author, conclusion_text, conclusion_date, conclusion_points, thread_id) VALUES
+(1, 1, 'Conclusion 1', '2023-07-26', 5, 1),
+(2, 2, 'Conclusion 2', '2023-07-27', 8, 2),
+(3, 3, 'Conclusion 3', '2023-07-28', 6, 3),
+(4, 1, 'Conclusion 4', '2023-07-28', 9, 4),
+(5, 2, 'Conclusion 5', '2023-07-29', 7, 5),
+(6, 3, 'Conclusion 6', '2023-07-30', 6, 6),
+(7, 4, 'Conclusion 7', '2023-07-30', 8, 7),
+(8, 1, 'Conclusion 8', '2023-07-31', 7, 8),
+(9, 2, 'Conclusion 9', '2023-07-31', 9, 9),
+(10, 3, 'Conclusion 10', '2023-08-01', 6, 10);
+
+INSERT INTO comments (comment_id, author_id, comment_date, comment_text, thread_id) VALUES
+(1, 1, '2023-07-26', 'Comment 1 for Thread 1', 1),
+(2, 2, '2023-07-27', 'Comment 2 for Thread 1', 1),
+(3, 3, '2023-07-28', 'Comment 1 for Thread 2', 1),
+(4, 1, '2023-07-28', 'Comment 1 for Thread 3', 2),
+(5, 2, '2023-07-29', 'Comment 1 for Thread 4', 2),
+(6, 3, '2023-07-30', 'Comment 2 for Thread 4', 3),
+(7, 4, '2023-07-30', 'Comment 1 for Thread 5', 4),
+(8, 1, '2023-07-31', 'Comment 1 for Thread 6', 5),
+(9, 2, '2023-07-31', 'Comment 1 for Thread 7', 6),
+(10, 3, '2023-08-01', 'Comment 1 for Thread 8', 7);
+
+UPDATE threads
+SET admission_id = (SELECT admission_id FROM admissions WHERE thread_id = threads.thread_id),
+    conclusion_id = (SELECT conclusion_id FROM conclusions WHERE thread_id = threads.thread_id);
 
