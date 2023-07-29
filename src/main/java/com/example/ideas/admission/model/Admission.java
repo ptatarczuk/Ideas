@@ -15,7 +15,6 @@ import java.time.LocalDate;
 public class Admission {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long admissionId;
 
     @Column(name = "admission_text")
@@ -29,8 +28,9 @@ public class Admission {
     @JoinColumn(name = "admission_author")
     private User user;
 
-    @OneToOne
-    @JoinColumn(name = "thread_id")
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
+    @JoinColumn(name = "admission_id")
     private Thread thread;
 
     public Admission(String content) {
