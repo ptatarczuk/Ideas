@@ -68,13 +68,10 @@ public class Thread {
     @JsonManagedReference
     private List<Comment> comments = new ArrayList<>();
 
-
-    @JoinColumn(name = "admission_id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "thread", fetch = FetchType.LAZY)
     private Admission admission;
 
-    @JoinColumn(name = "conclusion_id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "thread", fetch = FetchType.LAZY)
     private Conclusion conclusion;
 
 

@@ -35,8 +35,9 @@ public class Conclusion {
     @JoinColumn(name = "conclusion_author")
     private User user;
 
-    @OneToOne
-    @JoinColumn(name = "thread_id")
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
+    @JoinColumn(name = "conclusion_id")
     private Thread thread;
 
     public Conclusion(String content, Integer points) {
