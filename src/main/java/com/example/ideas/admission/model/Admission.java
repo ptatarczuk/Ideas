@@ -2,6 +2,7 @@ package com.example.ideas.admission.model;
 
 import com.example.ideas.thread.model.Thread;
 import com.example.ideas.user.model.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
@@ -31,6 +32,7 @@ public class Admission {
     @OneToOne(fetch = FetchType.LAZY)
     @MapsId
     @JoinColumn(name = "admission_id")
+    @JsonIgnore
     private Thread thread;
 
     public Admission(String content) {

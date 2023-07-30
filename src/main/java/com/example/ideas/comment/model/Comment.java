@@ -26,7 +26,7 @@ public class Comment {
     @Column(name = "comment_id")
     private Long commentId;
 
-    @NotBlank
+    //@NotBlank
     @Column(name="comment_text")
     private String commentText;
 

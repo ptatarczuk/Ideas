@@ -5,6 +5,7 @@ import com.example.ideas.comment.model.Comment;
 import com.example.ideas.comment.service.CommentService;
 import com.example.ideas.thread.service.ThreadService;
 import com.example.ideas.user.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -52,18 +53,21 @@ public class CommentController {
     }
 
     @PostMapping("/addComment")
-    public void addComment() {
-
+    public ResponseEntity<String> addComment(@Valid @RequestBody Comment comment) {
+        return commentService.addComment(comment);
     }
 
     @PutMapping("/update_comment/{comment_id}")
-    public void updateCommentById() {
-
+    public ResponseEntity<String> updateCommentById(
+            @PathVariable("comment_id") Long commentId,
+            @RequestBody Comment updatedComment
+    ) {
+        return commentService.updateCommentById(commentId, updatedComment);
     }
 
     @DeleteMapping("/{comment_id}")
-    public void deleteCommentById() {
-
+    public ResponseEntity<String> deleteCommentById(@PathVariable("comment_id") Long commentId) {
+        return commentService.deleteComment(commentId);
     }
 
 }

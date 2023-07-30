@@ -88,17 +88,17 @@ INSERT INTO conclusions (conclusion_id, conclusion_author, conclusion_text, conc
 (9, 2, 'Conclusion 9', '2023-07-31', 9),
 (10, 3, 'Conclusion 10', '2023-08-01', 6);
 
-INSERT INTO comments (comment_id, author_id, comment_date, comment_text, thread_id) VALUES
-(1, 1, '2023-07-26', 'Comment 1 for Thread 1', 1),
-(2, 2, '2023-07-27', 'Comment 2 for Thread 1', 1),
-(3, 3, '2023-07-28', 'Comment 1 for Thread 2', 1),
-(4, 1, '2023-07-28', 'Comment 1 for Thread 3', 2),
-(5, 2, '2023-07-29', 'Comment 1 for Thread 4', 2),
-(6, 3, '2023-07-30', 'Comment 2 for Thread 4', 3),
-(7, 4, '2023-07-30', 'Comment 1 for Thread 5', 4),
-(8, 1, '2023-07-31', 'Comment 1 for Thread 6', 5),
-(9, 2, '2023-07-31', 'Comment 1 for Thread 7', 6),
-(10, 3, '2023-08-01', 'Comment 1 for Thread 8', 7);
+INSERT INTO comments (author_id, comment_date, comment_text, thread_id) VALUES
+(1, '2023-07-26', 'Comment 1 for Thread 1', 1),
+(2, '2023-07-27', 'Comment 2 for Thread 1', 1),
+(3, '2023-07-28', 'Comment 1 for Thread 2', 1),
+(1, '2023-07-28', 'Comment 1 for Thread 3', 2),
+(2, '2023-07-29', 'Comment 1 for Thread 4', 2),
+(3, '2023-07-30', 'Comment 2 for Thread 4', 3),
+(4, '2023-07-30', 'Comment 1 for Thread 5', 4),
+(1, '2023-07-31', 'Comment 1 for Thread 6', 5),
+(2, '2023-07-31', 'Comment 1 for Thread 7', 6),
+(3, '2023-08-01', 'Comment 1 for Thread 8', 7);
 
 -- UPDATE threads
 -- SET admission_id = (SELECT admission_id FROM admissions WHERE thread_id = threads.thread_id),
