@@ -48,22 +48,24 @@ public class ThreadService {
     // Walidacja?
     @Transactional
     public ResponseEntity<String> updateThreadById(Long threadId, Thread updatedThread) {
-        Thread searchedThread = threadRepository.findById(threadId).orElse(null);
-        if (searchedThread == null) {
+        Thread thread = threadRepository.findById(threadId).orElse(null);
+        if (thread == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Provided Thread with id:" + threadId + " does not exist");
         }
-        searchedThread.setTitle(updatedThread.getTitle());
-        searchedThread.setDescription(updatedThread.getDescription());
-        searchedThread.setJustification(updatedThread.getJustification());
-        searchedThread.setPhoto(updatedThread.getPhoto());
-        searchedThread.setPoints(updatedThread.getPoints());
-        searchedThread.setUser(updatedThread.getUser());
-        searchedThread.setCategory(updatedThread.getCategory());
-        searchedThread.setStage(updatedThread.getStage());
-        searchedThread.setAdmission(updatedThread.getAdmission());
-        searchedThread.setStatus(updatedThread.getStatus());
-        searchedThread.setConclusion(updatedThread.getConclusion());
+        thread.setTitle(updatedThread.getTitle());
+        thread.setDescription(updatedThread.getDescription());
+        thread.setJustification(updatedThread.getJustification());
+        thread.setPhoto(updatedThread.getPhoto());
+        thread.setPoints(updatedThread.getPoints());
+        thread.setUser(updatedThread.getUser());
+        thread.setCategory(updatedThread.getCategory());
+        thread.setStage(updatedThread.getStage());
+        thread.setStatus(updatedThread.getStatus());
+        // czy tutaj updatujemy admission i conclusion ? one maja swoje update'y
+        thread.setAdmission(updatedThread.getAdmission());
+        thread.setConclusion(updatedThread.getConclusion());
         return ResponseEntity.ok("Thread updated successfully");
     }
 
 }
+
