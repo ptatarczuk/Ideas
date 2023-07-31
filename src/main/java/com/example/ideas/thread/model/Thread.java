@@ -1,11 +1,11 @@
 package com.example.ideas.thread.model;
 
 import com.example.ideas.admission.model.Admission;
-import com.example.ideas.category.model.Category;
+import com.example.ideas.util_Entities.category.model.Category;
 import com.example.ideas.comment.model.Comment;
 import com.example.ideas.conclusion.model.Conclusion;
-import com.example.ideas.stage.model.Stage;
-import com.example.ideas.status.model.Status;
+import com.example.ideas.util_Entities.stage.model.Stage;
+import com.example.ideas.util_Entities.status.model.Status;
 import com.example.ideas.user.model.User;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;

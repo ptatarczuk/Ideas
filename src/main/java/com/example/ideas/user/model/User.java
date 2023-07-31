@@ -1,7 +1,7 @@
 package com.example.ideas.user.model;
 
-import com.example.ideas.department.model.Department;
-import com.example.ideas.role.model.Role;
+import com.example.ideas.util_Entities.department.model.Department;
+import com.example.ideas.util_Entities.role.model.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

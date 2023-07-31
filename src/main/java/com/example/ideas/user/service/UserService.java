@@ -1,9 +1,9 @@
 package com.example.ideas.user.service;
 
-import com.example.ideas.department.model.Department;
-import com.example.ideas.department.repository.DepartmentRepository;
-import com.example.ideas.role.model.Role;
-import com.example.ideas.role.repository.RoleRepository;
+import com.example.ideas.util_Entities.department.model.Department;
+import com.example.ideas.util_Entities.department.repository.DepartmentRepository;
+import com.example.ideas.util_Entities.role.model.Role;
+import com.example.ideas.util_Entities.role.repository.RoleRepository;
 import com.example.ideas.user.model.User;
 import com.example.ideas.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
