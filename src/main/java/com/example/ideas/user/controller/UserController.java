@@ -40,7 +40,7 @@ public class UserController {
         return userService.addUser(user);
     }
 
-    @PutMapping("/id/{user_id}")
+    @PatchMapping("/id/{user_id}")
     public ResponseEntity<String> updateUserById(
             @PathVariable("user_id") Long userId,
             @RequestBody User updatedUser
@@ -48,7 +48,7 @@ public class UserController {
         return userService.updateUserById(userId, updatedUser);
     }
 
-    @PutMapping("/email/{user_email}")
+    @PatchMapping("/email/{user_email}")
     public ResponseEntity<String> updateUserByEmail(
             @PathVariable("user_email") String email,
             @RequestBody User updatedUser
