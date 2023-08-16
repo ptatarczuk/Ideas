@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin
 @RequestMapping("/threads")
 @RestController
 public class ThreadController {
