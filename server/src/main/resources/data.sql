@@ -43,12 +43,12 @@ INSERT INTO statuses (status_id, status_name) VALUES
 (1, 'closed'),
 (2, 'open');
 
-INSERT INTO users (user_id, user_name, user_email, user_password, role_id, department_id) VALUES
-(1, 'Jowita', 'jowita@test.com', '123', 1, 5),
-(2, 'Alex', 'alex@test.com', '321', 4, 6),
-(3, 'Tomek', 'tomek@test.com', '555', 3, 3),
-(4, 'Piotr', 'piotr@test.com', '987', 2, 4),
-(5, 'test', 'a@a.pl', '000', 1 ,1);
+INSERT INTO users (user_name, user_email, user_password, role_id, department_id) VALUES
+('Jowita', 'jowita@test.com', '123', 1, 5),
+('Alex', 'alex@test.com', '321', 4, 6),
+('Tomek', 'tomek@test.com', '555', 3, 3),
+('Piotr', 'piotr@test.com', '987', 2, 4),
+('test', 'a@a.pl', '000', 1 ,1);
 
 INSERT INTO threads (thread_title, thread_description, thread_justification, thread_photo, thread_points, user_id, category_id, stage_id, status_id) VALUES
 ('Thread 1', 'Description for Thread 1', 'Justification for Thread 1', 'photo1.jpg', 10, 1, 1, 1, 1),
