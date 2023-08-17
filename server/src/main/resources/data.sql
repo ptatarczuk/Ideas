@@ -1,8 +1,8 @@
 INSERT INTO roles (role_id, role_name) VALUES
-(1, 'Admin'),
-(2, 'HumanResources'),
-(3, 'Moderator'),
-(4, 'Employee');
+(1, 'ADMIN'),
+(2, 'HUMAN_RESOURCES'),
+(3, 'MODERATOR'),
+(4, 'EMPLOYEE');
 
 INSERT INTO departments (department_id, department_name) VALUES
 (1, 'Department of Strategic Planning'),

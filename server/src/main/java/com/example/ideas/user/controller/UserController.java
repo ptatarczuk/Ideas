@@ -12,7 +12,6 @@ import java.util.List;
 @RestController
 public class UserController {
     private final UserService userService;
-
     @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
@@ -36,8 +35,8 @@ public class UserController {
     }
 
     @PostMapping("/addUser")
-    public ResponseEntity<String> addUser(@Valid @RequestBody User user) {
-        return userService.addUser(user);
+    public ResponseEntity<String> addUser(@Valid @RequestBody RegisterRequest request) {
+        return userService.addUser(request);
     }
 
     @PatchMapping("/id/{user_id}")
