@@ -1,14 +1,16 @@
 package com.example.ideas.user.service;
 
+import com.example.ideas.security.auth.AuthenticationService;
+import com.example.ideas.security.auth.RegisterRequest;
+import com.example.ideas.user.model.User;
+import com.example.ideas.user.repository.UserRepository;
 import com.example.ideas.util_Entities.department.model.Department;
 import com.example.ideas.util_Entities.department.repository.DepartmentRepository;
 import com.example.ideas.util_Entities.role.model.Role;
 import com.example.ideas.util_Entities.role.repository.RoleRepository;
-import com.example.ideas.user.model.User;
-import com.example.ideas.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,18 +23,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final DepartmentRepository departmentRepository;
+    private final AuthenticationService authenticationService;
 
-    @Autowired
-    public UserService(UserRepository userRepository, RoleRepository roleRepository, DepartmentRepository departmentRepository) {
-        this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
-        this.departmentRepository = departmentRepository;
-    }
 
     public List<User> getUsers() {
         return userRepository.findAll(Sort.by(Sort.Direction.ASC, "email"));
@@ -46,30 +44,27 @@ public class UserService {
         return userRepository.findUserByEmail(email);
     }
 
-    public ResponseEntity<String> addUser(@Valid User user) {
-        String email = user.getEmail();
+    public ResponseEntity<String> registerUser(@Valid RegisterRequest request) {
+        String email = request.getEmail();
         Optional<User> userOptional = userRepository.findUserByEmail(email);
         if (userOptional.isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Email is already taken");
         }
-        if (!isEmailValid(user.getEmail())) {
+        if (!isEmailValid(request.getEmail())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid email format");
         }
-        Long roleId = user.getRole().getRoleId();
+        Long roleId = request.getRole().getRoleId();
         Optional<Role> roleOptional = roleRepository.findById(roleId);
         if (roleOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Role with id: " + roleId + " doesn't exist");
         }
-        Long departmentId = user.getDepartment().getDepartmentId();
+        Long departmentId = request.getDepartment().getDepartmentId();
         Optional<Department> departmentOptional = departmentRepository.findById(departmentId);
         if (departmentOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Department with id: " + departmentId + " doesn't exist");
         }
-        Role role = roleOptional.get();
-        Department department = departmentOptional.get();
 
-        userRepository.save(new User(user.getName(), email, user.getPassword(), role, department));
-        return ResponseEntity.ok("User added successfully");
+        return ResponseEntity.ok(authenticationService.register(request).toString());
     }
 
     public void deleteUser(Long userId) {
@@ -88,6 +83,7 @@ public class UserService {
         }
         return validation(updatedUser.getEmail(), updatedUser.getName(), updatedUser.getPassword(), updatedUser.getRole().getRoleId(), updatedUser.getDepartment().getDepartmentId(), user);
     }
+
     @Transactional
     public ResponseEntity<String> updateUserByEmail(String email, User updatedUser) {
         User user = userRepository.findUserByEmail(email).orElse(null);
@@ -134,4 +130,5 @@ public class UserService {
         Matcher matcher = pattern.matcher(email);
         return matcher.matches();
     }
+
 }
