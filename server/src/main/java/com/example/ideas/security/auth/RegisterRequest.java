@@ -1,4 +1,4 @@
-package com.example.ideas.user.controller;
+package com.example.ideas.security.auth;
 
 import com.example.ideas.util_Entities.department.model.Department;
 import com.example.ideas.util_Entities.role.model.Role;

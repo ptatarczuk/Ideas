@@ -1,10 +1,7 @@
 package com.example.ideas.user.service;
 
-import com.example.ideas.security.config.JwtService;
-import com.example.ideas.security.token.Token;
-import com.example.ideas.security.token.TokenRepository;
-import com.example.ideas.security.token.TokenType;
-import com.example.ideas.user.controller.RegisterRequest;
+import com.example.ideas.security.auth.AuthenticationService;
+import com.example.ideas.security.auth.RegisterRequest;
 import com.example.ideas.user.model.User;
 import com.example.ideas.user.repository.UserRepository;
 import com.example.ideas.util_Entities.department.model.Department;
@@ -17,8 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -34,11 +29,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final DepartmentRepository departmentRepository;
-
-    private final TokenRepository tokenRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
-    private final AuthenticationManager authenticationManager;
+    private final AuthenticationService authenticationService;
 
 
     public List<User> getUsers() {
@@ -53,7 +44,7 @@ public class UserService {
         return userRepository.findUserByEmail(email);
     }
 
-    public ResponseEntity<String> addUser(@Valid RegisterRequest request) {
+    public ResponseEntity<String> registerUser(@Valid RegisterRequest request) {
         String email = request.getEmail();
         Optional<User> userOptional = userRepository.findUserByEmail(email);
         if (userOptional.isPresent()) {
@@ -72,25 +63,8 @@ public class UserService {
         if (departmentOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Department with id: " + departmentId + " doesn't exist");
         }
-        Role role = roleOptional.get();
-        Department department = departmentOptional.get();
 
-//        User(String name, String email, String password, Role role, Department department)
-        User user = new User(request.getName(), email, passwordEncoder.encode(request.getPassword()), role, department);
-
-//        User user = User.builder()
-//                .name(request.getName())
-//                .email(email)
-//                .password(passwordEncoder.encode(request.getPassword()))
-//                .role(role)
-//                .department(department)
-//                .build();
-
-        User savedUser = userRepository.save(user);
-        String jwtToken = jwtService.generateToken(user);
-//        saveUserToken(savedUser, jwtToken);
-
-        return ResponseEntity.ok(jwtToken);
+        return ResponseEntity.ok(authenticationService.register(request).toString());
     }
 
     public void deleteUser(Long userId) {
@@ -157,14 +131,4 @@ public class UserService {
         return matcher.matches();
     }
 
-    private void saveUserToken(User user, String jwtToken) {
-        var token = Token.builder()
-                .user(user)
-                .token(jwtToken)
-                .tokenType(TokenType.BEARER)
-                .expired(false)
-                .revoked(false)
-                .build();
-        tokenRepository.save(token);
-    }
 }

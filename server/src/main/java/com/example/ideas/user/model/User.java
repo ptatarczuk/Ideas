@@ -24,7 +24,7 @@ import java.util.List;
 @Builder
 public class User implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
     @NotBlank(message = "Name is mandatory")
@@ -47,14 +47,6 @@ public class User implements UserDetails {
     @OneToOne
     @JoinColumn(name = "department_id")
     private Department department;
-
-    public User(String name, String email, String password, Role role, Department department) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-        this.department = department;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
