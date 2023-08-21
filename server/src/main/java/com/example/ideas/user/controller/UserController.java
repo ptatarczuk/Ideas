@@ -1,8 +1,8 @@
 package com.example.ideas.user.controller;
+import com.example.ideas.security.auth.AuthenticationService;
 import com.example.ideas.user.model.User;
 import com.example.ideas.user.service.UserService;
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -10,13 +10,10 @@ import java.util.List;
 
 @RequestMapping("/users")
 @RestController
+@RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
 
-    @Autowired
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
 
     @GetMapping("/")
     public List<User> getUsers() {
@@ -33,11 +30,6 @@ public class UserController {
     public ResponseEntity<User> getRoleByEmail(@PathVariable("email") String email) {
         User user = userService.getUserByEmail(email).orElse(null);
         return user != null ? ResponseEntity.ok(user) : ResponseEntity.notFound().build();
-    }
-
-    @PostMapping("/addUser")
-    public ResponseEntity<String> addUser(@Valid @RequestBody User user) {
-        return userService.addUser(user);
     }
 
     @PatchMapping("/id/{user_id}")
