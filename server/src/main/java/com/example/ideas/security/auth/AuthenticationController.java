@@ -31,6 +31,18 @@ public class AuthenticationController {
     return ResponseEntity.ok(authenticationService.authenticate(request));
   }
 
+  @PostMapping("/change-password")
+  public ResponseEntity<AuthenticationResponse> changePassword(
+          @RequestBody PasswordChangeRequest request
+  ) {
+    return ResponseEntity.ok(authenticationService.changePassword(request));
+  }
+
+  @PostMapping("/reset-password")
+  public boolean resetPassword(@RequestBody String email) {
+    return authenticationService.resetPassword(email);
+  }
+
   @PostMapping("/refresh-token")
   public void refreshToken(
       HttpServletRequest request,

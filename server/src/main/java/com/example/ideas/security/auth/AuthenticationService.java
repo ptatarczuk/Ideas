@@ -5,6 +5,7 @@ import com.example.ideas.security.config.JwtService;
 import com.example.ideas.security.token.Token;
 import com.example.ideas.security.token.TokenRepository;
 import com.example.ideas.security.token.TokenType;
+import com.example.ideas.thread.utils.EmailSender;
 import com.example.ideas.user.model.User;
 import com.example.ideas.user.repository.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +30,7 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final EmailSender emailSender;
 
 
     public AuthenticationResponse register(RegisterRequest request) {
@@ -118,4 +121,48 @@ public class AuthenticationService {
             }
         }
     }
+
+    public AuthenticationResponse changePassword(PasswordChangeRequest request) {
+        authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        request.getEmail(),
+                        request.getPassword()
+                )
+        );
+
+        // todo napisać password validator user i użyć go tutaj
+//        if(request.getNewPassword().isEmpty() && request.getNewPassword().equals(request.getPassword())) {
+//            throw(new Exception("a"));
+//        }
+
+        User user = repository.findUserByEmail(request.getEmail())
+                .orElseThrow();
+
+        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+
+        repository.save(user);
+        String jwtToken = jwtService.generateToken(user);
+        String refreshToken = jwtService.generateRefreshToken(user);
+        revokeAllUserTokens(user);
+        saveUserToken(user, jwtToken);
+        return AuthenticationResponse.builder()
+                .accessToken(jwtToken)
+                .refreshToken(refreshToken)
+                .build();
+
+    }
+
+//    public boolean resetPassword(String email) {
+//
+//        if(repository.findUserByEmail(email).isEmpty()) {
+//            return false;
+//        }
+//
+//        String text =
+//
+//        emailSender.sendEmail("IdeasApp", email, "Password reset request", );
+//
+//        return true;
+//
+//    }
 }
