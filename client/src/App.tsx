@@ -7,6 +7,7 @@ import Login from './pages/Login/Login';
 import './App.css';
 
 function App() {
+
   return (
     <BrowserRouter>
     <Routes>
@@ -15,7 +16,6 @@ function App() {
       <Route path="users" element={<UsersList />} />
       <Route path="login" element={<Login />} />
       </Route>
-      
     </Routes>
   </BrowserRouter>
   );
