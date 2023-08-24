@@ -2,9 +2,7 @@ package com.example.ideas.security.auth;
 
 
 import com.example.ideas.security.config.JwtService;
-import com.example.ideas.security.token.Token;
-import com.example.ideas.security.token.TokenRepository;
-import com.example.ideas.security.token.TokenType;
+import com.example.ideas.security.token.*;
 import com.example.ideas.thread.utils.EmailSender;
 import com.example.ideas.user.model.User;
 import com.example.ideas.user.repository.UserRepository;
@@ -13,20 +11,22 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
     private final UserRepository repository;
     private final TokenRepository tokenRepository;
+    private final PasswordResetTokenRepository passwordResetTokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
@@ -43,7 +43,7 @@ public class AuthenticationService {
                 .build();
 
         User savedUser = repository.save(user);
-        String jwtToken = jwtService.generateToken(user);
+        String jwtToken = jwtService.generateToken(Map.of("role", user.getRole().getRoleName()), user);
         String refreshToken = jwtService.generateRefreshToken(user);
         saveUserToken(savedUser, jwtToken);
         return AuthenticationResponse.builder()
@@ -62,7 +62,7 @@ public class AuthenticationService {
         );
         User user = repository.findUserByEmail(request.getEmail())
                 .orElseThrow();
-        String jwtToken = jwtService.generateToken(user);
+        String jwtToken = jwtService.generateToken(Map.of("role", user.getRole().getRoleName()), user);
         String refreshToken = jwtService.generateRefreshToken(user);
         revokeAllUserTokens(user);
         saveUserToken(user, jwtToken);
@@ -110,7 +110,7 @@ public class AuthenticationService {
             User user = this.repository.findUserByEmail(userEmail)
                     .orElseThrow();
             if (jwtService.isTokenValid(refreshToken, user)) {
-                String accessToken = jwtService.generateToken(user);
+                String accessToken = jwtService.generateToken(Map.of("role", user.getRole().getRoleName()), user);
                 revokeAllUserTokens(user);
                 saveUserToken(user, accessToken);
                 AuthenticationResponse authResponse = AuthenticationResponse.builder()
@@ -122,7 +122,7 @@ public class AuthenticationService {
         }
     }
 
-    public AuthenticationResponse changePassword(PasswordChangeRequest request) {
+    public ResponseEntity<AuthenticationResponse> changePassword(PasswordChangeRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
@@ -131,9 +131,11 @@ public class AuthenticationService {
         );
 
         // todo napisać password validator user i użyć go tutaj
-//        if(request.getNewPassword().isEmpty() && request.getNewPassword().equals(request.getPassword())) {
-//            throw(new Exception("a"));
-//        }
+        if(request.getNewPassword().isEmpty() || request.getNewPassword().equals(request.getPassword())) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                    AuthenticationResponse.builder().build()
+            );
+        }
 
         User user = repository.findUserByEmail(request.getEmail())
                 .orElseThrow();
@@ -145,24 +147,65 @@ public class AuthenticationService {
         String refreshToken = jwtService.generateRefreshToken(user);
         revokeAllUserTokens(user);
         saveUserToken(user, jwtToken);
-        return AuthenticationResponse.builder()
-                .accessToken(jwtToken)
-                .refreshToken(refreshToken)
-                .build();
 
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(
+                        AuthenticationResponse.builder()
+                                .accessToken(jwtToken)
+                                .refreshToken(refreshToken)
+                                .build()
+                );
     }
 
-//    public boolean resetPassword(String email) {
-//
-//        if(repository.findUserByEmail(email).isEmpty()) {
-//            return false;
-//        }
-//
-//        String text =
-//
-//        emailSender.sendEmail("IdeasApp", email, "Password reset request", );
-//
-//        return true;
-//
-//    }
+    public ResponseEntity<String> resetPassword(String userEmail, String baseURL) {
+
+        Optional<User> userOptional = repository.findUserByEmail(userEmail);
+
+        if(userOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+        String token = UUID.randomUUID().toString();
+        User user = userOptional.get();
+
+        PasswordResetToken passwordResetToken = PasswordResetToken.builder()
+                .token(token)
+                .user(user)
+                .expiryDate(new Date(System.currentTimeMillis() + 600000)) // 10 minut ważny
+                .build();
+
+        passwordResetTokenRepository.save(passwordResetToken);
+
+        String from = "emailsender666666@gmail.com";
+        String recipientEmail = "emailsender666666@gmail.com";
+        String subject = "Password reset";
+        String text = baseURL + "/" + token;
+        emailSender.sendEmail(from, recipientEmail, subject, text);
+
+        return ResponseEntity.ok("password reset email sent");
+    }
+
+    public ResponseEntity<String> changePassword(String token, String newPassword) {
+
+        Optional<PasswordResetToken> passwordResetTokenOptional = passwordResetTokenRepository.findPasswordResetTokenByToken(token);
+
+        if(passwordResetTokenOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+
+        // todo napisać password validator user i użyć go tutaj
+        PasswordResetToken passwordResetToken = passwordResetTokenOptional.get();
+
+        if(passwordResetToken.getExpiryDate().before(new Date(System.currentTimeMillis()))) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Token expired");
+        }
+
+        User user = passwordResetToken.getUser();
+
+        user.setPassword(passwordEncoder.encode(newPassword));
+        repository.save(user);
+
+        return ResponseEntity.ok("User password successfully updated");
+    }
+
+
 }

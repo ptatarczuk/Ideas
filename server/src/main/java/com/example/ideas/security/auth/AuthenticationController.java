@@ -16,40 +16,52 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class AuthenticationController {
 
-  private final AuthenticationService authenticationService;
-  private final UserService userService;
+    private final AuthenticationService authenticationService;
+    private final UserService userService;
 
-  @PostMapping("/register")
-  public ResponseEntity<String> register(@Valid @RequestBody RegisterRequest request) {
-    return userService.registerUser(request);
-  }
+    @PostMapping("/register")
+    public ResponseEntity<String> register(@Valid @RequestBody RegisterRequest request) {
+        return userService.registerUser(request);
+    }
 
-  @PostMapping("/authenticate")
-  public ResponseEntity<AuthenticationResponse> authenticate(
-      @RequestBody AuthenticationRequest request
-  ) {
-    return ResponseEntity.ok(authenticationService.authenticate(request));
-  }
+    @PostMapping("/authenticate")
+    public ResponseEntity<AuthenticationResponse> authenticate(
+            @RequestBody AuthenticationRequest request
+    ) {
+        return ResponseEntity.ok(authenticationService.authenticate(request));
+    }
 
-  @PostMapping("/change-password")
-  public ResponseEntity<AuthenticationResponse> changePassword(
-          @RequestBody PasswordChangeRequest request
-  ) {
-    return ResponseEntity.ok(authenticationService.changePassword(request));
-  }
+    @PostMapping("/change-password")
+    public ResponseEntity<AuthenticationResponse> changePassword(
+            @RequestBody PasswordChangeRequest request
+    ) {
+        return authenticationService.changePassword(request);
+    }
 
-  @PostMapping("/reset-password")
-  public boolean resetPassword(@RequestBody String email) {
-    return authenticationService.resetPassword(email);
-  }
+    @PostMapping("reset-password")
+    public ResponseEntity<String> resetPassword(
+            HttpServletRequest request,
+            @RequestParam("email") String userEmail
+    ) {
+        String baseUrl = request.getRequestURL().toString();
+        return authenticationService.resetPassword(userEmail, baseUrl);
+    }
 
-  @PostMapping("/refresh-token")
-  public void refreshToken(
-      HttpServletRequest request,
-      HttpServletResponse response
-  ) throws IOException {
-    authenticationService.refreshToken(request, response);
-  }
+    @PatchMapping("reset-password/{token}")
+    public ResponseEntity<String> changePassword(
+            @PathVariable("token") String token,
+            @RequestBody String newPassword
+    ) {
+        return authenticationService.changePassword(token, newPassword);
+    }
+
+    @PostMapping("/refresh-token")
+    public void refreshToken(
+            HttpServletRequest request,
+            HttpServletResponse response
+    ) throws IOException {
+        authenticationService.refreshToken(request, response);
+    }
 
 
 }
