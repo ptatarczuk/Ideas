@@ -1,4 +1,8 @@
-import { useState, useEffect, FormEvent } from "react";
+import { useState, useEffect, FormEvent, useContext } from "react";
+import { UserContext } from "../../context/UserContext";
+import { useNavigate } from "react-router-dom";
+
+
 
 interface LoginData {
     email: string;
@@ -6,11 +10,16 @@ interface LoginData {
 }
 
 export default function Login() {
+
     const [formData, setFormData] = useState<LoginData>({
         email: '',
         password: ''
     });
-    
+    const { setUser } = useContext(UserContext);
+    const navigate = useNavigate();
+
+
+
 
     const [failedAttempts, setFailedAttempts] = useState(0);
     const [blockTime, setBlockTime] = useState(0);
@@ -23,7 +32,7 @@ export default function Login() {
                 alert(`Account is blocked. Try again after ${remainingTime} seconds.`);
             }
         }, 1000);
-    
+
         return () => {
             clearInterval(interval);
         };
@@ -31,9 +40,8 @@ export default function Login() {
 
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
-
-        try { 
-            const response = await fetch('http://localhost:8080/users/', {
+        try {
+            const response = await fetch('http://localhost:8080/api/v1/auth/authenticate', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -42,11 +50,16 @@ export default function Login() {
             });
 
             if (response.ok) {
+                console.log("Login successful!");
                 const data = await response.json();
-                sessionStorage.setItem('token', data.token);
+                console.log(data);
+                sessionStorage.setItem("token", JSON.stringify(data.access_token)); 
+                setUser(data.access_token); //lub nazwa uzytkownika?
                 setFailedAttempts(0);
-                //navigate to home page
+                navigate("/");
+                
             } else {
+                console.log("Login failed!");
                 const errorData = await response.json();
                 console.log('Error:', errorData);
                 const newFailedAttempts: number = failedAttempts + 1;
@@ -56,12 +69,9 @@ export default function Login() {
             }
         } catch (error: any) {
             console.log(`Error: ${error.message}`);
-            //to tylko do testów
-            // const newFailedAttempts: number = failedAttempts + 1;
-            //     setFailedAttempts(newFailedAttempts);
-            //     setBlockTime(Date.now() + 10000); 
         }
-        //navigate
+        setFormData({ email: '', password: '' });
+        
     }
 
     return (
