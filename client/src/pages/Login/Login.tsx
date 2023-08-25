@@ -9,12 +9,12 @@ interface LoginData {
     password: string;
 }
 
-export default function Login() {
-
+const Login: React.FC = () => {
     const [formData, setFormData] = useState<LoginData>({
         email: '',
         password: ''
     });
+
     const { setUser } = useContext(UserContext);
     const navigate = useNavigate();
 
@@ -51,16 +51,16 @@ export default function Login() {
 
             if (response.ok) {
                 console.log("Login successful!");
-                const data = await response.json();
+                const data: { access_token: string } = await response.json();
                 console.log(data);
-                sessionStorage.setItem("token", JSON.stringify(data.access_token)); 
+                sessionStorage.setItem("token", JSON.stringify(data.access_token));
                 setUser(data.access_token); //lub nazwa uzytkownika?
                 setFailedAttempts(0);
                 navigate("/");
-                
+
             } else {
                 console.log("Login failed!");
-                const errorData = await response.json();
+                const errorData: { message: string } = await response.json();
                 console.log('Error:', errorData);
                 const newFailedAttempts: number = failedAttempts + 1;
                 setFailedAttempts(newFailedAttempts);
@@ -71,7 +71,7 @@ export default function Login() {
             console.log(`Error: ${error.message}`);
         }
         setFormData({ email: '', password: '' });
-        
+
     }
 
     return (
@@ -106,3 +106,6 @@ export default function Login() {
         </main>
     );
 }
+
+export default Login;
+
