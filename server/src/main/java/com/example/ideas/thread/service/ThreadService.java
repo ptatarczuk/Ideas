@@ -9,13 +9,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 public class ThreadService {
 
-    private ThreadRepository threadRepository;
+    private final ThreadRepository threadRepository;
 
     @Autowired
     public ThreadService(ThreadRepository threadRepository) {
@@ -32,6 +33,7 @@ public class ThreadService {
 
     //Walidacja?
     public ResponseEntity<Thread> addThread(@Valid Thread thread) {
+        thread.setDate(LocalDate.now());
         threadRepository.save(thread);
         return ResponseEntity.status(HttpStatus.OK).body(thread);
     }

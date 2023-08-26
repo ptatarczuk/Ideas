@@ -7,6 +7,7 @@ import com.example.ideas.conclusion.model.Conclusion;
 import com.example.ideas.util_Entities.stage.model.Stage;
 import com.example.ideas.util_Entities.status.model.Status;
 import com.example.ideas.user.model.User;
+import com.example.ideas.util_Entities.vote.model.Vote;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -14,6 +15,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,6 +29,9 @@ public class Thread {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long threadId;
+
+    @Column(name = "thread_date")
+    private LocalDate date;
 
     @Column(name = "thread_title")
     @NotBlank
@@ -63,6 +68,9 @@ public class Thread {
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "status_id")
     private Status status;
+
+    @OneToMany(mappedBy = "thread", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Vote> votes = new ArrayList<>();
 
     @OneToMany(mappedBy = "thread", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference
