@@ -1,20 +1,21 @@
-import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Layout from './components/Layout/Layout';
 import UsersList from './pages/UsersList/UsersList';
-import Ideas from './pages/Ideas/Ideas';
 import Login from './pages/Login/Login';
 import './App.css';
+import { Threads } from './components/Threads/Threads';
 
 function App() {
 
   return (
     <BrowserRouter>
+
     <Routes>
       <Route path="/" element={<Layout />} >
-      <Route index element={<Ideas />} />
+      <Route index element={<Threads />} />
       <Route path="users" element={<UsersList />} />
       <Route path="login" element={<Login />} />
+      <Route path="threads" element={<Threads />} />
       </Route>
     </Routes>
   </BrowserRouter>
