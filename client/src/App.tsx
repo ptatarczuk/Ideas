@@ -5,7 +5,7 @@ import Login from './pages/Login/Login';
 import './App.css';
 import { Threads } from './components/Threads/Threads';
 import { NotFound } from './components/NotFound/NotFound';
-
+import { ThreadPage } from './components/Threads/ThreadPage';
 function App() {
 
   return (
@@ -17,6 +17,7 @@ function App() {
       <Route path="users" element={<UsersList />} />
       <Route path="login" element={<Login />} />
       <Route path="threads" element={<Threads />} />
+      <Route path="thread/:id" element={<ThreadPage />} />
       <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>

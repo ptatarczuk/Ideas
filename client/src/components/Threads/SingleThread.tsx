@@ -1,4 +1,6 @@
 import { Thread } from "../../models/Thread"
+import { Link } from 'react-router-dom';
+
 
 
 function formatDate(date: Date) {
@@ -18,7 +20,7 @@ export const SingleThread: React.FC<{thread: Thread}> = ({thread}) => {
             <tr key={thread.threadId}>
                 <td>{thread.threadId}</td>
                 <td>{formatDate(new Date())}</td>
-                <td>{thread.title}</td>
+                <td><Link to={`/thread/${thread.threadId}`}>{thread.title}</Link></td>
                 <td>{thread.points}</td>
                 <td>{thread.user.name}</td>
                 <td>{thread.category.categoryName}</td>

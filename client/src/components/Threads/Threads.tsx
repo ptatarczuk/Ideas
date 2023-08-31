@@ -1,21 +1,27 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import { Thread } from '../../models/Thread';
 import { SingleThread } from "./SingleThread"
+import jwt_decode from 'jwt-decode';
+import { UserContext } from '../../context/UserContext';
 
 
 export const Threads: React.FC = () => {
-
+    interface Token {
+        user: string;
+        setUser: () => void;
+    }
+    const token: Token | null = useContext(UserContext);
+    const decodedToken: string | null = token ? jwt_decode(token.user) : null;
     const [threads, setThreads] = useState<Thread[]>([])
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState('')
-    
 
     useEffect(() => {
         const fetchThreads = async () => {
-    
+
             try {
                 const response = await fetch('http://localhost:8080/threads/')
-            
+
                 if (!response.ok) {
                     throw new Error('Network response was not ok')
                 }
@@ -46,22 +52,22 @@ export const Threads: React.FC = () => {
                 <table>
                     <thead>
                         <tr>
-                        <th>ID</th>
-                        <th>DATE</th>
-                        <th>TITLE</th>
-                        <th>POINTS</th>
-                        <th>USER</th>
-                        <th>CATEGORY</th>
-                        <th>STAGE</th>
+                            <th>ID</th>
+                            <th>DATE</th>
+                            <th>TITLE</th>
+                            <th>POINTS</th>
+                            <th>USER</th>
+                            <th>CATEGORY</th>
+                            <th>STAGE</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {threads.map(thread => 
+                        {threads.map(thread =>
                             <SingleThread thread={thread} />
                         )}
                     </tbody>
                 </table>
-            )            
+            )
             }
         </div>
     )
