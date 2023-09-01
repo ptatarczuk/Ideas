@@ -62,11 +62,13 @@ public class ThreadController {
         return threadService.deleteThread(threadId);
     }
 
-    @PutMapping("/id/{thread_id}")
-    public ResponseEntity<String> updateThreadById(
+    @PatchMapping("/id/{thread_id}")
+    public ResponseEntity<?> updateThreadById(
+//    public void updateThreadById(
             @PathVariable("thread_id") Long threadId,
-            @RequestBody Thread updatedThread
+            @RequestBody ThreadDTO updatedThread
     ) {
+//
         return threadService.updateThreadById(threadId, updatedThread);
     }
 }
