@@ -7,56 +7,55 @@ import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
-export type Role = {
-  roleId: number;
-  roleName: string;
-};
+import {Role} from "../../models/Role"
+import {User} from "../../models/User"
+import {Department} from "../../models/Department" // TODO : Czy dodac filtrowanie przez departament ?
 
-export type Department = {
-  departmentId: number;
-  departmentName: string;
-};
-
-export type Users = {
-  name: string;
-  email: string;
-  role: Role;
-  department: Department;
-};
 
 const UsersList: React.FC = () => {
-  const [users, setUsers] = useState<Users[]>([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [roles, setRoles] = useState<Role[] | null>();
-  const [selectedRole, setSelectedRole] = useState<number | undefined>(undefined);
-  const [filteredUsers, setFilteredUsers] = useState<Users[]>([]);
+  const [selectedRole, setSelectedRole] = useState<number | undefined>();
+  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
 
   const handleRoleChange = (event: SelectChangeEvent) => {
-    setSelectedRole(event.target.value !== "" ? parseInt(event.target.value) : undefined);
+    setSelectedRole(event.target.value ? parseInt(event.target.value) : undefined);
   };
 
   useEffect(() => {
-    const url = "http://localhost:8080/users/";
-    axios.get(url).then((res) => {
-      setUsers(res.data);
-      setFilteredUsers(res.data);
-    });
+    const fetchUsers = async () => {
+      try {
+        const url = "http://localhost:8080/users/";
+        const response = await axios.get(url);
+        setUsers(response.data);
+        setFilteredUsers(response.data);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
+  
+    fetchUsers();
   }, []);
-
+  
   useEffect(() => {
-    const url = "http://localhost:8080/roles/";
-    axios.get(url).then((res) => {
-      //console.log(res.data)
-      setRoles(res.data);
-    });
+    const fetchRoles = async () => {
+      try {
+        const url = "http://localhost:8080/roles/";
+        const response = await axios.get(url);
+        setRoles(response.data);
+      } catch (error) {
+        console.error("Error fetching roles:", error);
+      }
+    };
+  
+    fetchRoles();
   }, []);
-
+  
   useEffect(() => {
-    if (selectedRole === undefined) {
+    if (!selectedRole) {
       setFilteredUsers(users);
     } else {
-      const filtered = users.filter(
-        (user) => user.role.roleId === selectedRole
-      );
+      const filtered = users.filter((user) => user.role.roleId === selectedRole);
       setFilteredUsers(filtered);
       console.log(selectedRole);
     }
