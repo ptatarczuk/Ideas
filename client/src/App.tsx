@@ -6,12 +6,13 @@ import "./App.css";
 import { Threads } from "./components/Threads/Threads";
 import { NotFound } from "./components/NotFound/NotFound";
 import { UnauthorizedRoute } from "./components/UnauthorizedRoute";
+import { Registration } from "./pages/Registration/Registration";
 
 function App() {
   return (
-      // TODO : Dorobic Protected route !
+    // TODO : Dorobic Protected route !
     <BrowserRouter>
-    <Routes> 
+      <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Threads />} />
           <Route path="users" element={<UsersList />} />
@@ -27,7 +28,15 @@ function App() {
             </UnauthorizedRoute>
           }
         ></Route>
-    
+
+        <Route
+          path="/registration"
+          element={
+            <UnauthorizedRoute>
+              <Registration />
+            </UnauthorizedRoute>
+          }
+        ></Route>
       </Routes>
     </BrowserRouter>
   );
