@@ -1,5 +1,6 @@
 package com.example.ideas.thread.service;
 
+import com.example.ideas.thread.controller.ThreadDTO;
 import com.example.ideas.thread.model.Thread;
 import com.example.ideas.thread.repository.ThreadRepository;
 import jakarta.transaction.Transactional;
@@ -40,7 +41,7 @@ public class ThreadService {
 
     public ResponseEntity<Thread> deleteThread(Long id) {
         Optional<Thread> threadOptional = threadRepository.findById(id);
-        if(threadOptional.isPresent()) {
+        if (threadOptional.isPresent()) {
             threadRepository.deleteById(id);
             return ResponseEntity.status(HttpStatus.OK).body(threadOptional.get());
         }
@@ -49,24 +50,45 @@ public class ThreadService {
 
     // Walidacja?
     @Transactional
-    public ResponseEntity<String> updateThreadById(Long threadId, Thread updatedThread) {
+    public ResponseEntity<?> updateThreadById(Long threadId, ThreadDTO threadDTO) {
         Thread thread = threadRepository.findById(threadId).orElse(null);
         if (thread == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Provided Thread with id:" + threadId + " does not exist");
         }
-        thread.setTitle(updatedThread.getTitle());
-        thread.setDescription(updatedThread.getDescription());
-        thread.setJustification(updatedThread.getJustification());
-        thread.setPhoto(updatedThread.getPhoto());
-        thread.setPoints(updatedThread.getPoints());
-        thread.setUser(updatedThread.getUser());
-        thread.setCategory(updatedThread.getCategory());
-        thread.setStage(updatedThread.getStage());
-        thread.setStatus(updatedThread.getStatus());
+
+        if (threadDTO.getTitle() != null) {
+            thread.setTitle(threadDTO.getTitle());
+        }
+        if (threadDTO.getDescription() != null) {
+            thread.setDescription(threadDTO.getDescription());
+        }
+        if (threadDTO.getJustification() != null) {
+            thread.setJustification(threadDTO.getJustification());
+        }
+        if (threadDTO.getPhoto() != null) {
+            thread.setPhoto(threadDTO.getPhoto());
+        }
+        if (threadDTO.getPoints() != null) {
+            thread.setPoints(threadDTO.getPoints());
+        }
+        if (threadDTO.getCategory() != null) {
+            thread.setCategory(threadDTO.getCategory());
+        }
+        if (threadDTO.getStage() != null) {
+            thread.setStage(threadDTO.getStage());
+        }
+        if (threadDTO.getStatus() != null) {
+            thread.setStatus(threadDTO.getStatus());
+        }
+        if (threadDTO.getAdmission() != null) {
+            thread.setAdmission(threadDTO.getAdmission());
+        }
+        if (threadDTO.getConclusion() != null) {
+            thread.setConclusion(threadDTO.getConclusion());
+        }
+
         // czy tutaj updatujemy admission i conclusion ? one maja swoje update'y
-        thread.setAdmission(updatedThread.getAdmission());
-        thread.setConclusion(updatedThread.getConclusion());
-        return ResponseEntity.ok("Thread updated successfully");
+        return ResponseEntity.ok(thread);
     }
 
 }
