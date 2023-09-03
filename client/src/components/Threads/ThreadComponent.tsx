@@ -17,7 +17,7 @@ export const ThreadReadOnly: React.FC<ThreadReadOnlyProps> = ({ thread, decodedT
 
     const handleFieldChange = (field: keyof Thread, value: any) => {
         setEditedThread((prevThread) => ({
-            ...prevThread,
+            ...prevThread, 
             [field]: value,
         }));
     };
@@ -35,7 +35,8 @@ export const ThreadReadOnly: React.FC<ThreadReadOnlyProps> = ({ thread, decodedT
                 description: editedThread.description,
                 justification: editedThread.justification
             };
-    
+
+            console.log(dataToSend);
             const response = await fetch(`http://localhost:8080/threads/id/${thread.threadId}`, {
                 method: 'PUT',
                 headers: {
