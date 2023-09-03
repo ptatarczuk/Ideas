@@ -17,6 +17,7 @@ export const Threads: React.FC = () => {
     const [error, setError] = useState('')
 
     useEffect(() => {
+
         const fetchThreads = async () => {
 
             try {
@@ -29,6 +30,7 @@ export const Threads: React.FC = () => {
                 const data = await response.json()
                 setThreads(data)
                 setIsLoading(false)
+                console.log(data);
 
             } catch (error) {
                 setError('An error occurred while fetching data')
@@ -63,7 +65,7 @@ export const Threads: React.FC = () => {
                     </thead>
                     <tbody>
                         {threads.map(thread =>
-                            <SingleThread thread={thread} />
+                            <SingleThread key={thread.threadId} thread={thread} />
                         )}
                     </tbody>
                 </table>

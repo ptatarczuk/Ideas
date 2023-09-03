@@ -3,21 +3,30 @@ import { useParams } from 'react-router-dom';
 import { Thread } from '../../models/Thread';
 import jwt_decode from 'jwt-decode';
 import { UserContext } from '../../context/UserContext';
-
+import { ThreadReadOnly } from './ThreadComponent';
 
 
 export const ThreadPage: React.FC = () => {
     const { id } = useParams();
     const [thread, setThread] = useState<Thread | null>(null);
+    //czy sam mechanizm dekodowania nie powinien byc gdzies przeniesiony?
     interface Token {
         user: string;
         setUser: () => void;
     }
+
+    
+
+
+
     const token: Token | null = useContext(UserContext);
-    const decodedToken: string | null = token ? jwt_decode(token.user) : null;
+    const decodedToken: object | any = token ? jwt_decode(token.user) : null;
+    //jak to zrobic? zamiast any wczesniej bylo null, ale pojawiał sie błąd
+    
 
 
     useEffect(() => {
+        console.log(decodedToken);
         fetchThread();
     }, [id]);
 
@@ -37,14 +46,17 @@ export const ThreadPage: React.FC = () => {
     };
 
 
+
+
     if (!thread) {
         return <p>Loading...</p>;
     }
 
     return (
+        
         <div>
             <h1>Thread</h1>
-            <p>Title: {thread.title}</p>
+            <ThreadReadOnly thread={thread} decodedToken={decodedToken} />
         </div>
     );
 };
