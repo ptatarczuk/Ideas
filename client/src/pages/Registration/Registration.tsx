@@ -6,6 +6,7 @@ import { Role } from "../../models/Role"
 import { Department } from "../../models/Department"
 import { UserContext } from "../../context/UserContext"
 
+
 type RegistrationData = {
   name: string
   email: string
@@ -65,19 +66,19 @@ export const Registration: React.FC = () => {
   }
 
   function handleDepartmentChange(event: ChangeEvent<HTMLSelectElement>) {
-    const selectedDepartmentId = event.target.value;
+    const selectedDepartmentId = event.target.value
 
     const selectedDepartment = departments.find(
       (department) =>
         department.departmentId.toString() === selectedDepartmentId
     );
     if (selectedDepartment) {
-      setRegFormData({ ...regFormData, department: selectedDepartment });
+      setRegFormData({ ...regFormData, department: selectedDepartment })
     }
   }
 
   function handleRegistrationInput(event: ChangeEvent<HTMLInputElement>) {
-    const { name, value } = event.target;
+    const { name, value } = event.target
     setRegFormData({ ...regFormData, [name]: value });
   }
 

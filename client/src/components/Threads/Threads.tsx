@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
-import { Thread } from '../../models/Thread';
+import { Thread } from '../../models/Thread'
 import { SingleThread } from "./SingleThread"
+import { dbApiWithoutAuth } from '../../httpService/httpService'
 
 
 export const Threads: React.FC = () => {
@@ -8,32 +9,23 @@ export const Threads: React.FC = () => {
     const [threads, setThreads] = useState<Thread[]>([])
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState('')
-    
+
 
     useEffect(() => {
         const fetchThreads = async () => {
     
             try {
-                const response = await fetch('http://localhost:8080/threads/')
-            
-                if (!response.ok) {
-                    throw new Error('Network response was not ok')
-                }
-
-                const data = await response.json()
-                setThreads(data)
+                const responseData = await dbApiWithoutAuth.get('/threads/')
+                setThreads(responseData.data)
                 setIsLoading(false)
 
             } catch (error) {
                 setError('An error occurred while fetching data')
                 setIsLoading(false)
-            } finally {
-                setIsLoading(false);
             }
         }
         fetchThreads()
     }, [])
-
 
     return (
 
@@ -66,4 +58,3 @@ export const Threads: React.FC = () => {
         </div>
     )
 }
-
