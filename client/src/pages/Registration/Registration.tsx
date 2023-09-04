@@ -51,7 +51,6 @@ export const Registration: React.FC = () => {
 
   useEffect(() => {
     fetchRolesAndDepartments()
-    console.log("pobrano dane")
   }, [])
 
   function handleRoleChange(event: ChangeEvent<HTMLSelectElement>) {
@@ -190,7 +189,7 @@ export const Registration: React.FC = () => {
             className="register-form__select"
             onChange={handleRoleChange}
           >
-            <option value="">Select a role</option>
+            <option value="">Select your role</option>
             {roles.map((role) => (
               <option key={role.roleId} value={role.roleId.toString()}>
                 {role.roleName}
