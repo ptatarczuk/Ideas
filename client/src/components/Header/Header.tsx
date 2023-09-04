@@ -20,7 +20,7 @@ import axios from "axios";
 
 
 
-const pages = ["Threads", "Users", "Login"]; // TODO: przerobic na enum -> poki co nie wiem jak zrobic mapowanie przez ten enum 
+const pages = ["Threads", "Users", "Login", "Register"]; // TODO: przerobic na enum -> poki co nie wiem jak zrobic mapowanie przez ten enum 
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function ResponsiveAppBar() {
