@@ -57,7 +57,7 @@ export const Threads: React.FC = () => {
                     </thead>
                     <tbody>
                         {threads.map(thread => 
-                            <SingleThread thread={thread} />
+                            <SingleThread key={thread.threadId} thread={thread} />
                         )}
                     </tbody>
                 </table>
