@@ -30,7 +30,7 @@ function App() {
         ></Route>
 
         <Route
-          path="/registration"
+          path="/register"
           element={
             <UnauthorizedRoute>
               <Registration />

@@ -1,0 +1,17 @@
+version: '3.5'
+
+services:
+  dbpostgresql:
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=haslo123
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=ideas_app
+  simple-app-with-db:
+    container_name: simple-app-with-db
+    build:
+      context: .
+    ports:
+      - 8082:8080
