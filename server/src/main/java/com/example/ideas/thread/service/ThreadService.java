@@ -9,9 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
 
+import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -53,7 +56,10 @@ public class ThreadService {
     public ResponseEntity<?> updateThreadById(Long threadId, ThreadDTO threadDTO) {
         Thread thread = threadRepository.findById(threadId).orElse(null);
         if (thread == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Provided Thread with id:" + threadId + " does not exist");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Provided Thread with id: " + threadId + " does not exist");
+        }
+        if (threadDTO.getEmail() != null && !thread.getUser().getEmail().equals(threadDTO.getEmail())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User: " + threadDTO.getEmail() + " is not authorized to modify this thread");
         }
 
         if (threadDTO.getTitle() != null) {
@@ -85,11 +91,24 @@ public class ThreadService {
         }
         if (threadDTO.getConclusion() != null) {
             thread.setConclusion(threadDTO.getConclusion());
-        }
+    }
 
-        // czy tutaj updatujemy admission i conclusion ? one maja swoje update'y
+    // czy tutaj updatujemy admission i conclusion ? one maja swoje update'y
         return ResponseEntity.ok(thread);
     }
 
+    public ResponseEntity<?> updateThreadById999(Long threadId, Map<String, Object> fields) {
+        Thread thread = threadRepository.findById(threadId).orElse(null);
+        if (thread == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Provided Thread with id:" + threadId + " does not exist");
+        }
+        fields.forEach((key, value) -> {
+            Field field = ReflectionUtils.findField(Thread.class, key);
+            if (field != null) {
+                field.setAccessible(true);
+                ReflectionUtils.setField(field, thread, value);
+            }
+        });
+        return ResponseEntity.ok(threadRepository.save(thread));
+    }
 }
-

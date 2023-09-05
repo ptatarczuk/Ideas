@@ -8,7 +8,7 @@ import { Threads } from "./components/ThreadsList/Threads";
 import { NotFound } from "./components/NotFound/NotFound";
 import { UnauthorizedRoute } from "./components/UnauthorizedRoute";
 import { Registration } from "./pages/Registration/Registration";
-import { ThreadPage } from './pages/Thread/Thread';
+import {ThreadPage} from './pages/Thread/Thread'
 
 
 function App() {
@@ -40,6 +40,24 @@ function App() {
           <Route path="thread/:id" element={<ThreadPage />} />
           <Route path="*" element={<NotFound />} />
         </Route>
+
+        <Route
+          path="/login"
+          element={
+            <UnauthorizedRoute>
+              <Login />
+            </UnauthorizedRoute>
+          }
+        ></Route>
+
+        <Route
+          path="/register"
+          element={
+            <UnauthorizedRoute>
+              <Registration />
+            </UnauthorizedRoute>
+          }
+        ></Route>
       </Routes>
     </BrowserRouter>
 

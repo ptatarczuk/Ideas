@@ -3,6 +3,7 @@ import { Thread } from '../../models/Thread';
 import { SingleThread } from "./SingleThread"
 import jwt_decode from 'jwt-decode';
 import { UserContext } from '../../context/UserContext';
+import { dbApiWithoutAuth } from '../../httpService/httpService'
 
 
 export const Threads: React.FC = () => {
@@ -15,6 +16,7 @@ export const Threads: React.FC = () => {
     const [threads, setThreads] = useState<Thread[]>([])
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState('')
+
 
     useEffect(() => {
 
@@ -35,13 +37,10 @@ export const Threads: React.FC = () => {
             } catch (error) {
                 setError('An error occurred while fetching data')
                 setIsLoading(false)
-            } finally {
-                setIsLoading(false);
             }
         }
         fetchThreads()
     }, [])
-
 
     return (
 
@@ -51,6 +50,8 @@ export const Threads: React.FC = () => {
             ) : error ? (
                 <p>{error}</p>
             ) : (
+
+                
                 <table>
                     <thead>
                         <tr>
@@ -64,7 +65,7 @@ export const Threads: React.FC = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {threads.map(thread =>
+                        {threads.map(thread => 
                             <SingleThread key={thread.threadId} thread={thread} />
                         )}
                     </tbody>
@@ -74,4 +75,3 @@ export const Threads: React.FC = () => {
         </div>
     )
 }
-
