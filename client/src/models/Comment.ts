@@ -5,7 +5,7 @@ import {Thread} from "./Thread"
 export interface Comment {
     commentId: number
     commentText: string
-    commentDate: Date
+    commentDate: string
     user: User
     thread: Thread
 }
