@@ -40,8 +40,8 @@ VALUES (1, 'Submitted'),
        (5, 'NotApproved');
 
 INSERT INTO statuses (status_id, status_name)
-VALUES (1, 'closed'),
-       (2, 'open');
+VALUES (1, 'active'),
+       (2, 'closed');
 
 
 INSERT INTO users (user_name, user_email, user_password, role_id, department_id)
