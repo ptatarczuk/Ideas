@@ -22,4 +22,5 @@ export interface Thread {
     admission: Admission
     conclusion: Conclusion
     votes: Vote[];
+    date: string
 }
