@@ -5,9 +5,11 @@ import { Vote } from '../models/Vote';
 
 interface LikesProps {
     thread: Thread;
+    fetchThread: () => void;
 }
 
-export const Likes: React.FC<LikesProps> = ({ thread }) => {
+export const Likes: React.FC<LikesProps> = ({ thread, fetchThread }) => {
+    
     const totalPoints = thread.votes.reduce((accumulator: number, vote: Vote) => {
         if (vote.voteType === 'LIKE') {
             return accumulator + 1;
@@ -19,14 +21,14 @@ export const Likes: React.FC<LikesProps> = ({ thread }) => {
 
     const handleAddLike = async () => {
         try {
-            const response = await fetch('/votes/addVote', {
+            const response = await fetch('http://localhost:8080/votes/addVote', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
                     threadId: thread.threadId,
-                    userId: 1,
+                    userId: thread.user.userId,
                     voteType: 'LIKE',
                 }),
             });
@@ -34,8 +36,7 @@ export const Likes: React.FC<LikesProps> = ({ thread }) => {
             if (!response.ok) {
                 throw new Error('Error while adding DISLIKE vote');
             }
-
-            const data = await response.json();
+            fetchThread();            
 
         } catch (error: any) {
             console.error('Error:', error.message);
@@ -45,14 +46,14 @@ export const Likes: React.FC<LikesProps> = ({ thread }) => {
 
     const handleAddDislike = async () => {
         try {
-            const response = await fetch('/votes/addVote', {
+            const response = await fetch('http://localhost:8080/votes/addVote', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
                     threadId: thread.threadId,
-                    userId: 1,
+                    userId: thread.user.userId,
                     voteType: 'DISLIKE',
                 }),
             });
@@ -60,17 +61,12 @@ export const Likes: React.FC<LikesProps> = ({ thread }) => {
             if (!response.ok) {
                 throw new Error('Error while adding DISLIKE vote');
             }
-
-            const data = await response.json();
-
+            fetchThread();
+            
         } catch (error: any) {
             console.error('Error:', error.message);
         }
     };
-
-
-
-
 
     return (<div>
         <button onClick={handleAddLike}>+</button>

@@ -21,8 +21,7 @@ export const ThreadPage: React.FC = () => {
     
     const token: Token | null = useContext(UserContext);
     const decodedToken: object | any = token ? jwt_decode(token.user) : null;
-    //jak to zrobic? zamiast any wczesniej bylo null, ale pojawiał sie błąd
-    
+//to any zmienic    
 
 
     useEffect(() => {
@@ -58,7 +57,7 @@ export const ThreadPage: React.FC = () => {
             <h1>Thread</h1>
             <ThreadComponent thread={thread} decodedToken={decodedToken} />
             <Comments threadId={id} decodedToken={decodedToken}/>
-            <Likes thread={thread} />
+            <Likes thread={thread} fetchThread={fetchThread} />
         </div>
     );
 };
