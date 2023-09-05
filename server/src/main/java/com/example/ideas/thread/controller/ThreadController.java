@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RequestMapping("/threads")
 @RestController
@@ -34,7 +35,7 @@ public class ThreadController {
         return true;
     }
 
-//    @PreAuthorize("hasRole('Admin')")
+    //    @PreAuthorize("hasRole('Admin')")
 //    @PreAuthorize("hasAnyRole('Admin', 'User')")
     @GetMapping("/")
     public List<Thread> getThreads() {  // TODO: zmienic void na List<Thread>
@@ -44,8 +45,7 @@ public class ThreadController {
     @GetMapping("/id/{thread_id}")
     public ResponseEntity<Thread> getThreadById(
             @PathVariable("thread_id") Long threadId
-    )
-    {
+    ) {
         Thread thread = threadService.getThreadById(threadId).orElse(null);
         return thread != null ? ResponseEntity.ok(thread) : ResponseEntity.notFound().build();
     }
@@ -64,11 +64,17 @@ public class ThreadController {
 
     @PatchMapping("/id/{thread_id}")
     public ResponseEntity<?> updateThreadById(
-//    public void updateThreadById(
             @PathVariable("thread_id") Long threadId,
             @RequestBody ThreadDTO updatedThread
     ) {
-//
         return threadService.updateThreadById(threadId, updatedThread);
+    }
+
+    @PatchMapping("/id999/{thread_id}")
+    public ResponseEntity<?> updateThreadById999(
+            @PathVariable("thread_id") Long threadId,
+            @RequestBody Map<String, Object> fields
+    ){
+        return threadService.updateThreadById999(threadId, fields);
     }
 }

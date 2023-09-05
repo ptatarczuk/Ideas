@@ -4,6 +4,7 @@ import { Stage } from "./Stage"
 import { Status } from "./Status"
 import { Admission } from "./Admission"
 import { Conclusion } from "./Conclusion"
+import {Vote} from "./Vote"
 
 
 export interface Thread {
@@ -20,4 +21,5 @@ export interface Thread {
     comments: Comment[]
     admission: Admission
     conclusion: Conclusion
+    votes: Vote[];
 }

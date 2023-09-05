@@ -8,6 +8,7 @@ import com.example.ideas.util_Entities.stage.model.Stage;
 import com.example.ideas.util_Entities.status.model.Status;
 import com.example.ideas.user.model.User;
 import com.example.ideas.util_Entities.vote.model.Vote;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -70,6 +71,7 @@ public class Thread {
     private Status status;
 
     @OneToMany(mappedBy = "thread", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Vote> votes = new ArrayList<>();
 
     @OneToMany(mappedBy = "thread", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -81,8 +83,6 @@ public class Thread {
 
     @OneToOne(mappedBy = "thread", fetch = FetchType.LAZY)
     private Conclusion conclusion;
-
-
 
 
     //@OneToMany

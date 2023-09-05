@@ -1,7 +1,5 @@
 import React, { useContext } from "react";
-
 import { UserContext } from "../../context/UserContext";
-
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";

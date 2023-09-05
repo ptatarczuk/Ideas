@@ -43,7 +43,7 @@ public class AuthenticationService {
                 .build();
 
         User savedUser = repository.save(user);
-        String jwtToken = jwtService.generateToken(Map.of("role", user.getRole().getRoleName()), user);
+        String jwtToken = getJwtToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
         saveUserToken(savedUser, jwtToken);
         return AuthenticationResponse.builder()
@@ -51,7 +51,6 @@ public class AuthenticationService {
                 .refreshToken(refreshToken)
                 .build();
     }
-
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(
@@ -62,7 +61,7 @@ public class AuthenticationService {
         );
         User user = repository.findUserByEmail(request.getEmail())
                 .orElseThrow();
-        String jwtToken = jwtService.generateToken(Map.of("role", user.getRole().getRoleName()), user);
+        String jwtToken = getJwtToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
         revokeAllUserTokens(user);
         saveUserToken(user, jwtToken);
@@ -110,7 +109,7 @@ public class AuthenticationService {
             User user = this.repository.findUserByEmail(userEmail)
                     .orElseThrow();
             if (jwtService.isTokenValid(refreshToken, user)) {
-                String accessToken = jwtService.generateToken(Map.of("role", user.getRole().getRoleName()), user);
+                String accessToken = getJwtToken(user);
                 revokeAllUserTokens(user);
                 saveUserToken(user, accessToken);
                 AuthenticationResponse authResponse = AuthenticationResponse.builder()
@@ -205,6 +204,13 @@ public class AuthenticationService {
         repository.save(user);
 
         return ResponseEntity.ok("User password successfully updated");
+    }
+
+    private String getJwtToken(User user) {
+        return jwtService.generateToken(
+                Map.of("role", user.getRole().getRoleName(), "name", user.getName()),
+                user
+        );
     }
 
 
