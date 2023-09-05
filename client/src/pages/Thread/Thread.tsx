@@ -3,7 +3,10 @@ import { useParams } from 'react-router-dom';
 import { Thread } from '../../models/Thread';
 import jwt_decode from 'jwt-decode';
 import { UserContext } from '../../context/UserContext';
-import { ThreadReadOnly } from './ThreadComponent';
+import { ThreadComponent } from '../../components/Thread/Thread';
+import Comments from '../../components/Comments/Comments';
+import { Likes } from '../../components/Likes';
+
 
 
 export const ThreadPage: React.FC = () => {
@@ -16,9 +19,6 @@ export const ThreadPage: React.FC = () => {
     }
 
     
-
-
-
     const token: Token | null = useContext(UserContext);
     const decodedToken: object | any = token ? jwt_decode(token.user) : null;
     //jak to zrobic? zamiast any wczesniej bylo null, ale pojawiał sie błąd
@@ -56,7 +56,9 @@ export const ThreadPage: React.FC = () => {
         
         <div>
             <h1>Thread</h1>
-            <ThreadReadOnly thread={thread} decodedToken={decodedToken} />
+            <ThreadComponent thread={thread} decodedToken={decodedToken} />
+            <Comments threadId={id} decodedToken={decodedToken}/>
+            <Likes thread={thread} />
         </div>
     );
 };

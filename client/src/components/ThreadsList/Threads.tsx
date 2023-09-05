@@ -10,8 +10,8 @@ export const Threads: React.FC = () => {
         user: string;
         setUser: () => void;
     }
-    const token: Token | null = useContext(UserContext);
-    const decodedToken: string | null = token ? jwt_decode(token.user) : null;
+    // const token: Token | null = useContext(UserContext);
+    // const decodedToken: string | null = token ? jwt_decode(token.user) : null;
     const [threads, setThreads] = useState<Thread[]>([])
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState('')

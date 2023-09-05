@@ -2,12 +2,12 @@ import { TextField, Button, Box } from '@mui/material';
 import React, { useState } from 'react';
 import { Thread } from '../../models/Thread';
 
-interface ThreadReadOnlyProps {
+interface ThreadComponentProps {
     thread: Thread;
     decodedToken: any;
 }
 
-export const ThreadReadOnly: React.FC<ThreadReadOnlyProps> = ({ thread, decodedToken }) => {
+export const ThreadComponent: React.FC<ThreadComponentProps> = ({ thread, decodedToken }) => {
     const [editedThread, setEditedThread] = useState<Thread>({ ...thread });
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const [buttonText, setButtonText] = useState<String>("EDIT")
@@ -27,7 +27,7 @@ export const ThreadReadOnly: React.FC<ThreadReadOnlyProps> = ({ thread, decodedT
         setIsEditing(true);
         setButtonText("SAVE")
     };
-
+//wysyłać jeszcze email
     const handleSave = async () => {
         try {
             const dataToSend = {
@@ -38,7 +38,7 @@ export const ThreadReadOnly: React.FC<ThreadReadOnlyProps> = ({ thread, decodedT
 
             console.log(dataToSend);
             const response = await fetch(`http://localhost:8080/threads/id/${thread.threadId}`, {
-                method: 'PUT',
+                method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                 },
@@ -56,8 +56,6 @@ export const ThreadReadOnly: React.FC<ThreadReadOnlyProps> = ({ thread, decodedT
         }
     };
     
-
-
 
     return (
         <Box

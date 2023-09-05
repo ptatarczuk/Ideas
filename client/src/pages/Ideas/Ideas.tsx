@@ -1,5 +1,5 @@
 import React from 'react';
-import {Threads} from '../../components/Threads/Threads';
+import {Threads} from '../../components/ThreadsList/Threads';
 
 const Ideas: React.FC = () => {
     return (
