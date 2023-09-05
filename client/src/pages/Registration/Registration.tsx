@@ -1,25 +1,42 @@
-import React, { useState, FormEvent, ChangeEvent, useEffect, useContext } from "react"
-import { useNavigate } from "react-router-dom"
-import { dbApiWithoutAuth } from "../../httpService/httpService"
-import { AxiosResponse, AxiosError } from "axios"
-import { Role } from "../../models/Role"
-import { Department } from "../../models/Department"
-import { UserContext } from "../../context/UserContext"
-
+import React, {
+  useState,
+  FormEvent,
+  ChangeEvent,
+  useEffect,
+  useContext,
+} from "react";
+import { useNavigate } from "react-router-dom";
+import { dbApiWithoutAuth } from "../../httpService/httpService";
+import { AxiosResponse, AxiosError } from "axios";
+import { Role } from "../../models/Role";
+import { Department } from "../../models/Department";
+import { UserContext } from "../../context/UserContext";
+import jwt_decode from "jwt-decode";
 
 type RegistrationData = {
-  name: string
-  email: string
-  password: string
-  repeatPassword: string
-  role: Role
-  department: Department
-}
+  name: string;
+  email: string;
+  password: string;
+  repeatPassword: string;
+  role: Role;
+  department: Department;
+};
 
 type RegistrationResponse = {
   accessToken: string;
   refreshToken: string;
 };
+
+type FileUpload = {
+  file: File | null
+}
+
+type FileUploadResponse = {
+  fileName: string;
+  size: number;
+  downloadUri: string;
+}
+
 
 export const Registration: React.FC = () => {
   const [regFormData, setRegFormData] = useState<RegistrationData>({
@@ -29,93 +46,126 @@ export const Registration: React.FC = () => {
     repeatPassword: "",
     role: { roleId: 0, roleName: "" },
     department: { departmentId: 0, departmentName: "" },
-  })
+  });
   const { setUser } = useContext(UserContext);
-  const [roles, setRoles] = useState<Role[]>([])
-  const [departments, setDepartments] = useState<Department[]>([])
-  const [error, setError] = useState<string | null>(null)
-  const navigate = useNavigate()
+  const [roles, setRoles] = useState<Role[]>([]);
+  const [departments, setDepartments] = useState<Department[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
+  const [file, setFile] = useState<FileUpload | null>(null)
 
-
+  
   async function fetchRolesAndDepartments() {
     try {
-      const getRoles = dbApiWithoutAuth.get("/roles/")
-      const getDepartments = dbApiWithoutAuth.get("/departments/")
+      const getRoles = dbApiWithoutAuth.get("/roles/");
+      const getDepartments = dbApiWithoutAuth.get("/departments/");
 
-      const results = await Promise.all([getRoles, getDepartments])
-      setRoles(results[0].data)
-      setDepartments(results[1].data)
+      const results = await Promise.all([getRoles, getDepartments]);
+      setRoles(results[0].data);
+      setDepartments(results[1].data);
     } catch (error) {
-      console.error(error)
+      console.error(error);
     }
   }
 
   useEffect(() => {
-    fetchRolesAndDepartments()
-  }, [])
+    fetchRolesAndDepartments();
+  }, []);
 
-  function handleRoleChange(event: ChangeEvent<HTMLSelectElement>) {
-    const selectedRoleId = event.target.value
+  function handleSelectChange(event: ChangeEvent<HTMLSelectElement>) {
+    const { name, value } = event.target;
+    const selected =
+      name === "role"
+        ? roles.find((role) => role.roleId.toString() === value)
+        : departments.find(
+            (department) => department.departmentId.toString() === value
+          );
 
-    const selectedRole = roles.find(
-      (role) => role.roleId.toString() === selectedRoleId
-    )
-    if (selectedRole) {
-      setRegFormData({ ...regFormData, role: selectedRole })
-    }
-  }
-
-  function handleDepartmentChange(event: ChangeEvent<HTMLSelectElement>) {
-    const selectedDepartmentId = event.target.value
-
-    const selectedDepartment = departments.find(
-      (department) =>
-        department.departmentId.toString() === selectedDepartmentId
-    );
-    if (selectedDepartment) {
-      setRegFormData({ ...regFormData, department: selectedDepartment })
+    if (selected) {
+      setRegFormData({ ...regFormData, [name]: selected });
     }
   }
 
   function handleRegistrationInput(event: ChangeEvent<HTMLInputElement>) {
-    const { name, value } = event.target
+    const { name, value } = event.target;
     setRegFormData({ ...regFormData, [name]: value });
   }
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const fileInput = e.target;
+    if (fileInput && fileInput.files && fileInput.files[0]) {
+      const file = fileInput.files[0] as File;
+      setFile({ file: file })
+      console.log(file)
+    }
+  };
 
   const register = async (url: string, data: any) => {
     try {
       const response: AxiosResponse<RegistrationResponse> =
         await dbApiWithoutAuth.post(url, data)
-      
-      const statusCode = response.status
-      console.log("Response Status Code:", statusCode)
-      return response.data
+      const statusCode = response.status;
+      console.log("Response Status Code:", statusCode);
+      return response.data;
     } catch (error) {
       const axiosError = error as AxiosError;
       if (axiosError.response) {
-        const errorStatusCode = axiosError.response.status
-        console.log("Error Status Code:", errorStatusCode)
+        const errorStatusCode = axiosError.response.status;
+        console.log("Error Status Code:", errorStatusCode);
 
-        throw axiosError.response.data
+        throw axiosError.response.data;
       } else {
-        throw axiosError.message
+        throw axiosError.message;
       }
     }
   };
+
+  const sendFile = async (url: string, data: any) => {
+    try {
+      const response: AxiosResponse<FileUploadResponse> =
+        await dbApiWithoutAuth.post(url, data, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+      const statusCode = response.status;
+      console.log("Response Status Code:", statusCode);
+      return response.data;
+    } catch (error) {
+      const axiosError = error as AxiosError;
+      if (axiosError.response) {
+        const errorStatusCode = axiosError.response.status;
+        console.log("Error Status Code:", errorStatusCode);
+
+        throw axiosError.response.data;
+      } else {
+        throw axiosError.message;
+      }
+    }
+  };
+
+
   async function handleRegistrationSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
+    event.preventDefault();
     if (regFormData.password !== regFormData.repeatPassword) {
-      setError('Password and repeat password do not match')
-      return
+      setError("Password and repeat password do not match");
+      return;
     }
     try {
-      const responseData = await register("/api/v1/auth/register", regFormData)
+      const responseData = await register("/api/v1/auth/register", regFormData);
       console.log("Response: ", responseData);
-      const token = responseData.accessToken
-      console.log(token)
+      const token = responseData.accessToken;
+      console.log(token);
       if (token) {
-        sessionStorage.setItem("token", JSON.stringify(token))
-        setUser(token)
+        sessionStorage.setItem("token", JSON.stringify(token));
+        setUser(token);
+      }
+      const decoded = jwt_decode(token);
+      console.log(decoded);
+
+      if (file) {
+        const uploadData = await sendFile("/uploadFile", file)
+        console.log(uploadData)
       }
 
       setRegFormData({
@@ -126,10 +176,13 @@ export const Registration: React.FC = () => {
         role: { roleId: 0, roleName: "" },
         department: { departmentId: 0, departmentName: "" },
       });
-      navigate("/")
+
+      setFile(null)
+
+      navigate("/");
     } catch (error) {
-      console.error("Error:", error)
-      setError("Registration failed. Please try again.")
+      console.error("Error:", error);
+      setError("Registration failed. Please try again.");
     }
   }
 
@@ -188,7 +241,7 @@ export const Registration: React.FC = () => {
             id="role"
             name="role"
             className="register-form__select"
-            onChange={handleRoleChange}
+            onChange={handleSelectChange}
           >
             <option value="">Select your role</option>
             {roles.map((role) => (
@@ -206,7 +259,7 @@ export const Registration: React.FC = () => {
             id="department"
             name="department"
             className="register-form__select"
-            onChange={handleDepartmentChange}
+            onChange={handleSelectChange}
           >
             <option value="">Select a department</option>
             {departments.map((department) => (
@@ -219,6 +272,12 @@ export const Registration: React.FC = () => {
             ))}
           </select>
         </div>
+        <input
+          type="file"
+          name="photo"
+          accept="image/*"
+          onChange={handleFileChange}
+        />
 
         {/* Display error message  */}
         {error && <div className="register-form__error">{error}</div>}
@@ -231,5 +290,5 @@ export const Registration: React.FC = () => {
         <a href="/login">Already have an account? Sign-in</a>
       </div>
     </main>
-  )
-}
+  );
+};
