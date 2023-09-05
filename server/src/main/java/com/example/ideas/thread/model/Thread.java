@@ -70,8 +70,8 @@ public class Thread {
     @JoinColumn(name = "status_id")
     private Status status;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "thread", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<Vote> votes = new ArrayList<>();
 
     @OneToMany(mappedBy = "thread", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -83,8 +83,6 @@ public class Thread {
 
     @OneToOne(mappedBy = "thread", fetch = FetchType.LAZY)
     private Conclusion conclusion;
-
-
 
 
     //@OneToMany

@@ -2,6 +2,7 @@ package com.example.ideas.util_Entities.vote.model;
 
 import com.example.ideas.thread.model.Thread;
 import com.example.ideas.user.model.User;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,8 +21,9 @@ public class Vote {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "thread_id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "thread_id")
+    @JsonBackReference
     private Thread thread;
 
     @ManyToOne
