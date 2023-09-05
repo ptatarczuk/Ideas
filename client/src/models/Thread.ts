@@ -23,5 +23,4 @@ export interface Thread {
     conclusion: Conclusion
     date: string
     votes: Vote[];
-    date: string
 }
