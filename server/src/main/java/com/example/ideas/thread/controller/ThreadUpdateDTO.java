@@ -10,7 +10,7 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class ThreadDTO {
+public class ThreadUpdateDTO {
     private String email;
     private String title;
     private String description;

@@ -1,10 +1,20 @@
 package com.example.ideas.thread.service;
 
-import com.example.ideas.thread.controller.ThreadDTO;
+import com.example.ideas.thread.controller.ThreadCreateDTO;
+import com.example.ideas.thread.controller.ThreadUpdateDTO;
 import com.example.ideas.thread.model.Thread;
 import com.example.ideas.thread.repository.ThreadRepository;
+import com.example.ideas.user.model.User;
+import com.example.ideas.user.repository.UserRepository;
+import com.example.ideas.util_Entities.category.model.Category;
+import com.example.ideas.util_Entities.category.repository.CategoryRepository;
+import com.example.ideas.util_Entities.stage.model.Stage;
+import com.example.ideas.util_Entities.stage.repository.StageRepository;
+import com.example.ideas.util_Entities.status.model.Status;
+import com.example.ideas.util_Entities.status.repository.StatusRepository;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,14 +28,16 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class ThreadService {
 
     private final ThreadRepository threadRepository;
+    private final UserRepository userRepository;
+    private final CategoryRepository categoryRepository;
+    private final StageRepository stageRepository;
+    private final StatusRepository statusRepository;
 
-    @Autowired
-    public ThreadService(ThreadRepository threadRepository) {
-        this.threadRepository = threadRepository;
-    }
+
 
     public List<Thread> getThreads() {
         return threadRepository.findAll();
@@ -36,10 +48,29 @@ public class ThreadService {
     }
 
     //Walidacja?
-    public ResponseEntity<Thread> addThread(@Valid Thread thread) {
-        thread.setDate(LocalDate.now());
-        threadRepository.save(thread);
-        return ResponseEntity.status(HttpStatus.OK).body(thread);
+    public ResponseEntity<?> addThread(ThreadCreateDTO threadDTO) {
+
+        User user = userRepository.findUserByEmail(threadDTO.getUserEmail()).orElse(null);
+        Category category = categoryRepository.findById(threadDTO.getCategoryId()).orElse(null);
+        Stage stage = stageRepository.findById(threadDTO.getStageId()).orElse(null);
+        Status status = statusRepository.findById(threadDTO.getStatusId()).orElse(null);
+
+        if(user == null || category == null || stage == null || status == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("wrong data");
+        }
+
+        Thread thread = Thread.builder()
+                .date(LocalDate.now())
+                .title(threadDTO.getTitle())
+                .description(threadDTO.getDescription())
+                .justification(threadDTO.getJustification())
+                .user(user)
+                .category(category)
+                .stage(stage)
+                .status(status)
+                .build();
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(threadRepository.save(thread));
     }
 
     public ResponseEntity<Thread> deleteThread(Long id) {
@@ -53,44 +84,44 @@ public class ThreadService {
 
     // Walidacja?
     @Transactional
-    public ResponseEntity<?> updateThreadById(Long threadId, ThreadDTO threadDTO) {
+    public ResponseEntity<?> updateThreadById(Long threadId, ThreadUpdateDTO threadUpdateDTO) {
         Thread thread = threadRepository.findById(threadId).orElse(null);
         if (thread == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Provided Thread with id: " + threadId + " does not exist");
         }
-        if (threadDTO.getEmail() != null && !thread.getUser().getEmail().equals(threadDTO.getEmail())) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User: " + threadDTO.getEmail() + " is not authorized to modify this thread");
+        if (threadUpdateDTO.getEmail() != null && !thread.getUser().getEmail().equals(threadUpdateDTO.getEmail())) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User: " + threadUpdateDTO.getEmail() + " is not authorized to modify this thread");
         }
 
-        if (threadDTO.getTitle() != null) {
-            thread.setTitle(threadDTO.getTitle());
+        if (threadUpdateDTO.getTitle() != null) {
+            thread.setTitle(threadUpdateDTO.getTitle());
         }
-        if (threadDTO.getDescription() != null) {
-            thread.setDescription(threadDTO.getDescription());
+        if (threadUpdateDTO.getDescription() != null) {
+            thread.setDescription(threadUpdateDTO.getDescription());
         }
-        if (threadDTO.getJustification() != null) {
-            thread.setJustification(threadDTO.getJustification());
+        if (threadUpdateDTO.getJustification() != null) {
+            thread.setJustification(threadUpdateDTO.getJustification());
         }
-        if (threadDTO.getPhoto() != null) {
-            thread.setPhoto(threadDTO.getPhoto());
+        if (threadUpdateDTO.getPhoto() != null) {
+            thread.setPhoto(threadUpdateDTO.getPhoto());
         }
-        if (threadDTO.getPoints() != null) {
-            thread.setPoints(threadDTO.getPoints());
+        if (threadUpdateDTO.getPoints() != null) {
+            thread.setPoints(threadUpdateDTO.getPoints());
         }
-        if (threadDTO.getCategory() != null) {
-            thread.setCategory(threadDTO.getCategory());
+        if (threadUpdateDTO.getCategory() != null) {
+            thread.setCategory(threadUpdateDTO.getCategory());
         }
-        if (threadDTO.getStage() != null) {
-            thread.setStage(threadDTO.getStage());
+        if (threadUpdateDTO.getStage() != null) {
+            thread.setStage(threadUpdateDTO.getStage());
         }
-        if (threadDTO.getStatus() != null) {
-            thread.setStatus(threadDTO.getStatus());
+        if (threadUpdateDTO.getStatus() != null) {
+            thread.setStatus(threadUpdateDTO.getStatus());
         }
-        if (threadDTO.getAdmission() != null) {
-            thread.setAdmission(threadDTO.getAdmission());
+        if (threadUpdateDTO.getAdmission() != null) {
+            thread.setAdmission(threadUpdateDTO.getAdmission());
         }
-        if (threadDTO.getConclusion() != null) {
-            thread.setConclusion(threadDTO.getConclusion());
+        if (threadUpdateDTO.getConclusion() != null) {
+            thread.setConclusion(threadUpdateDTO.getConclusion());
     }
 
     // czy tutaj updatujemy admission i conclusion ? one maja swoje update'y

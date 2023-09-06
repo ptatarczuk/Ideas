@@ -6,7 +6,6 @@ import com.example.ideas.thread.utils.EmailSender;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -53,8 +52,8 @@ public class ThreadController {
     // czy tu beda potrzebne getByStatus getByCategory getByStage itp ?
 
     @PostMapping("/addThread")
-    public ResponseEntity<Thread> addThread(@Valid @RequestBody Thread thread) {
-        return threadService.addThread(thread);
+    public ResponseEntity<?> addThread(@Valid @RequestBody ThreadCreateDTO threadCreateDTO) {
+        return threadService.addThread(threadCreateDTO);
     }
 
     @DeleteMapping("/{thread_id}")
@@ -65,7 +64,7 @@ public class ThreadController {
     @PatchMapping("/id/{thread_id}")
     public ResponseEntity<?> updateThreadById(
             @PathVariable("thread_id") Long threadId,
-            @RequestBody ThreadDTO updatedThread
+            @RequestBody ThreadUpdateDTO updatedThread
     ) {
         return threadService.updateThreadById(threadId, updatedThread);
     }
