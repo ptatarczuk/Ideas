@@ -13,9 +13,7 @@ import com.example.ideas.util_Entities.stage.repository.StageRepository;
 import com.example.ideas.util_Entities.status.model.Status;
 import com.example.ideas.util_Entities.status.repository.StatusRepository;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -52,11 +50,11 @@ public class ThreadService {
 
         User user = userRepository.findUserByEmail(threadDTO.getUserEmail()).orElse(null);
         Category category = categoryRepository.findById(threadDTO.getCategoryId()).orElse(null);
-        Stage stage = stageRepository.findById(threadDTO.getStageId()).orElse(null);
-        Status status = statusRepository.findById(threadDTO.getStatusId()).orElse(null);
+        Stage stage = stageRepository.findById(1L).orElse(null);
+        Status status = statusRepository.findById(1L).orElse(null);
 
         if(user == null || category == null || stage == null || status == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("wrong data");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("given user or category does not exist in database");
         }
 
         Thread thread = Thread.builder()
