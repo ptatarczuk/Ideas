@@ -1,15 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { Thread } from "../../models/Thread";
-import { SingleThread } from "./SingleThread";
+
 import axios from "axios";
 import Box from "@mui/material/Box";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
 import { StatusFilter } from "../Filters/StatusFilter";
 import {
-  Autocomplete,
   Button,
   Grid,
   Paper,
@@ -19,7 +14,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  TextField,
 } from "@mui/material";
 import AutocompleteComponent from "../Filters/AutocompleteComponent";
 import { useNavigate } from "react-router-dom";
@@ -29,15 +23,14 @@ export const Threads: React.FC = () => {
     user: string;
     setUser: () => void;
   }
-  // const token: Token | null = useContext(UserContext);
-  // const decodedToken: string | null = token ? jwt_decode(token.user) : null;
 
   const [threads, setThreads] = useState<Thread[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
-  const [filteredThreads, setFilteredThreads] = useState<Thread[]>([]);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+  const [filteredThreads, setFilteredThreads] = useState<Thread[]>([]); // zmienic na obiekt
   const [selectedThreadTitle, setSelectedThreadTitle] = useState<
+    // polaczyc z filteredThreads
     string | null
   >();
   const [displayedThreads, setDisplayedThreads] = useState<Thread[]>([]);
@@ -61,10 +54,7 @@ export const Threads: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    setIsButtonDisabled(true);
-    if (displayedThreads !== filteredThreads) {
-      setIsButtonDisabled(false);
-    }
+    setIsButtonDisabled(displayedThreads === filteredThreads);
   }, [displayedThreads, filteredThreads]);
 
   const handleButtonClick = () => {
@@ -75,39 +65,39 @@ export const Threads: React.FC = () => {
 
   return (
     <div>
-         <Box marginLeft="9%">
-      <Grid container spacing={2} alignItems="left">
-        <Grid item>
-          <AutocompleteComponent
-            options={threads.map((thread) => thread.title)}
-            value={selectedThreadTitle || null} // Ensure it's never undefined
-            onChange={(newValue) => {
-              setSelectedThreadTitle(newValue);
-              const filtered = threads.filter(
-                (thread) => thread.title === newValue
-              );
-              setDisplayedThreads(filtered);
-            }}
-          />
+      <Box marginLeft="9%">
+        <Grid container spacing={2} alignItems="left">
+          <Grid item>
+            <AutocompleteComponent
+              options={threads.map((thread) => thread.title)}
+              value={selectedThreadTitle || null} // Ensure it's never undefined
+              onChange={(newValue) => {
+                setSelectedThreadTitle(newValue);
+                const filtered = threads.filter(
+                  (thread) => thread.title === newValue
+                );
+                setDisplayedThreads(filtered);
+              }}
+            />
+          </Grid>
+          <Grid item>
+            <StatusFilter
+              threads={threads}
+              setFilteredThreads={setFilteredThreads}
+              setDisplayedThreads={setDisplayedThreads}
+            />
+          </Grid>
+          <Grid item>
+            <Button
+              variant="outlined"
+              onClick={handleButtonClick}
+              disabled={isButtonDisabled}
+            >
+              Reset
+            </Button>
+          </Grid>
         </Grid>
-        <Grid item>
-          <StatusFilter
-            threads={threads}
-            setFilteredThreads={setFilteredThreads}
-            setDisplayedThreads={setDisplayedThreads}
-          />
-        </Grid>
-        <Grid item>
-          <Button
-            variant="outlined"
-            onClick={handleButtonClick}
-            disabled={isButtonDisabled}
-          >
-            Reset
-          </Button>
-        </Grid>
-      </Grid>
-</Box>
+      </Box>
       {isLoading ? (
         <p>Loading...</p>
       ) : error ? (
@@ -123,15 +113,30 @@ export const Threads: React.FC = () => {
             }} // remove margins from here and add css file later
             aria-label="simple table"
           >
-            <TableHead>
+            <TableHead>  
               <TableRow>
-                <TableCell>Date</TableCell>
-                <TableCell align="right">Title</TableCell>
-                <TableCell align="right">Points</TableCell>
-                <TableCell align="right">Category</TableCell>
-                <TableCell align="right">Stage</TableCell>
-                <TableCell align="right">Author</TableCell>
-                <TableCell align="right">Department</TableCell>
+                {/* {{ ["Date", "Title"].map(name) => ({TableCell.})}} */}
+                <TableCell>
+                  <b>Date</b>
+                </TableCell>
+                <TableCell align="right">
+                  <b>Title</b>
+                </TableCell>
+                <TableCell align="right">
+                  <b>Points</b>
+                </TableCell>
+                <TableCell align="right">
+                  <b>Category</b>
+                </TableCell>
+                <TableCell align="right">
+                  <b>Stage</b>
+                </TableCell>
+                <TableCell align="right">
+                  <b>Author</b>
+                </TableCell>
+                <TableCell align="right">
+                  <b>Department</b>
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

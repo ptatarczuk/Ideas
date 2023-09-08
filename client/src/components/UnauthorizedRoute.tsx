@@ -4,7 +4,7 @@ import React from "react";
 
 export const UnauthorizedRoute = ({ children }: React.PropsWithChildren) => {
   if (localStorage.getItem(ACCESS_TOKEN)) {
-    return <Navigate to={"/profile"} replace />;
+    return <Navigate to={"/profile"} replace />; // zmienic na ternary
   }
 
   return <>{children}</>;

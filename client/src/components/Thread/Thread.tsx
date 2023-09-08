@@ -36,7 +36,7 @@ export const ThreadComponent: React.FC<ThreadComponentProps> = ({ thread, decode
                 justification: editedThread.justification
             };
 
-            console.log(dataToSend);
+            console.log(dataToSend);   // zmienic na axios
             const response = await fetch(`http://localhost:8080/threads/id/${thread.threadId}`, {
                 method: 'PATCH',
                 headers: {
