@@ -20,7 +20,7 @@ function App() {
         <Route path="/" element={<Layout />} >
           <Route index element={<Threads />} />
           <Route path="users" element={<UsersList />} />
-          <Route
+          {/* <Route
             path="/login"
             element={
               <UnauthorizedRoute>
@@ -35,7 +35,7 @@ function App() {
                 <Registration />
               </UnauthorizedRoute>
             }
-          ></Route>
+          ></Route> */}
           <Route path="threads" element={<Threads />} />
           <Route path="thread/:id" element={<ThreadPage />} />
           <Route path="*" element={<NotFound />} />
