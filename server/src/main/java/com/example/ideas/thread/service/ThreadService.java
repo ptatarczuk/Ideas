@@ -1,5 +1,8 @@
 package com.example.ideas.thread.service;
 
+import com.example.ideas.exception.EntityNotFoundException;
+import com.example.ideas.files.FileService;
+import com.example.ideas.files.FileUploadResponse;
 import com.example.ideas.thread.controller.ThreadCreateDTO;
 import com.example.ideas.thread.controller.ThreadUpdateDTO;
 import com.example.ideas.thread.model.Thread;
@@ -17,13 +20,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ReflectionUtils;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.lang.reflect.Field;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
+
+import static com.example.ideas.thread.utils.ObjectProvider.getObjectFromDB;
 
 @Service
 @RequiredArgsConstructor
@@ -34,8 +38,7 @@ public class ThreadService {
     private final CategoryRepository categoryRepository;
     private final StageRepository stageRepository;
     private final StatusRepository statusRepository;
-
-
+    private final FileService fileService;
 
     public List<Thread> getThreads() {
         return threadRepository.findAll();
@@ -46,16 +49,13 @@ public class ThreadService {
     }
 
     //Walidacja?
-    public ResponseEntity<?> addThread(ThreadCreateDTO threadDTO) {
+    public Thread addThread(MultipartFile multipartFile, ThreadCreateDTO threadDTO) throws EntityNotFoundException, IOException {
 
-        User user = userRepository.findUserByEmail(threadDTO.getUserEmail()).orElse(null);
-        Category category = categoryRepository.findById(threadDTO.getCategoryId()).orElse(null);
-        Stage stage = stageRepository.findById(1L).orElse(null);
-        Status status = statusRepository.findById(1L).orElse(null);
-
-        if(user == null || category == null || stage == null || status == null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("given user or category does not exist in database");
-        }
+        User user = userRepository.findUserByEmail(threadDTO.getUserEmail())
+                .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + threadDTO.getUserEmail()));
+        Category category = getObjectFromDB(threadDTO.getCategoryId(), categoryRepository);
+        Stage stage = getObjectFromDB(1L, stageRepository);
+        Status status = getObjectFromDB(1L, statusRepository);
 
         Thread thread = Thread.builder()
                 .date(LocalDate.now())
@@ -68,7 +68,12 @@ public class ThreadService {
                 .status(status)
                 .build();
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(threadRepository.save(thread));
+        if (!(multipartFile == null || multipartFile.isEmpty())) {
+            FileUploadResponse fileUploadResponse = fileService.uploadFile(multipartFile);
+            thread.setPhoto(fileUploadResponse.getDownloadUri());
+        }
+
+        return threadRepository.save(thread);
     }
 
     public ResponseEntity<Thread> deleteThread(Long id) {
@@ -82,14 +87,13 @@ public class ThreadService {
 
     // Walidacja?
     @Transactional
-    public ResponseEntity<?> updateThreadById(Long threadId, ThreadUpdateDTO threadUpdateDTO) {
-        Thread thread = threadRepository.findById(threadId).orElse(null);
-        if (thread == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Provided Thread with id: " + threadId + " does not exist");
-        }
-        if (threadUpdateDTO.getEmail() != null && !thread.getUser().getEmail().equals(threadUpdateDTO.getEmail())) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("User: " + threadUpdateDTO.getEmail() + " is not authorized to modify this thread");
-        }
+    public Thread updateThreadById(Long threadId, MultipartFile multipartFile, ThreadUpdateDTO threadUpdateDTO) throws IOException, EntityNotFoundException {
+
+        Long categoryId = threadUpdateDTO.getCategoryId();
+        Long stageId = threadUpdateDTO.getStageId();
+        Long statusId = threadUpdateDTO.getStatusId();
+
+        Thread thread = getObjectFromDB(threadId, threadRepository);
 
         if (threadUpdateDTO.getTitle() != null) {
             thread.setTitle(threadUpdateDTO.getTitle());
@@ -100,44 +104,55 @@ public class ThreadService {
         if (threadUpdateDTO.getJustification() != null) {
             thread.setJustification(threadUpdateDTO.getJustification());
         }
-        if (threadUpdateDTO.getPhoto() != null) {
-            thread.setPhoto(threadUpdateDTO.getPhoto());
+        if (!(multipartFile == null || multipartFile.isEmpty())) {
+            uploadNewPhoto(multipartFile, thread);
         }
         if (threadUpdateDTO.getPoints() != null) {
             thread.setPoints(threadUpdateDTO.getPoints());
         }
-        if (threadUpdateDTO.getCategory() != null) {
-            thread.setCategory(threadUpdateDTO.getCategory());
+        if (categoryId != null) {
+            thread.setCategory(getObjectFromDB(categoryId, categoryRepository));
         }
-        if (threadUpdateDTO.getStage() != null) {
-            thread.setStage(threadUpdateDTO.getStage());
+        if (stageId != null) {
+            thread.setStage(getObjectFromDB(stageId, stageRepository));
         }
-        if (threadUpdateDTO.getStatus() != null) {
-            thread.setStatus(threadUpdateDTO.getStatus());
+        if (statusId != null) {
+            thread.setStatus(getObjectFromDB(statusId, statusRepository));
         }
-        if (threadUpdateDTO.getAdmission() != null) {
-            thread.setAdmission(threadUpdateDTO.getAdmission());
-        }
-        if (threadUpdateDTO.getConclusion() != null) {
-            thread.setConclusion(threadUpdateDTO.getConclusion());
+
+        return thread;
     }
 
-    // czy tutaj updatujemy admission i conclusion ? one maja swoje update'y
-        return ResponseEntity.ok(thread);
+    private void uploadNewPhoto(MultipartFile multipartFile, Thread thread) throws IOException {
+        deleteOldPhotoIfPresent(thread);
+        FileUploadResponse fileUploadResponse = fileService.uploadFile(multipartFile);
+        if (fileUploadResponse != null) {
+            thread.setPhoto(fileUploadResponse.getDownloadUri());
+        }
     }
 
-    public ResponseEntity<?> updateThreadById999(Long threadId, Map<String, Object> fields) {
-        Thread thread = threadRepository.findById(threadId).orElse(null);
-        if (thread == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Provided Thread with id:" + threadId + " does not exist");
+    private void deleteOldPhotoIfPresent(Thread thread) throws IOException {
+        String downloadUri = thread.getPhoto();
+        if (!downloadUri.isEmpty()) {
+            String fileCode = downloadUri.substring(downloadUri.lastIndexOf("/") + 1);
+            fileService.deleteFile(fileCode);
         }
-        fields.forEach((key, value) -> {
-            Field field = ReflectionUtils.findField(Thread.class, key);
-            if (field != null) {
-                field.setAccessible(true);
-                ReflectionUtils.setField(field, thread, value);
-            }
-        });
-        return ResponseEntity.ok(threadRepository.save(thread));
     }
+
+//    public ResponseEntity<?> updateThreadById999(Long threadId, Map<String, Object> fields) {
+//        Thread thread = threadRepository.findById(threadId).orElse(null);
+//        if (thread == null) {
+//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Provided Thread with id:" + threadId + " does not exist");
+//        }
+//        fields.forEach((key, value) -> {
+//            Field field = ReflectionUtils.findField(Thread.class, key);
+//            if (field != null) {
+//                field.setAccessible(true);
+//                ReflectionUtils.setField(field, thread, value);
+//            }
+//        });
+//        return ResponseEntity.ok(threadRepository.save(thread));
+//    }
+
 }
+

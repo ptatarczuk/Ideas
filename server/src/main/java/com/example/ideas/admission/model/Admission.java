@@ -13,17 +13,17 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Admission {
 
     @Id
     private Long admissionId;
 
     @Column(name = "admission_text")
-    @NotBlank(message = "Content of admission information is mandatory")
     private String content;
 
     @Column(name = "admission_date")
-    private final LocalDate dateOfPost = LocalDate.now();
+    private LocalDate dateOfPost;
 
     @OneToOne
     @JoinColumn(name = "admission_author")

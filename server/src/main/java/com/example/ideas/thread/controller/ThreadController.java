@@ -1,15 +1,23 @@
 package com.example.ideas.thread.controller;
 
+import com.example.ideas.exception.EntityNotFoundException;
 import com.example.ideas.thread.model.Thread;
 import com.example.ideas.thread.service.ThreadService;
 import com.example.ideas.thread.utils.EmailSender;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+
+import java.io.IOException;
 import java.util.List;
-import java.util.Map;
+
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RequestMapping("/threads")
 @RestController
@@ -18,11 +26,16 @@ public class ThreadController {
     private final ThreadService threadService;
     private EmailSender emailSender;
 
+
+
     @Autowired
     public ThreadController(ThreadService threadService, EmailSender emailSender) {
         this.threadService = threadService;
         this.emailSender = emailSender;
     }
+
+
+
 
     @GetMapping("/email")
     public boolean sendEmail() {
@@ -51,9 +64,12 @@ public class ThreadController {
 
     // czy tu beda potrzebne getByStatus getByCategory getByStage itp ?
 
-    @PostMapping("/addThread")
-    public ResponseEntity<?> addThread(@Valid @RequestBody ThreadCreateDTO threadCreateDTO) {
-        return threadService.addThread(threadCreateDTO);
+    @RequestMapping(path = "/addThread", method = POST, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<Thread> addThread(
+            @RequestPart @Valid ThreadCreateDTO threadCreateDTO,
+            @RequestPart(value = "file", required = false) MultipartFile multipartFile
+    ) throws EntityNotFoundException, IOException {
+        return new ResponseEntity<>(threadService.addThread(multipartFile, threadCreateDTO), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{thread_id}")
@@ -61,19 +77,23 @@ public class ThreadController {
         return threadService.deleteThread(threadId);
     }
 
-    @PatchMapping("/id/{thread_id}")
-    public ResponseEntity<?> updateThreadById(
+    @PatchMapping(value = "/id/{thread_id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<Thread> updateThreadById(
+            @RequestHeader("Authorization") String token,
             @PathVariable("thread_id") Long threadId,
-            @RequestBody ThreadUpdateDTO updatedThread
-    ) {
-        return threadService.updateThreadById(threadId, updatedThread);
+            @RequestPart(value ="file", required = false) MultipartFile multipartFile,
+            @RequestPart(value = "thread") @Valid ThreadUpdateDTO updatedThread
+    ) throws IOException, EntityNotFoundException {
+//        System.out.println(token);
+//        SecurityContextHolder.getContext();
+        return new  ResponseEntity<>(threadService.updateThreadById(threadId, multipartFile,updatedThread), HttpStatus.OK);
     }
 
-    @PatchMapping("/id999/{thread_id}")
-    public ResponseEntity<?> updateThreadById999(
-            @PathVariable("thread_id") Long threadId,
-            @RequestBody Map<String, Object> fields
-    ){
-        return threadService.updateThreadById999(threadId, fields);
-    }
+//    @PatchMapping("/id999/{thread_id}")
+//    public ResponseEntity<?> updateThreadById999(
+//            @PathVariable("thread_id") Long threadId,
+//            @RequestBody Map<String, Object> fields
+//    ) {
+//        return threadService.updateThreadById999(threadId, fields);
+//    }
 }

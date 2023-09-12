@@ -2,11 +2,14 @@ package com.example.ideas.admission.controller;
 
 import com.example.ideas.admission.model.Admission;
 import com.example.ideas.admission.service.AdmissionService;
+import com.example.ideas.exception.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @RequestMapping("/admission")
@@ -27,17 +30,16 @@ public class AdmissionController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<String> addAdmission(@Valid @RequestBody Admission admission) {
-        return admissionService.addAdmission(admission);
-
+    public ResponseEntity<Admission> addAdmission(@Valid @RequestBody AdmissionCreateDTO admissionCreateDTO) throws EntityNotFoundException, IOException {
+        return new ResponseEntity<>(admissionService.addAdmission(admissionCreateDTO), HttpStatus.CREATED);
     }
 
-    @PutMapping("/{admission_id}")
-    public ResponseEntity<String> updateAdmissionById(
+    @PatchMapping("/{admission_id}")
+    public ResponseEntity<Admission> updateAdmissionById(
             @PathVariable("admission_id") Long admissionId,
-            @RequestBody Admission updatedAdmission
-    ) {
-        return admissionService.updateAdmissionById(admissionId, updatedAdmission);
+            @RequestBody AdmissionUpdateDTO admissionUpdateDTO
+    ) throws EntityNotFoundException {
+        return ResponseEntity.ok(admissionService.updateAdmissionById(admissionId, admissionUpdateDTO));
     }
 
     @DeleteMapping("/{admission_id}")

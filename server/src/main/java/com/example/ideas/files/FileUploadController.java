@@ -2,15 +2,16 @@ package com.example.ideas.files;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Objects;
+
+import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @RestController
 public class FileUploadController {
@@ -23,9 +24,10 @@ public class FileUploadController {
         this.fileUploadService = fileUploadService;
     }
 
-    @PostMapping("/uploadFile")
+    //    @PostMapping(path = "/uploadFile", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @RequestMapping(path = "/uploadFile", method = POST, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<?> uploadFile(
-            @RequestParam("file") MultipartFile multipartFile) {
+            @RequestPart("file") MultipartFile multipartFile) {
 
 //        if (multipartFile == null || multipartFile.isEmpty()) {
 //            return new ResponseEntity<>("File not found", HttpStatus.NOT_FOUND);
