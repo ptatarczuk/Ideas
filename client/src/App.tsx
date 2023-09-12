@@ -5,7 +5,7 @@ import UsersList from "./pages/UsersList/UsersList";
 import Login from "./pages/Login/Login";
 import "./App.css";
 import { Threads } from "./components/ThreadsList/Threads";
-import { NotFound } from "./components/NotFound/NotFound";
+import { NotFound } from "./pages/NotFound/NotFound";
 import { UnauthorizedRoute } from "./components/UnauthorizedRoute";
 import { Registration } from "./pages/Registration/Registration";
 import {ThreadPage} from './pages/Thread/Thread'

@@ -70,7 +70,7 @@ export const Threads: React.FC = () => {
           <Grid item>
             <AutocompleteComponent
               options={threads.map((thread) => thread.title)}
-              value={selectedThreadTitle || null} // Ensure it's never undefined
+              value={selectedThreadTitle || null} 
               onChange={(newValue) => {
                 setSelectedThreadTitle(newValue);
                 const filtered = threads.filter(
@@ -113,30 +113,21 @@ export const Threads: React.FC = () => {
             }} // remove margins from here and add css file later
             aria-label="simple table"
           >
-            <TableHead>  
+            <TableHead>
               <TableRow>
-                {/* {{ ["Date", "Title"].map(name) => ({TableCell.})}} */}
-                <TableCell>
-                  <b>Date</b>
-                </TableCell>
-                <TableCell align="right">
-                  <b>Title</b>
-                </TableCell>
-                <TableCell align="right">
-                  <b>Points</b>
-                </TableCell>
-                <TableCell align="right">
-                  <b>Category</b>
-                </TableCell>
-                <TableCell align="right">
-                  <b>Stage</b>
-                </TableCell>
-                <TableCell align="right">
-                  <b>Author</b>
-                </TableCell>
-                <TableCell align="right">
-                  <b>Department</b>
-                </TableCell>
+                {[
+                  "Date",
+                  "Title",
+                  "Points",
+                  "Category",
+                  "Stage",
+                  "Author",
+                  "Department",
+                ].map((name) => (
+                  <TableCell key={name} align="right">
+                    <b>{name}</b>
+                  </TableCell>
+                ))}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -149,7 +140,7 @@ export const Threads: React.FC = () => {
                     navigate(url);
                   }}
                 >
-                  <TableCell component="th" scope="row">
+                  <TableCell component="th" scope="row" align="right">
                     {thread.date}
                   </TableCell>
                   <TableCell align="right">{thread.title}</TableCell>
