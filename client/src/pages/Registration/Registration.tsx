@@ -60,7 +60,7 @@ const RegisterTextField = styled(TextField)`
   width: 406.75px;
   height: 49.25px;
   margin-left: 30px;
-  margin-top: 10px;
+  margin-top: 2%;
 
   &:hover {
     background-color: #ffffff;
@@ -82,62 +82,29 @@ const RegisterTextField = styled(TextField)`
 `;
 
 const RegisterSelect = styled(Select)`
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   border: none;
   border-radius: 69px;
-  border-color: #FFFFFF;
+  border-color: #ffffff;
   opacity: 1;
   width: 406.75px;
   height: 49.25px;
-  margin-bottom: 25px;
-  margin-top: 10px;
-  font-family: 'Poppins Light', sans-serif;
-
-  &:hover {
-    background-color: #FFFFFF;
-  }
-  
-  .MuiButtonBase-root {
-    font-family: 'Poppins Light', sans-serif;
-  }
-
-  .MuiMenuItem-root {
-    font-family: 'Poppins Light', sans-serif;
-  }
-
-  .MuiFormLabel-root {
-    font-family: 'Poppins Light', sans-serif;
-  }
-
-  .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline {
-    border-color: transparent; /* Remove border color when focused */
-  }
-  
-  .MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
-    border-color: transparent; /* Remove border color on hover */
-  }
-  
-  .MuiSelect-icon {
-    color: #000; /* Optional: Change the color of the select arrow */
-  }
-
-  &.Mui-focused .MuiOutlinedInput-notchedOutline {
-    border-color: transparent !important;
-  }
-
-  &:hover .MuiOutlinedInput-notchedOutline {
-    border-color: transparent !important;
-  }
-
-  .MuiInputLabel-root {
-    font-family: 'Poppins Light', sans-serif;
+  margin-top: 2%;
+  & .MuiInputBase-input {
     margin-left: 50px;
-    margin-top: 10px;
+    font-size: 16px;
+    color: #807d7d;
+    margin-top: 5px;
+    font-family: "Poppins Light", sans-serif;
   }
+`;
 
-  /* Style the input */
-    font-family: 'Poppins Light', sans-serif;
-  }
+const RegisterSelectLabel = styled(InputLabel)`
+  font-family: "Poppins Light", sans-serif;
+`;
+
+const RegisterSelectMenuItem = styled(MenuItem)`
+  font-family: "Poppins Light", sans-serif;
 `;
 
 const RegisterButton = styled(Button)`
@@ -402,42 +369,51 @@ export const Registration: React.FC = () => {
         <div className="register-form__right">
           <div className="register-form__select-container">
             <FormControl>
-              <InputLabel id="role-select-label">Role</InputLabel>
+              <RegisterSelectLabel id="role-select-label">
+                Role
+              </RegisterSelectLabel>
               <RegisterSelect
                 id="role"
                 labelId="role-select-label"
                 name="role"
                 value={regFormData.role.roleId.toString()}
-                label="Role"
                 required
+                variant="standard"
+                disableUnderline
                 onChange={handleSelectChange}
               >
                 {roles.map((role) => (
-                  <MenuItem key={role.roleId} value={role.roleId.toString()}>
+                  <RegisterSelectMenuItem
+                    key={role.roleId}
+                    value={role.roleId.toString()}
+                  >
                     {role.roleName}
-                  </MenuItem>
+                  </RegisterSelectMenuItem>
                 ))}
               </RegisterSelect>
             </FormControl>
           </div>
           <div className="register-form__select-container">
             <FormControl>
-              <InputLabel id="department-select-label">Department</InputLabel>
+              <RegisterSelectLabel id="department-select-label">
+                Department
+              </RegisterSelectLabel>
               <RegisterSelect
                 id="department"
                 labelId="department-select-label"
                 name="department"
-                label="Department"
                 required
+                variant="standard"
+                disableUnderline
                 onChange={handleSelectChange}
               >
                 {departments.map((department) => (
-                  <MenuItem
+                  <RegisterSelectMenuItem
                     key={department.departmentId}
                     value={department.departmentId.toString()}
                   >
                     {department.departmentName}
-                  </MenuItem>
+                  </RegisterSelectMenuItem>
                 ))}
               </RegisterSelect>
             </FormControl>

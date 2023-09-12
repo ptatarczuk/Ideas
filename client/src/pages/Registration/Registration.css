@@ -59,12 +59,16 @@
   }
   
   /* Style for individual form fields */
-  .register-form__field, .register-form__buttons {
+  .register-form__field, .register-form__buttons, .register-form__select-container {
     margin-bottom: 4%;
   }
 
+  .register-form__select-container {
+    margin-top: -1%; /* JEŚLI UDA SIĘ NAPRAWIĆ LABEL SELECTÓW TO PEWNIE MOŻNA TEN KONKRETNY MARGINES USUNĄĆ */
+  }
+
   .register-form__buttons {
-    margin-top: 4%;
+    margin-top: 6%;
   }
   
   /* Style for error message */
