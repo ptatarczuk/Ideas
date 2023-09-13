@@ -64,7 +64,6 @@ public class AdmissionService {
         return admissionRepository.save(admission);
     }
 
-
     @Transactional
     public Admission updateAdmissionById(Long admissionId, AdmissionUpdateDTO admissionDTO)
             throws EntityNotFoundException {

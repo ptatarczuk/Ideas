@@ -78,17 +78,17 @@ VALUES (1, 1, 'Admission 1', '2023-07-26'),
        (10, 3, 'Admission 10', '2023-08-01');
 
 
-INSERT INTO conclusions (conclusion_id, conclusion_author, conclusion_text, conclusion_date, conclusion_points)
-VALUES (1, 1, 'Conclusion 1', '2023-07-26', 5),
-       (2, 2, 'Conclusion 2', '2023-07-27', 8),
-       (3, 3, 'Conclusion 3', '2023-07-28', 6),
-       (4, 1, 'Conclusion 4', '2023-07-28', 9),
-       (5, 2, 'Conclusion 5', '2023-07-29', 7),
-       (6, 3, 'Conclusion 6', '2023-07-30', 6),
-       (7, 4, 'Conclusion 7', '2023-07-30', 8),
-       (8, 1, 'Conclusion 8', '2023-07-31', 7),
-       (9, 2, 'Conclusion 9', '2023-07-31', 9),
-       (10, 3, 'Conclusion 10', '2023-08-01', 6);
+INSERT INTO conclusions (conclusion_id, conclusion_author, conclusion_text, conclusion_date)
+VALUES (1, 1, 'Conclusion 1', '2023-07-26'),
+       (2, 2, 'Conclusion 2', '2023-07-27'),
+       (3, 3, 'Conclusion 3', '2023-07-28'),
+       (4, 1, 'Conclusion 4', '2023-07-28'),
+       (5, 2, 'Conclusion 5', '2023-07-29'),
+       (6, 3, 'Conclusion 6', '2023-07-30'),
+       (7, 4, 'Conclusion 7', '2023-07-30'),
+       (8, 1, 'Conclusion 8', '2023-07-31'),
+       (9, 2, 'Conclusion 9', '2023-07-31'),
+       (10, 3, 'Conclusion 10', '2023-08-01');
 
 INSERT INTO comments (author_id, comment_date, comment_text, thread_id)
 VALUES (1, '2023-07-26', 'Comment 1 for Thread 1', 1),

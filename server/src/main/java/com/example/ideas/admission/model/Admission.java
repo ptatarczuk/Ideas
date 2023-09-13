@@ -4,8 +4,10 @@ import com.example.ideas.thread.model.Thread;
 import com.example.ideas.user.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 @Entity
@@ -17,6 +19,7 @@ import java.time.LocalDate;
 public class Admission {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long admissionId;
 
     @Column(name = "admission_text")
