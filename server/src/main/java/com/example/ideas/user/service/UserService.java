@@ -44,7 +44,7 @@ public class UserService {
         return userRepository.findUserByEmail(email);
     }
 
-    public ResponseEntity<String> registerUser(@Valid RegisterRequest request) {
+    public ResponseEntity<String> registerUser(RegisterRequest request) {
         String email = request.getEmail();
         Optional<User> userOptional = userRepository.findUserByEmail(email);
         if (userOptional.isPresent()) {
@@ -64,7 +64,15 @@ public class UserService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Department with id: " + departmentId + " doesn't exist");
         }
 
-        return ResponseEntity.ok(authenticationService.register(request).toString());
+        RegisterRequest validatedRequest = RegisterRequest.builder()
+                .name(request.getName())
+                .email(request.getEmail())
+                .password(request.getPassword())
+                .department(departmentOptional.get())
+                .role(roleOptional.get())
+                .build();
+
+        return ResponseEntity.ok(authenticationService.register(validatedRequest).toString());
     }
 
     public void deleteUser(Long userId) {

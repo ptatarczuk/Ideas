@@ -1,6 +1,7 @@
 package com.example.ideas.thread.controller;
 
 import com.example.ideas.exception.EntityNotFoundException;
+import com.example.ideas.exception.NoAuthorizationException;
 import com.example.ideas.thread.model.Thread;
 import com.example.ideas.thread.service.ThreadService;
 import com.example.ideas.thread.utils.EmailSender;
@@ -26,16 +27,10 @@ public class ThreadController {
     private final ThreadService threadService;
     private EmailSender emailSender;
 
-
-
-    @Autowired
     public ThreadController(ThreadService threadService, EmailSender emailSender) {
         this.threadService = threadService;
         this.emailSender = emailSender;
     }
-
-
-
 
     @GetMapping("/email")
     public boolean sendEmail() {
@@ -47,7 +42,7 @@ public class ThreadController {
         return true;
     }
 
-    //    @PreAuthorize("hasRole('Admin')")
+//    @PreAuthorize("hasRole('Admin')")
 //    @PreAuthorize("hasAnyRole('Admin', 'User')")
     @GetMapping("/")
     public List<Thread> getThreads() {  // TODO: zmienic void na List<Thread>
@@ -83,17 +78,8 @@ public class ThreadController {
             @PathVariable("thread_id") Long threadId,
             @RequestPart(value ="file", required = false) MultipartFile multipartFile,
             @RequestPart(value = "thread") @Valid ThreadUpdateDTO updatedThread
-    ) throws IOException, EntityNotFoundException {
-//        System.out.println(token);
-//        SecurityContextHolder.getContext();
-        return new  ResponseEntity<>(threadService.updateThreadById(threadId, multipartFile,updatedThread), HttpStatus.OK);
+    ) throws IOException, EntityNotFoundException, NoAuthorizationException {
+        return new  ResponseEntity<>(threadService.updateThreadById(token, threadId, multipartFile,updatedThread), HttpStatus.OK);
     }
 
-//    @PatchMapping("/id999/{thread_id}")
-//    public ResponseEntity<?> updateThreadById999(
-//            @PathVariable("thread_id") Long threadId,
-//            @RequestBody Map<String, Object> fields
-//    ) {
-//        return threadService.updateThreadById999(threadId, fields);
-//    }
 }

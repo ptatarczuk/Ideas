@@ -2,6 +2,7 @@ package com.example.ideas.admission.controller;
 
 import com.example.ideas.admission.model.Admission;
 import com.example.ideas.admission.service.AdmissionService;
+import com.example.ideas.exception.DataAlreadyExistsException;
 import com.example.ideas.exception.EntityNotFoundException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,9 @@ public class AdmissionController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Admission> addAdmission(@Valid @RequestBody AdmissionCreateDTO admissionCreateDTO) throws EntityNotFoundException, IOException {
+    public ResponseEntity<Admission> addAdmission(@Valid @RequestBody AdmissionCreateDTO admissionCreateDTO)
+            throws DataAlreadyExistsException, EntityNotFoundException {
+
         return new ResponseEntity<>(admissionService.addAdmission(admissionCreateDTO), HttpStatus.CREATED);
     }
 

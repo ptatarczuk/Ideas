@@ -3,10 +3,13 @@ package com.example.ideas.comment.controller;
 
 import com.example.ideas.comment.model.Comment;
 import com.example.ideas.comment.service.CommentService;
+import com.example.ideas.exception.EntityNotFoundException;
+import com.example.ideas.exception.NoAuthorizationException;
 import com.example.ideas.thread.service.ThreadService;
 import com.example.ideas.user.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,11 +44,11 @@ public class CommentController {
 
     }
 
-    @GetMapping("/user/{user_id}")
-    public ResponseEntity<Comment> getCommentByUserId(@PathVariable("user_id") Long userId) {
-        Comment comment = commentService.findCommentByUserId(userId).orElse(null);
-        return comment != null ? ResponseEntity.ok(comment) : ResponseEntity.notFound().build();
-    }
+//    @GetMapping("/user/{user_id}")
+//    public ResponseEntity<Comment> getCommentByUserId(@PathVariable("user_id") Long userId) {
+//        Comment comment = commentService.findCommentByUserId(userId).orElse(null);
+//        return comment != null ? ResponseEntity.ok(comment) : ResponseEntity.notFound().build();
+//    }
 
     @GetMapping("/thread/{thread_id}")
     public List<Comment> getCommentByThreadId(@PathVariable("thread_id") Long threadId) {
@@ -53,21 +56,25 @@ public class CommentController {
     }
 
     @PostMapping("/addComment")
-    public ResponseEntity<String> addComment(@Valid @RequestBody Comment comment) {
-        return commentService.addComment(comment);
+    public ResponseEntity<Comment> addComment(@Valid @RequestBody CommentCreateDTO commentCreateDTO) throws EntityNotFoundException {
+        return new ResponseEntity<>(commentService.addComment(commentCreateDTO), HttpStatus.CREATED);
     }
 
     @PatchMapping("/update_comment/{comment_id}")
     public ResponseEntity<String> updateCommentById(
             @PathVariable("comment_id") Long commentId,
+
             @RequestBody Comment updatedComment
     ) {
         return commentService.updateCommentById(commentId, updatedComment);
     }
 
     @DeleteMapping("/{comment_id}")
-    public ResponseEntity<String> deleteCommentById(@PathVariable("comment_id") Long commentId) {
-        return commentService.deleteComment(commentId);
+    public ResponseEntity<Boolean> deleteCommentById(
+            @PathVariable("comment_id") Long commentId,
+            @RequestHeader("Authorization") String token
+    ) throws NoAuthorizationException, EntityNotFoundException {
+        return new ResponseEntity<>(commentService.deleteComment(token, commentId), HttpStatus.OK);
     }
 
 }

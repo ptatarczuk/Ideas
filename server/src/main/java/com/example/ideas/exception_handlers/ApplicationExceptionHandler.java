@@ -1,6 +1,8 @@
 package com.example.ideas.exception_handlers;
 
+import com.example.ideas.exception.DataAlreadyExistsException;
 import com.example.ideas.exception.EntityNotFoundException;
+import com.example.ideas.exception.NoAuthorizationException;
 import io.jsonwebtoken.io.IOException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -24,9 +26,25 @@ public class ApplicationExceptionHandler {
         return errorMap;
     }
 
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(EntityNotFoundException.class)
-    public Map<String, String> handleBusinessException(EntityNotFoundException ex) {
+    public Map<String, String> handleEntityNotFoundException(EntityNotFoundException ex) {
+        Map<String, String> errorMap = new HashMap<>();
+        errorMap.put("errorMessage", ex.getMessage());
+        return errorMap;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(NoAuthorizationException.class)
+    public Map<String, String> handleNoAuthorizationException(NoAuthorizationException ex) {
+        Map<String, String> errorMap = new HashMap<>();
+        errorMap.put("errorMessage", ex.getMessage());
+        return errorMap;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(DataAlreadyExistsException.class)
+    public Map<String, String> handleDataAlreadyExistsException(DataAlreadyExistsException ex) {
         Map<String, String> errorMap = new HashMap<>();
         errorMap.put("errorMessage", ex.getMessage());
         return errorMap;

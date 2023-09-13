@@ -5,10 +5,9 @@ import com.example.ideas.admission.controller.AdmissionUpdateDTO;
 import com.example.ideas.admission.model.Admission;
 import com.example.ideas.admission.repository.AdmissionRepository;
 import com.example.ideas.exception.EntityNotFoundException;
-import com.example.ideas.thread.controller.ThreadUpdateDTO;
+import com.example.ideas.exception.DataAlreadyExistsException;
 import com.example.ideas.thread.model.Thread;
 import com.example.ideas.thread.repository.ThreadRepository;
-import com.example.ideas.thread.service.ThreadService;
 import com.example.ideas.user.model.User;
 import com.example.ideas.user.repository.UserRepository;
 import com.example.ideas.util_Entities.stage.model.Stage;
@@ -21,7 +20,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -34,7 +32,6 @@ public class AdmissionService {
     private final AdmissionRepository admissionRepository;
     private final UserRepository userRepository;
     private final ThreadRepository threadRepository;
-    private final ThreadService threadService;
     private final StageRepository stageRepository;
     private final StatusRepository statusRepository;
 
@@ -42,10 +39,12 @@ public class AdmissionService {
         return admissionRepository.findById(admissionId);
     }
 
-    public Admission addAdmission(AdmissionCreateDTO admissionDTO)
-            throws com.example.ideas.exception.EntityNotFoundException, IOException {
+    public Admission addAdmission(AdmissionCreateDTO admissionDTO) throws EntityNotFoundException, DataAlreadyExistsException {
 
         Thread thread = getObjectFromDB(admissionDTO.getThreadId(), threadRepository);
+        if(thread.getAdmission() != null) {
+            throw new DataAlreadyExistsException("Given thread already has admission");
+        }
         User user = getObjectFromDB(admissionDTO.getUserId(), userRepository);
 
         Admission admission = Admission.builder()
@@ -55,12 +54,12 @@ public class AdmissionService {
                 .user(user)
                 .build();
 
-        ThreadUpdateDTO threadUpdateDTO = ThreadUpdateDTO.builder()
-                .stageId(admissionDTO.getStageId())
-                .statusId((admissionDTO.getStageId() == 3 ? 2L : 1L))
-                .build();
+        Stage stage = getObjectFromDB(admissionDTO.getStageId(), stageRepository);
+        Status status = getObjectFromDB(admissionDTO.getStageId() == 3 ? 2L : 1L, statusRepository);
 
-        threadService.updateThreadById(admissionDTO.getThreadId(), null, threadUpdateDTO);
+        thread.setStage(stage);
+        thread.setStatus(status);
+        threadRepository.save(thread);
 
         return admissionRepository.save(admission);
     }

@@ -1,8 +1,10 @@
 package com.example.ideas.thread.service;
 
 import com.example.ideas.exception.EntityNotFoundException;
+import com.example.ideas.exception.NoAuthorizationException;
 import com.example.ideas.files.FileService;
 import com.example.ideas.files.FileUploadResponse;
+import com.example.ideas.security.config.JwtService;
 import com.example.ideas.thread.controller.ThreadCreateDTO;
 import com.example.ideas.thread.controller.ThreadUpdateDTO;
 import com.example.ideas.thread.model.Thread;
@@ -39,6 +41,7 @@ public class ThreadService {
     private final StageRepository stageRepository;
     private final StatusRepository statusRepository;
     private final FileService fileService;
+    private final JwtService jwtService;
 
     public List<Thread> getThreads() {
         return threadRepository.findAll();
@@ -87,13 +90,17 @@ public class ThreadService {
 
     // Walidacja?
     @Transactional
-    public Thread updateThreadById(Long threadId, MultipartFile multipartFile, ThreadUpdateDTO threadUpdateDTO) throws IOException, EntityNotFoundException {
+    public Thread updateThreadById(String token, Long threadId, MultipartFile multipartFile, ThreadUpdateDTO threadUpdateDTO) throws IOException, EntityNotFoundException, NoAuthorizationException {
+
+        Thread thread = getObjectFromDB(threadId, threadRepository);
+
+        if(!(thread.getUser().getEmail().equals(getUserEmail(token)) || getUserRole(token).equals("Admin"))) {
+            throw new NoAuthorizationException("only thread author or user with role \"Admin\" can modify thread");
+        }
 
         Long categoryId = threadUpdateDTO.getCategoryId();
         Long stageId = threadUpdateDTO.getStageId();
         Long statusId = threadUpdateDTO.getStatusId();
-
-        Thread thread = getObjectFromDB(threadId, threadRepository);
 
         if (threadUpdateDTO.getTitle() != null) {
             thread.setTitle(threadUpdateDTO.getTitle());
@@ -123,6 +130,17 @@ public class ThreadService {
         return thread;
     }
 
+    public String getUserRole(String token) {
+        String jwt = jwtService.getJWT(token);
+        return jwtService.extractUserRole(jwt);
+    }
+
+    public String getUserEmail(String token) {
+        String jwt = jwtService.getJWT(token);
+        return jwtService.extractUsername(jwt);
+    }
+
+
     private void uploadNewPhoto(MultipartFile multipartFile, Thread thread) throws IOException {
         deleteOldPhotoIfPresent(thread);
         FileUploadResponse fileUploadResponse = fileService.uploadFile(multipartFile);
@@ -138,6 +156,7 @@ public class ThreadService {
             fileService.deleteFile(fileCode);
         }
     }
+
 
 //    public ResponseEntity<?> updateThreadById999(Long threadId, Map<String, Object> fields) {
 //        Thread thread = threadRepository.findById(threadId).orElse(null);
