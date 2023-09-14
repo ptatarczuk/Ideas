@@ -41,18 +41,14 @@ const Comments: React.FC<CommentsProps> = ({ threadId, decodedToken }) => {
 
   const handleDeleteComment = async (commentId: number) => {
     try {
-      const accessToken = sessionStorage.getItem('token');
-      console.log(accessToken);
       const response = await fetch(
-        `http://localhost:8080/comments/${commentId}`,
-        {
-          method: "DELETE",
-          headers: {
-            //"Content-Type": "application/json",
-            'Authorization': `Bearer ${accessToken}`,
-          },
-        }
+        `http://localhost:8080/comments/thread/${threadId}`
       );
+      const data = await response.json();
+      setComments(data);
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
 
       if (!response.ok) {
         throw new Error("Network response was not ok");
