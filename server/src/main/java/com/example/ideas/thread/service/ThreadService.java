@@ -90,13 +90,15 @@ public class ThreadService {
 
     // Walidacja?
     @Transactional
-    public Thread updateThreadById(String token, Long threadId, MultipartFile multipartFile, ThreadUpdateDTO threadUpdateDTO) throws IOException, EntityNotFoundException, NoAuthorizationException {
+    public Thread updateThreadById(
+//            String token,
+                                   Long threadId, MultipartFile multipartFile, ThreadUpdateDTO threadUpdateDTO) throws IOException, EntityNotFoundException, NoAuthorizationException {
 
         Thread thread = getObjectFromDB(threadId, threadRepository);
 
-        if(!(thread.getUser().getEmail().equals(getUserEmail(token)) || getUserRole(token).equals("Admin"))) {
-            throw new NoAuthorizationException("only thread author or user with role \"Admin\" can modify thread");
-        }
+//        if(!(thread.getUser().getEmail().equals(getUserEmail(token)) || getUserRole(token).equals("Admin"))) {
+//            throw new NoAuthorizationException("only thread author or user with role \"Admin\" can modify thread");
+//        }
 
         Long categoryId = threadUpdateDTO.getCategoryId();
         Long stageId = threadUpdateDTO.getStageId();

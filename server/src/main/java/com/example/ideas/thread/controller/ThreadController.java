@@ -75,12 +75,14 @@ public class ThreadController {
 
     @PatchMapping(value = "/id/{thread_id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Thread> updateThreadById(
-            @RequestHeader("Authorization") String token,
+//            @RequestHeader("Authorization") String token,
             @PathVariable("thread_id") Long threadId,
             @RequestPart(value ="file", required = false) MultipartFile multipartFile,
             @RequestPart(value = "thread") @Valid ThreadUpdateDTO updatedThread
     ) throws IOException, EntityNotFoundException, NoAuthorizationException {
-        return new  ResponseEntity<>(threadService.updateThreadById(token, threadId, multipartFile,updatedThread), HttpStatus.OK);
+        return new  ResponseEntity<>(threadService.updateThreadById(
+//                token,
+                threadId, multipartFile,updatedThread), HttpStatus.OK);
     }
 
 }
