@@ -1,0 +1,88 @@
+@font-face {
+    font-family: 'Poppins Light';
+    src: url('../../../public/fonts/Poppins-Light.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  @font-face {
+    font-family: 'Poppins Bold';
+    src: url('../../../public/fonts/Poppins-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+  }
+
+
+.logo {
+    transform: scale(0.25); 
+}
+
+.logo-container {
+    top: -10px;
+    left: 0px;
+    width: 100vw;
+    height: 30vh;
+    background: #F9F9F9 0% 0% no-repeat padding-box;
+    opacity: 1;
+    overflow: hidden;
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+}
+
+/* Container for the entire form */
+.register-form__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    background-color: #FF8900;
+    height: 70vh;
+    width: 100vw;
+  }
+  
+  /* Left container for input fields */
+  .register-form__left {
+    flex: 1;
+    padding-right: 20px;
+    margin-left: 20%;
+    margin-top: 4%;
+  }
+  
+  /* Right container for select fields, file input, and buttons */
+  .register-form__right {
+    flex: 1;
+    padding-right: 20px;
+    margin-right: 15%;
+    margin-top: 4%;
+  }
+  
+  /* Style for individual form fields */
+  .register-form__field, .register-form__buttons, .register-form__select-container {
+    margin-bottom: 4%;
+  }
+
+  .register-form__select-container {
+    margin-top: -1%; /* JEŚLI UDA SIĘ NAPRAWIĆ LABEL SELECTÓW TO PEWNIE MOŻNA TEN KONKRETNY MARGINES USUNĄĆ */
+  }
+
+  .register-form__buttons {
+    margin-top: 6%;
+  }
+  
+  /* Style for error message */
+  .register-form__error {
+    color: red;
+    margin-top: 10px;
+  }
+
+.register-form__buttons {
+    display: flex;
+    flex-direction: row;
+}
+  
+.register-form__register-button-and-nav-text{
+    display: flex;
+    flex-direction: column;
+}

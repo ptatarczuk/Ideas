@@ -1,5 +1,6 @@
 package com.example.ideas.security.config;
 
+import com.example.ideas.util_Entities.role.model.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -27,6 +28,18 @@ public class JwtService {
 
   public String extractUsername(String token) {
     return extractClaim(token, Claims::getSubject);
+  }
+
+  public String getJWT(String authHeader) {
+    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+      return null;
+    }
+    return authHeader.substring(7);
+  }
+
+  public String extractUserRole(String token) {
+    final Claims claims = extractAllClaims(token);
+    return claims.get("role", String.class);
   }
 
   public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {

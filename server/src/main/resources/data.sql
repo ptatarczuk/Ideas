@@ -40,8 +40,8 @@ VALUES (1, 'Submitted'),
        (5, 'NotApproved');
 
 INSERT INTO statuses (status_id, status_name)
-VALUES (1, 'closed'),
-       (2, 'open');
+VALUES (1, 'active'),
+       (2, 'closed');
 
 
 INSERT INTO users (user_name, user_email, user_password, role_id, department_id)
@@ -52,18 +52,18 @@ VALUES ('Jowita', 'jowita@test.com', '123', 1, 5),
        ('test', 'a@a.pl', '000', 1, 1);
 
 
-INSERT INTO threads (thread_title, thread_description, thread_justification, thread_photo, thread_points, user_id,
+INSERT INTO threads (thread_date, thread_title, thread_description, thread_justification, thread_photo, thread_points, user_id,
                      category_id, stage_id, status_id)
-VALUES ('Thread 1', 'Description for Thread 1', 'Justification for Thread 1', 'photo1.jpg', 10, 1, 1, 1, 1),
-       ('Thread 2', 'Description for Thread 2', 'Justification for Thread 2', 'photo2.jpg', 20, 2, 2, 2, 1),
-       ('Thread 3', 'Description for Thread 3', 'Justification for Thread 3', 'photo3.jpg', 15, 3, 1, 1, 2),
-       ('Thread 4', 'Description for Thread 4', 'Justification for Thread 4', 'photo4.jpg', 25, 4, 2, 2, 2),
-       ('Thread 5', 'Description for Thread 5', 'Justification for Thread 5', 'photo5.jpg', 18, 1, 1, 1, 1),
-       ('Thread 6', 'Description for Thread 6', 'Justification for Thread 6', 'photo6.jpg', 12, 2, 2, 2, 1),
-       ('Thread 7', 'Description for Thread 7', 'Justification for Thread 7', 'photo7.jpg', 30, 3, 1, 1, 2),
-       ('Thread 8', 'Description for Thread 8', 'Justification for Thread 8', 'photo8.jpg', 22, 4, 2, 2, 2),
-       ('Thread 9', 'Description for Thread 9', 'Justification for Thread 9', 'photo9.jpg', 17, 1, 1, 1, 1),
-       ('Thread 10', 'Description for Thread 10', 'Justification for Thread 10', 'photo10.jpg', 28, 2, 2, 2, 1);
+VALUES ('2023-05-10', 'Thread 1', 'Description for Thread 1', 'Justification for Thread 1', 'photo1.jpg', 10, 1, 1, 1, 1),
+       ('2023-05-10','Thread 2', 'Description for Thread 2', 'Justification for Thread 2', 'photo2.jpg', 20, 2, 2, 2, 1),
+       ('2023-05-10','Thread 3', 'Description for Thread 3', 'Justification for Thread 3', 'photo3.jpg', 15, 3, 1, 1, 2),
+       ('2023-05-10','Thread 4', 'Description for Thread 4', 'Justification for Thread 4', 'photo4.jpg', 25, 4, 2, 2, 2),
+       ('2023-05-10','Thread 5', 'Description for Thread 5', 'Justification for Thread 5', 'photo5.jpg', 18, 1, 1, 1, 1),
+       ('2023-05-10','Thread 6', 'Description for Thread 6', 'Justification for Thread 6', 'photo6.jpg', 12, 2, 2, 2, 1),
+       ('2023-05-10','Thread 7', 'Description for Thread 7', 'Justification for Thread 7', 'photo7.jpg', 30, 3, 1, 1, 2),
+       ('2023-05-10','Thread 8', 'Description for Thread 8', 'Justification for Thread 8', 'photo8.jpg', 22, 4, 2, 2, 2),
+       ('2023-05-10','Thread 9', 'Description for Thread 9', 'Justification for Thread 9', 'photo9.jpg', 17, 1, 1, 1, 1),
+       ('2023-05-10','Thread 10', 'Description for Thread 10', 'Justification for Thread 10', 'photo10.jpg', 28, 2, 2, 2, 1);
 
 INSERT INTO admissions (admission_id, admission_author, admission_text, admission_date)
 VALUES (1, 1, 'Admission 1', '2023-07-26'),
@@ -78,17 +78,17 @@ VALUES (1, 1, 'Admission 1', '2023-07-26'),
        (10, 3, 'Admission 10', '2023-08-01');
 
 
-INSERT INTO conclusions (conclusion_id, conclusion_author, conclusion_text, conclusion_date, conclusion_points)
-VALUES (1, 1, 'Conclusion 1', '2023-07-26', 5),
-       (2, 2, 'Conclusion 2', '2023-07-27', 8),
-       (3, 3, 'Conclusion 3', '2023-07-28', 6),
-       (4, 1, 'Conclusion 4', '2023-07-28', 9),
-       (5, 2, 'Conclusion 5', '2023-07-29', 7),
-       (6, 3, 'Conclusion 6', '2023-07-30', 6),
-       (7, 4, 'Conclusion 7', '2023-07-30', 8),
-       (8, 1, 'Conclusion 8', '2023-07-31', 7),
-       (9, 2, 'Conclusion 9', '2023-07-31', 9),
-       (10, 3, 'Conclusion 10', '2023-08-01', 6);
+INSERT INTO conclusions (conclusion_id, conclusion_author, conclusion_text, conclusion_date)
+VALUES (1, 1, 'Conclusion 1', '2023-07-26'),
+       (2, 2, 'Conclusion 2', '2023-07-27'),
+       (3, 3, 'Conclusion 3', '2023-07-28'),
+       (4, 1, 'Conclusion 4', '2023-07-28'),
+       (5, 2, 'Conclusion 5', '2023-07-29'),
+       (6, 3, 'Conclusion 6', '2023-07-30'),
+       (7, 4, 'Conclusion 7', '2023-07-30'),
+       (8, 1, 'Conclusion 8', '2023-07-31'),
+       (9, 2, 'Conclusion 9', '2023-07-31'),
+       (10, 3, 'Conclusion 10', '2023-08-01');
 
 INSERT INTO comments (author_id, comment_date, comment_text, thread_id)
 VALUES (1, '2023-07-26', 'Comment 1 for Thread 1', 1),

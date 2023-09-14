@@ -1,0 +1,97 @@
+@font-face {
+    font-family: 'Poppins Light';
+    src: url('../../../public/fonts/Poppins-Light.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  @font-face {
+    font-family: 'Poppins Bold';
+    src: url('../../../public/fonts/Poppins-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+  }
+
+
+.logo {
+    transform: scale(0.25); 
+}
+
+.logo-container {
+    top: -10px;
+    left: 0px;
+    width: 100vw;
+    height: 30vh;
+    background: #F9F9F9 0% 0% no-repeat padding-box;
+    opacity: 1;
+    overflow: hidden;
+    display: flex; 
+    justify-content: center; 
+    align-items: center;
+}
+
+.login-form__container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #FF8900;
+    height: 70vh;
+    width: 100vw;
+}
+
+.login-form__container-fields {
+    display: flex;
+    flex-direction: column;
+    height: inherit;
+    width: inherit;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 7%;
+    margin-right: 2%;
+}
+
+.login-form__email-container, .login-form__show-password {
+    margin-bottom: 1.5%;
+ }
+
+ .login-form__show-password {
+    margin-left: 2.5%;
+ }
+
+ .login-form__password-container  {
+    margin-bottom: 0.7%;
+ }
+
+.login-form__show-password {
+    display: flex;
+    justify-content: flex-start;
+    width: 406.75px;
+}
+
+.login-form-show-password-button {
+    width: 21px;
+    height: 21px;
+    border-radius: 50%;
+    border: none;
+    outline: none;
+    background-color: #C198F0;
+}
+
+.login-form-show-password-button:hover {
+    background-color: #FFFF;
+}
+
+.login-form-show-password-text {
+    color: #ffffff;
+    font-family: "Poppins Light", sans-serif;
+    font-size: 11px;
+    margin-top: 0.5%;
+    margin-left: 1.5%;
+}
+
+.login-form__show-password, .login-form__links-register, .login-form__links-forgot-password {
+    margin-left: 2.5%;
+}

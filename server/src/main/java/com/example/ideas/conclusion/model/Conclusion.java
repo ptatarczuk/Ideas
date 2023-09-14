@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -16,6 +17,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Conclusion {
 
     @Id
@@ -26,11 +28,8 @@ public class Conclusion {
     @NotBlank(message = "Content of conclusion information is mandatory")
     private String content;
 
-    @Column(name = "conclusion_points")
-    private Integer points;
-
     @Column(name = "conclusion_date")
-    private final LocalDate dateOfPost = LocalDate.now();
+    private LocalDate dateOfPost;
 
     @OneToOne
     @JoinColumn(name = "conclusion_author")
@@ -43,8 +42,6 @@ public class Conclusion {
     private Thread thread;
 
     public Conclusion(String content, Integer points) {
-
         this.content = content;
-        this.points = points;
     }
 }

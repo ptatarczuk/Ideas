@@ -4,8 +4,10 @@ import com.example.ideas.thread.model.Thread;
 import com.example.ideas.user.model.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 @Entity
@@ -13,17 +15,18 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Admission {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long admissionId;
 
     @Column(name = "admission_text")
-    @NotBlank(message = "Content of admission information is mandatory")
     private String content;
 
     @Column(name = "admission_date")
-    private final LocalDate dateOfPost = LocalDate.now();
+    private LocalDate dateOfPost;
 
     @OneToOne
     @JoinColumn(name = "admission_author")
