@@ -41,12 +41,15 @@ const Comments: React.FC<CommentsProps> = ({ threadId, decodedToken }) => {
 
   const handleDeleteComment = async (commentId: number) => {
     try {
+      const accessToken = sessionStorage.getItem('token');
+      console.log(accessToken);
       const response = await fetch(
         `http://localhost:8080/comments/${commentId}`,
         {
           method: "DELETE",
           headers: {
-            "Content-Type": "application/json",
+            //"Content-Type": "application/json",
+            'Authorization': `Bearer ${accessToken}`,
           },
         }
       );

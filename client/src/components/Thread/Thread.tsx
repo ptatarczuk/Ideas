@@ -2,6 +2,7 @@ import { TextField, Button, Box } from '@mui/material';
 import React, { useState } from 'react';
 import { Thread } from '../../models/Thread';
 
+
 interface ThreadComponentProps {
     thread: Thread;
     decodedToken: any;
@@ -10,52 +11,55 @@ interface ThreadComponentProps {
 export const ThreadComponent: React.FC<ThreadComponentProps> = ({ thread, decodedToken }) => {
     const [editedThread, setEditedThread] = useState<Thread>({ ...thread });
     const [isEditing, setIsEditing] = useState<boolean>(false);
-    const [buttonText, setButtonText] = useState<String>("EDIT")
+    const [buttonText, setButtonText] = useState<string>("EDIT");
     const isAuthor = editedThread.user.email === decodedToken.sub;
     const isUser = decodedToken.role === "User";
     const isAdmin = decodedToken.role === "Admin";
 
+
+
     const handleFieldChange = (field: keyof Thread, value: any) => {
         setEditedThread((prevThread) => ({
-            ...prevThread, 
+            ...prevThread,
             [field]: value,
         }));
     };
 
     const handleEdit = () => {
-        console.log(thread)
         setIsEditing(true);
-        setButtonText("SAVE")
+        setButtonText("SAVE");
     };
-//wysyłać jeszcze email
+
+
+
     const handleSave = async () => {
         try {
-            const dataToSend = {
-                title: editedThread.title,
-                description: editedThread.description,
-                justification: editedThread.justification
-            };
+            const accessToken = localStorage.getItem('user');
+            const formData = new FormData();
+            formData.append('thread', JSON.stringify({ title: editedThread.title }));
+            console.log(formData);
 
-            console.log(dataToSend);   // zmienic na axios
             const response = await fetch(`http://localhost:8080/threads/id/${thread.threadId}`, {
                 method: 'PATCH',
+                body: formData,
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': `Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQWRtaW4iLCJuYW1lIjoiam92aXRhYSIsInN1YiI6Impvdml0YWFAZy5wbCIsImlhdCI6MTY5NDcwMzUxMSwiZXhwIjoxNjk0Nzg5OTExfQ.xDhcDQJhMKawhaTx2qHkHfu4vqyAbMyY0KyksYvgMT4`,
                 },
-                body: JSON.stringify(dataToSend),
             });
-    
+            console.log(response);
+
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                const errorData = await response.json();
+                throw new Error(`Network response was not ok. Error data: ${JSON.stringify(errorData)}`);
             }
-    
+
             setIsEditing(false);
             setButtonText("EDIT");
         } catch (error) {
             console.error('An error occurred while saving data', error);
         }
     };
-    
 
     return (
         <Box
@@ -64,7 +68,8 @@ export const ThreadComponent: React.FC<ThreadComponentProps> = ({ thread, decode
                 '& .MuiTextField-root': { m: 1, width: '25ch' },
             }}
             noValidate
-            autoComplete="off">
+            autoComplete="off"
+        >
             <h1>Thread</h1>
             {(isUser && isAuthor) || isAdmin ? (
                 <Button variant="contained" onClick={buttonText === "EDIT" ? handleEdit : handleSave}>
@@ -85,7 +90,6 @@ export const ThreadComponent: React.FC<ThreadComponentProps> = ({ thread, decode
                 label="Author"
                 disabled={true}
                 value={editedThread.user.name}
-
             />
             <img src={editedThread.photo} alt="Thread Photo" />
             <TextField

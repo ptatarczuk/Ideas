@@ -132,6 +132,7 @@ const Login: React.FC = () => {
         console.log("Login successful!");
         const data: { access_token: string } = await response.json();
         console.log(data);
+        console.log(data)
         sessionStorage.setItem("token", JSON.stringify(data.access_token));
         setUser(data.access_token); //lub nazwa uzytkownika?
         setFailedAttempts(0);
