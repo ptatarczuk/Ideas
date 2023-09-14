@@ -64,16 +64,18 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
-    public Boolean deleteComment(String token, Long id) throws EntityNotFoundException, NoAuthorizationException {
+    public Boolean deleteComment(
+//            String token,
+            Long id) throws EntityNotFoundException, NoAuthorizationException {
 
         Comment comment = getObjectFromDB(id, commentRepository);
 
-        String userEmailFromToken = jwtService.extractUsername(jwtService.getJWT(token));
-        String userRoleFormToken = jwtService.extractUserRole(jwtService.getJWT(token));
-
-        if(!(comment.getUser().getEmail().equals(userEmailFromToken) || userRoleFormToken.equals("Admin"))) {
-            throw new NoAuthorizationException("only thread author or user with role \"Admin\" can modify thread");
-        }
+//        String userEmailFromToken = jwtService.extractUsername(jwtService.getJWT(token));
+//        String userRoleFormToken = jwtService.extractUserRole(jwtService.getJWT(token));
+//
+//        if(!(comment.getUser().getEmail().equals(userEmailFromToken) || userRoleFormToken.equals("Admin"))) {
+//            throw new NoAuthorizationException("only thread author or user with role \"Admin\" can modify thread");
+//        }
 
         commentRepository.delete(comment);
         return true;
