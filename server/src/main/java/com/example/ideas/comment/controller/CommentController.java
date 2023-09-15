@@ -71,10 +71,12 @@ public class CommentController {
 
     @DeleteMapping("/{comment_id}")
     public ResponseEntity<Boolean> deleteCommentById(
-            @PathVariable("comment_id") Long commentId,
-            @RequestHeader("Authorization") String token
+            @PathVariable("comment_id") Long commentId
+//            @RequestHeader("Authorization") String token
     ) throws NoAuthorizationException, EntityNotFoundException {
-        return new ResponseEntity<>(commentService.deleteComment(token, commentId), HttpStatus.OK);
+        return new ResponseEntity<>(commentService.deleteComment(
+//                token,
+                commentId), HttpStatus.OK);
     }
 
 }
