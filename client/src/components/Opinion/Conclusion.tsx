@@ -10,38 +10,41 @@ interface ConclusionProps {
 export const Conclusion: React.FC<ConclusionProps> = ({ thread, decodedToken }) => {
     const isAdmin = decodedToken.role === 'Admin';
     const [newConclusion, setNewConclusion] = useState<string>('');
-
+    console.log(thread);
 //ściezka do colclusion + zastanowić sie co ze stagem
+//sprawdzić gdy nie ma conclusion
+//linijka 70 sprawdzić
 
-    const handleAddConclusion = async (stage: string) => {
-        try {
-            const dataToSend = {
-                stage: stage,
-                conclusion:
-                {
-                    content: newConclusion
-                }
-            };
-
-            console.log(dataToSend);
-            const response = await fetch(`http://localhost:8080/threads/id999/${thread.threadId}`, {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(dataToSend),
-            });
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-        } catch (error) {
-            console.error('An error occurred while saving data', error);
-        }
-
-        setNewConclusion('');
-    };
+const handleAddConclusion = async (stage: string) => {
+    try {
+      const dataToSend = {
+        content: newConclusion,
+        userId: decodedToken.userId, 
+        threadId: thread.threadId,
+        stageId: stage === "APPROVED" ? 2 : 3, 
+      };
+  
+      const response = await fetch(`http://localhost:8080/conclusion/add`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dataToSend),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      // zaktualizować stan komponentu
+  
+    } catch (error) {
+      console.error('An error occurred while saving data', error);
+    }
+  
+    setNewConclusion('');
+  };
+  
 
 
 
@@ -65,7 +68,7 @@ export const Conclusion: React.FC<ConclusionProps> = ({ thread, decodedToken }) 
                     <Divider variant="fullWidth" style={{ margin: '30px 0' }} />
                 </Paper>
             ) : null}
-            {isAdmin ? (
+            {isAdmin && !thread.conclusion ? (
                 <div>
                     <TextField
                         required

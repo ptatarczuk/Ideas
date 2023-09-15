@@ -85,7 +85,7 @@ public class ThreadController {
 //                threadId, multipartFile,updatedThread), HttpStatus.OK);
 //    }
 
-    @PatchMapping(value = "/id/{thread_id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+    @PatchMapping("/id/{thread_id}")
     public ResponseEntity<Thread> updateThreadById(
             @PathVariable("thread_id") Long threadId,
             @RequestBody @Valid ThreadUpdateDTO updatedThread

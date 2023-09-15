@@ -34,20 +34,18 @@ export const ThreadComponent: React.FC<ThreadComponentProps> = ({ thread, decode
 
     const handleSave = async () => {
         try {
-            const accessToken = localStorage.getItem('user');
-            const formData = new FormData();
-            formData.append('thread', JSON.stringify({ title: editedThread.title }));
-            console.log(formData);
+            //const accessToken = localStorage.getItem('user');
+            const updatedThread = { title: editedThread.title };
+
 
             const response = await fetch(`http://localhost:8080/threads/id/${thread.threadId}`, {
                 method: 'PATCH',
-                body: formData,
+                body: JSON.stringify(updatedThread),
                 headers: {
-                    'Content-Type': 'multipart/form-data',
-                    'Authorization': `Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiQWRtaW4iLCJuYW1lIjoiam92aXRhYSIsInN1YiI6Impvdml0YWFAZy5wbCIsImlhdCI6MTY5NDcwMzUxMSwiZXhwIjoxNjk0Nzg5OTExfQ.xDhcDQJhMKawhaTx2qHkHfu4vqyAbMyY0KyksYvgMT4`,
+                    'Content-Type': 'application/json', 
                 },
             });
-            console.log(response);
+    
 
             if (!response.ok) {
                 const errorData = await response.json();
