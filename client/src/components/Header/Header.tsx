@@ -15,23 +15,57 @@ import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Lightbulb";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { styled } from "@mui/system";
+import logo from "../../assets/logo.svg";
+import "./Header.css";
+import jwt_decode from "jwt-decode";
 
 
+type DecodedToken = {
+  name: string;
+}
 
-const pages = ["Threads", "Users", "Login", "Register"]; // TODO: przerobic na enum -> poki co nie wiem jak zrobic mapowanie przez ten enum 
+const IdeaAppBar = styled(AppBar)`
+  background-color: #000000;
+  display: flex;
+  justify-content: space-between;
+`;
+
+const NavBox = styled(Box)`
+  display:flex;
+  justify-content: flex-end;
+`
+
+const NavButton = styled(Button)`
+  font-family: "Poppins Light", sans-serif;
+`;
+
+const HelloText = styled(Typography)`
+  font-family: "Poppins Light", sans-serif;
+  margin-top: 2.4%;
+  margin-right: 5%;
+`
+
+const pages = ["Threads", "Users", "Logout"]; // TODO: przerobic na enum -> poki co nie wiem jak zrobic mapowanie przez ten enum
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function ResponsiveAppBar() {
   const userContext = useContext(UserContext);
+  const jwtToken = localStorage.getItem('token');
 
   const handleLogout = async () => {
     try {
-      const response = await axios.post("http://localhost:8080/api/v1/auth/logout", {}, {
-        headers: {    // TODO: Dodac interceptory zebysmy  nie musieli w kazdym zapytaniu wpisywac headerow 
-          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-        },
-      });
-  
+      const response = await axios.post(
+        "http://localhost:8080/api/v1/auth/logout",
+        {},
+        {
+          headers: {
+            // TODO: Dodac interceptory zebysmy  nie musieli w kazdym zapytaniu wpisywac headerow
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
       if (response.status === 200) {
         console.log("User logged out on the server.");
       } else {
@@ -40,13 +74,23 @@ function ResponsiveAppBar() {
     } catch (error) {
       console.log("An error occurred while logging out on the server:", error);
     }
-    
+
     sessionStorage.removeItem("token");
     userContext.setUser(null);
   };
 
+  const displayNameFromToken = (jwtToken: string): string | null => {
+    try {
+      const decoded: DecodedToken = jwt_decode(jwtToken);
+      return decoded.name;
+    } catch (error) {
+      console.error('Error decoding JWT token:', error);
+      return null;
+    }
+  }
 
-/*   const handleLogout = async () => {
+
+  /*   const handleLogout = async () => {
     try {
       const response = await fetch("http://localhost:8080/api/v1/auth/logout", {
         method: "POST",
@@ -90,29 +134,19 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar position="static">
+    <IdeaAppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            Ideas
-          </Typography>
-
-          <Box
+          <div className="navbar-left">
+            <nav>
+              <Link to="/">
+                <img src={logo} alt="ideas logo" className="navbar-logo" />
+              </Link>
+              {/* Other navbar content */}
+            </nav>
+          </div>
+          <div className="navbar-center">
+          <NavBox
             sx={{
               flexGrow: 1,
 
@@ -123,7 +157,7 @@ function ResponsiveAppBar() {
               // alignItems: "center", // Center vertically
             }}
           >
-            <IconButton
+            {/* <IconButton
               size="large"
               aria-label="account of current user"
               aria-controls="menu-appbar"
@@ -132,7 +166,7 @@ function ResponsiveAppBar() {
               color="inherit"
             >
               <MenuIcon />
-            </IconButton>
+            </IconButton> */}
             <Menu
               id="menu-appbar"
               anchorEl={anchorElNav}
@@ -164,29 +198,12 @@ function ResponsiveAppBar() {
                 </MenuItem>
               ))}
             </Menu>
-          </Box>
+          </NavBox>
           <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: "flex", md: "none" },
-              flexGrow: 1,
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            LOGO
-          </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+
+          <NavBox sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
-              <Button
+              <NavButton
                 key={page}
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: "white", display: "block" }}
@@ -197,42 +214,47 @@ function ResponsiveAppBar() {
                 >
                   {page}
                 </Link>
-              </Button>
+              </NavButton>
             ))}
-          </Box>
-
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
+          </NavBox>
+          </div>
+          <div className="navbar-right">
+          <NavBox sx={{ flexGrow: 0 }}>
+            {/* <div className="sayHello"> */}
+              <HelloText>{jwtToken ? "Welcome, " + displayNameFromToken(jwtToken) : ""}</HelloText>
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: "45px" }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                {settings.map((setting) => (
+                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                    <Typography textAlign="center">{setting}</Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
+            {/* </div> */}
+          </NavBox>
+          </div>
         </Toolbar>
       </Container>
-    </AppBar>
+    </IdeaAppBar>
   );
 }
 export default ResponsiveAppBar;

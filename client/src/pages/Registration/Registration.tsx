@@ -271,7 +271,7 @@ export const Registration: React.FC = () => {
       const token = responseData.accessToken;
       console.log(token);
       if (token) {
-        sessionStorage.setItem("token", JSON.stringify(token));
+        localStorage.setItem("token", JSON.stringify(token));
         setUser(token);
       }
       const decoded = jwt_decode(token);
