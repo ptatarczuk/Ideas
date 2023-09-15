@@ -234,7 +234,7 @@ function ResponsiveAppBar() {
                 {jwtToken ? "Welcome, " + displayNameFromToken(jwtToken) : ""}
               </HelloText>
               <Link to="/logout" style={{ textDecoration: "none" }}>
-                <LogoutButton variant="contained">Logout</LogoutButton>
+                <LogoutButton variant="contained">Log out</LogoutButton>
               </Link>
             </NavBox>
           </div>
