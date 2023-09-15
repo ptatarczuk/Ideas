@@ -10,44 +10,36 @@ interface ConclusionProps {
 export const Conclusion: React.FC<ConclusionProps> = ({ thread, decodedToken }) => {
     const isAdmin = decodedToken.role === 'Admin';
     const [newConclusion, setNewConclusion] = useState<string>('');
-    console.log(thread);
-//ściezka do colclusion + zastanowić sie co ze stagem
-//sprawdzić gdy nie ma conclusion
-//linijka 70 sprawdzić
 
-const handleAddConclusion = async (stage: string) => {
-    try {
-      const dataToSend = {
-        content: newConclusion,
-        userId: decodedToken.userId, 
-        threadId: thread.threadId,
-        stageId: stage === "APPROVED" ? 2 : 3, 
-      };
-  
-      const response = await fetch(`http://localhost:8080/conclusion/add`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(dataToSend),
-      });
-  
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-  
-      // zaktualizować stan komponentu
-  
-    } catch (error) {
-      console.error('An error occurred while saving data', error);
-    }
-  
-    setNewConclusion('');
-  };
-  
-
-
-
+    const handleAddConclusion = async (stage: string) => {
+        try {
+            const dataToSend = {
+                content: newConclusion,
+                userId: decodedToken.userId, 
+                threadId: thread.threadId,
+                stageId: stage === "APPROVED" ? 3 : 2, 
+            };
+        
+            const response = await fetch(`http://localhost:8080/conclusion/add`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(dataToSend),
+            });
+        
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+        
+            // zaktualizować stan komponentu
+        
+        } catch (error) {
+            console.error('An error occurred while saving data', error);
+        }
+      
+        setNewConclusion('');
+    };
 
     return (
         <div>
@@ -62,7 +54,7 @@ const handleAddConclusion = async (stage: string) => {
                             <h4 style={{ margin: 0, textAlign: 'left' }}>{thread.conclusion.user.name}</h4>
                             <h5 style={{ margin: 0, textAlign: 'left' }}>{thread.conclusion.user.department.departmentName}</h5>
                             <p style={{ textAlign: 'left' }}>{thread.conclusion.content}</p>
-                            <p style={{ textAlign: 'left', color: 'gray' }}>{thread.conclusion.dateOfPost}</p>
+                            <p style={{ textAlign: 'left', color: 'gray' }}>{thread.conclusion.dateOfPost.toString()}</p>
                         </Grid>
                     </Grid>
                     <Divider variant="fullWidth" style={{ margin: '30px 0' }} />
@@ -91,7 +83,6 @@ const handleAddConclusion = async (stage: string) => {
                     >
                         NOT APPROVED
                     </Button>
-
                 </div>
             ) : null}
         </div>
