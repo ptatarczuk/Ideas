@@ -212,7 +212,7 @@ const Login: React.FC = () => {
             Sign in
           </LoginButton>
           <div className="login-form__links-forgot-password">
-            <LinkText href="#">Forgot Username/Password</LinkText>
+            <LinkText href="/api/v1/auth/reset-password">Forgot <SignupInText>Password</SignupInText></LinkText>
           </div>
           <div className="login-form__links-register">
             <LinkText href="/register">

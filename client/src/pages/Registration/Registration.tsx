@@ -402,6 +402,7 @@ export const Registration: React.FC = () => {
                 id="department"
                 labelId="department-select-label"
                 name="department"
+                value={regFormData.department.departmentId.toString()}
                 required
                 variant="standard"
                 disableUnderline
