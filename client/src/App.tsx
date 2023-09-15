@@ -9,6 +9,8 @@ import { NotFound } from "./pages/NotFound/NotFound";
 import { UnauthorizedRoute } from "./components/UnauthorizedRoute";
 import { Registration } from "./pages/Registration/Registration";
 import {ThreadPage} from './pages/Thread/Thread'
+import { ForgotPassword } from "./components/Password/ForgotPassword";
+import { ResetPassword } from "./components/Password/ResetPassword";
 
 
 function App() {
@@ -39,6 +41,8 @@ function App() {
           <Route path="threads" element={<Threads />} />
           <Route path="thread/:id" element={<ThreadPage />} />
           <Route path="*" element={<NotFound />} />
+          <Route path="api/v1/auth/reset-password/" element={<ForgotPassword />} />
+          <Route path="api/v1/auth/reset-password/:token" element={<ResetPassword />} />
         </Route>
 
         <Route
