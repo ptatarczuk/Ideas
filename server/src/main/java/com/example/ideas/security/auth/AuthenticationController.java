@@ -43,7 +43,8 @@ public class AuthenticationController {
             HttpServletRequest request,
             @RequestParam("email") String userEmail
     ) {
-        String baseUrl = request.getRequestURL().toString();
+        //String baseUrl = request.getRequestURL().toString();
+        String baseUrl = "http://localhost:3000/api/v1/auth/reset-password";
         return authenticationService.resetPassword(userEmail, baseUrl);
     }
 

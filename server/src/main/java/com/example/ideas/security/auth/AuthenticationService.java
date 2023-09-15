@@ -208,7 +208,7 @@ public class AuthenticationService {
 
     private String getJwtToken(User user) {
         return jwtService.generateToken(
-                Map.of("role", user.getRole().getRoleName(), "name", user.getName()),
+                Map.of("role", user.getRole().getRoleName(), "name", user.getName(), "user_id", user.getUserId()),
                 user
         );
     }
