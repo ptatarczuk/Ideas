@@ -3,14 +3,10 @@ import { UserContext } from "../../context/UserContext";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Lightbulb";
 import { Link } from "react-router-dom";
@@ -20,10 +16,9 @@ import logo from "../../assets/logo.svg";
 import "./Header.css";
 import jwt_decode from "jwt-decode";
 
-
 type DecodedToken = {
   name: string;
-}
+};
 
 const IdeaAppBar = styled(AppBar)`
   background-color: #000000;
@@ -32,9 +27,9 @@ const IdeaAppBar = styled(AppBar)`
 `;
 
 const NavBox = styled(Box)`
-  display:flex;
+  display: flex;
   justify-content: flex-end;
-`
+`;
 
 const NavButton = styled(Button)`
   font-family: "Poppins Light", sans-serif;
@@ -42,16 +37,32 @@ const NavButton = styled(Button)`
 
 const HelloText = styled(Typography)`
   font-family: "Poppins Light", sans-serif;
-  margin-top: 2.4%;
-  margin-right: 5%;
-`
+  margin-right: 2%;
+  padding: 2%;
+  font-size: 14px;
+`;
 
-const pages = ["Threads", "Users", "Logout"]; // TODO: przerobic na enum -> poki co nie wiem jak zrobic mapowanie przez ten enum
+const LogoutButton = styled(Button)`
+  background-color: #FF8900;
+  border-radius: 38px;
+  width: 136px;
+  height: 32px;
+  font-family: "Poppins Light", sans-serif;
+  margin-left: 3%;
+  margin-top: 1%;
+
+  &:hover {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+  }
+`;
+
+const pages = ["Threads", "Users"]; // TODO: przerobic na enum -> poki co nie wiem jak zrobic mapowanie przez ten enum
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function ResponsiveAppBar() {
   const userContext = useContext(UserContext);
-  const jwtToken = localStorage.getItem('token');
+  const jwtToken = localStorage.getItem("token");
 
   const handleLogout = async () => {
     try {
@@ -84,11 +95,10 @@ function ResponsiveAppBar() {
       const decoded: DecodedToken = jwt_decode(jwtToken);
       return decoded.name;
     } catch (error) {
-      console.error('Error decoding JWT token:', error);
+      console.error("Error decoding JWT token:", error);
       return null;
     }
-  }
-
+  };
 
   /*   const handleLogout = async () => {
     try {
@@ -146,18 +156,18 @@ function ResponsiveAppBar() {
             </nav>
           </div>
           <div className="navbar-center">
-          <NavBox
-            sx={{
-              flexGrow: 1,
+            <NavBox
+              sx={{
+                flexGrow: 1,
 
-              display: { xs: "flex", md: "none" },
+                display: { xs: "flex", md: "none" },
 
-              // display: "flex",
-              // justifyContent: "center", // Center horizontally
-              // alignItems: "center", // Center vertically
-            }}
-          >
-            {/* <IconButton
+                // display: "flex",
+                // justifyContent: "center", // Center horizontally
+                // alignItems: "center", // Center vertically
+              }}
+            >
+              {/* <IconButton
               size="large"
               aria-label="account of current user"
               aria-controls="menu-appbar"
@@ -167,90 +177,66 @@ function ResponsiveAppBar() {
             >
               <MenuIcon />
             </IconButton> */}
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: "block", md: "none" },
-              }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">
-                    <Link
-                      style={{ textDecoration: "none", color: "white" }}
-                      to={`/${page}`}
-                    >
-                      {page}
-                    </Link>
-                  </Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </NavBox>
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
-
-          <NavBox sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
-              <NavButton
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
-              >
-                <Link
-                  style={{ textDecoration: "none", color: "white" }}
-                  to={`/${page}`}
-                >
-                  {page}
-                </Link>
-              </NavButton>
-            ))}
-          </NavBox>
-          </div>
-          <div className="navbar-right">
-          <NavBox sx={{ flexGrow: 0 }}>
-            {/* <div className="sayHello"> */}
-              <HelloText>{jwtToken ? "Welcome, " + displayNameFromToken(jwtToken) : ""}</HelloText>
-              <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-                </IconButton>
-              </Tooltip>
               <Menu
-                sx={{ mt: "45px" }}
                 id="menu-appbar"
-                anchorEl={anchorElUser}
+                anchorEl={anchorElNav}
                 anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
+                  vertical: "bottom",
+                  horizontal: "left",
                 }}
                 keepMounted
                 transformOrigin={{
                   vertical: "top",
-                  horizontal: "right",
+                  horizontal: "left",
                 }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
+                open={Boolean(anchorElNav)}
+                onClose={handleCloseNavMenu}
+                sx={{
+                  display: { xs: "block", md: "none" },
+                }}
               >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center">{setting}</Typography>
+                {pages.map((page) => (
+                  <MenuItem key={page} onClick={handleCloseNavMenu}>
+                    <Typography textAlign="center">
+                      <Link
+                        style={{ textDecoration: "none", color: "white" }}
+                        to={`/${page}`}
+                      >
+                        {page}
+                      </Link>
+                    </Typography>
                   </MenuItem>
                 ))}
               </Menu>
-            {/* </div> */}
-          </NavBox>
+            </NavBox>
+            <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
+
+            <NavBox sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+              {pages.map((page) => (
+                <NavButton
+                  key={page}
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: "white", display: "block" }}
+                >
+                  <Link
+                    style={{ textDecoration: "none", color: "white" }}
+                    to={`/${page}`}
+                  >
+                    {page}
+                  </Link>
+                </NavButton>
+              ))}
+            </NavBox>
+          </div>
+          <div className="navbar-right">
+            <NavBox sx={{ flexGrow: 0 }}>
+              <HelloText>
+                {jwtToken ? "Welcome, " + displayNameFromToken(jwtToken) : ""}
+              </HelloText>
+              <Link to="/logout" style={{ textDecoration: "none" }}>
+                <LogoutButton variant="contained">Logout</LogoutButton>
+              </Link>
+            </NavBox>
           </div>
         </Toolbar>
       </Container>
