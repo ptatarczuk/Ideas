@@ -6,7 +6,7 @@ export interface Conclusion {
     conclusionId: number
     content: string
     points: number
-    dateOfPost: Date
+    dateOfPost: string;
     user: User
     thread: Thread
 }
