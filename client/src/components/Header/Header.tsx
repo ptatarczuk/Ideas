@@ -29,6 +29,9 @@ const IdeaAppBar = styled(AppBar)`
 const NavBox = styled(Box)`
   display: flex;
   justify-content: flex-end;
+  a:hover {
+    color: #FF8900 !important;
+  }
 `;
 
 const NavButton = styled(Button)`
