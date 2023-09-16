@@ -7,8 +7,8 @@ interface ResetPasswordComponentProps {
 }
 
 export const ResetPassword: React.FC<ResetPasswordComponentProps> = ({}) => {
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [password, setPassword] = useState<String>("");
+  const [confirmPassword, setConfirmPassword] = useState<String>("");
    const { token } = useParams();
   // const [tokenValue, setTokenValue] = useState(token);
 
@@ -30,6 +30,9 @@ export const ResetPassword: React.FC<ResetPasswordComponentProps> = ({}) => {
 
   const handlePasswordChange = async () => {
     try {
+    //   const dataToSend = {
+    //     password
+    // }; 
         const response = await fetch(`http://localhost:8080/api/v1/auth/reset-password/${token}`, {
             method: 'PATCH',
             headers: {
