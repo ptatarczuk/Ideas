@@ -48,11 +48,11 @@ const HelloText = styled(Typography)`
 const LogoutButton = styled(Button)`
   background-color: #FF8900;
   border-radius: 38px;
-  width:  136px;
-  height: 32px;
+  width:  113px;
+  height: 27px;
   font-family: "Poppins Light", sans-serif;
   margin-left: 3%;
-  margin-top: 2%;
+  margin-top: 4%;
 
   &:hover {
     background-color: #ffffff !important;
