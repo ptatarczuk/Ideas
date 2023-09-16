@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { UserContext } from "../../context/UserContext";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -65,7 +65,9 @@ const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function ResponsiveAppBar() {
   const userContext = useContext(UserContext);
-  const jwtToken = localStorage.getItem("token");
+  const jwtToken2 = localStorage.getItem("token"); // zmienic na useEffect albo bezposrednio wpisac do useState jezeli sie da
+  const [jwtToken, setJwtToken] = useState<string | null>(jwtToken2);
+
 
   const handleLogout = async () => {
     try {
@@ -75,7 +77,7 @@ function ResponsiveAppBar() {
         {
           headers: {
             // TODO: Dodac interceptory zebysmy  nie musieli w kazdym zapytaniu wpisywac headerow
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
           },
         }
       );
@@ -89,9 +91,12 @@ function ResponsiveAppBar() {
       console.log("An error occurred while logging out on the server:", error);
     }
 
+    localStorage.clear();
     sessionStorage.removeItem("token");
     userContext.setUser(null);
+    setJwtToken("")
   };
+
 
   const displayNameFromToken = (jwtToken: string): string | null => {
     try {
@@ -236,7 +241,7 @@ function ResponsiveAppBar() {
               <HelloText>
                 {jwtToken ? "Welcome, " + displayNameFromToken(jwtToken) : ""}
               </HelloText>
-              {jwtToken ? <Link to="/logout" style={{ textDecoration: "none" }}>
+              {jwtToken ? <Link to="/login" onClick={handleLogout} style={{ textDecoration: "none" }}>
                 <LogoutButton variant="contained">Log out</LogoutButton>
               </Link> : ""}
             </NavBox>

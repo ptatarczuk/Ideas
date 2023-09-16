@@ -132,7 +132,8 @@ const Login: React.FC = () => {
         console.log("Login successful!");
         const data: { access_token: string } = await response.json();
         console.log(data);
-        localStorage.setItem("token", JSON.stringify(data.access_token));
+        //localStorage.setItem("token", JSON.stringify(data.access_token)); // tutaj trzeba bylo usunac stringify bo robilo podwojny cudzyslow !
+        localStorage.setItem("token", data.access_token);
         console.log(data)
         setUser(data.access_token); //lub nazwa uzytkownika?
         setFailedAttempts(0);
