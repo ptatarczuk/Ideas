@@ -1,37 +1,87 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { UserContext } from "../../context/UserContext";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
-import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
-import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Lightbulb";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { styled } from "@mui/system";
+import logo from "../../assets/logo.svg";
+import "./Header.css";
+import jwt_decode from "jwt-decode";
 
+type DecodedToken = {
+  name: string;
+};
 
+const IdeaAppBar = styled(AppBar)`
+  background-color: #000000;
+  display: flex;
+  justify-content: space-between;
+`;
 
-const pages = ["Threads", "Users", "Login", "Register"]; // TODO: przerobic na enum -> poki co nie wiem jak zrobic mapowanie przez ten enum 
+const NavBox = styled(Box)`
+  display: flex;
+  justify-content: flex-end;
+  a:hover {
+    color: #FF8900 !important;
+  }
+`;
+
+const NavButton = styled(Button)`
+  font-family: "Poppins Light", sans-serif;
+`;
+
+const HelloText = styled(Typography)`
+  font-family: "Poppins Light", sans-serif;
+  margin-right: 2%;
+  padding: 2%;
+  font-size: 14px;
+`;
+
+const LogoutButton = styled(Button)`
+  background-color: #FF8900;
+  border-radius: 38px;
+  width:  113px;
+  height: 27px;
+  font-family: "Poppins Light", sans-serif;
+  margin-left: 3%;
+  margin-top: 4%;
+
+  &:hover {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+  }
+`;
+
+const pages = ["Threads", "Users"]; // TODO: przerobic na enum -> poki co nie wiem jak zrobic mapowanie przez ten enum
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function ResponsiveAppBar() {
   const userContext = useContext(UserContext);
+  const jwtToken2 = localStorage.getItem("token"); // zmienic na useEffect albo bezposrednio wpisac do useState jezeli sie da
+  const [jwtToken, setJwtToken] = useState<string | null>(jwtToken2);
+
 
   const handleLogout = async () => {
     try {
-      const response = await axios.post("http://localhost:8080/api/v1/auth/logout", {}, {
-        headers: {    // TODO: Dodac interceptory zebysmy  nie musieli w kazdym zapytaniu wpisywac headerow 
-          Authorization: `Bearer ${sessionStorage.getItem("token")}`,
-        },
-      });
-  
+      const response = await axios.post(
+        "http://localhost:8080/api/v1/auth/logout",
+        {},
+        {
+          headers: {
+            // TODO: Dodac interceptory zebysmy  nie musieli w kazdym zapytaniu wpisywac headerow
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
+        }
+      );
+
       if (response.status === 200) {
         console.log("User logged out on the server.");
       } else {
@@ -40,13 +90,25 @@ function ResponsiveAppBar() {
     } catch (error) {
       console.log("An error occurred while logging out on the server:", error);
     }
-    
+
+    localStorage.clear();
     sessionStorage.removeItem("token");
     userContext.setUser(null);
+    setJwtToken("")
   };
 
 
-/*   const handleLogout = async () => {
+  const displayNameFromToken = (jwtToken: string): string | null => {
+    try {
+      const decoded: DecodedToken = jwt_decode(jwtToken);
+      return decoded.name;
+    } catch (error) {
+      console.error("Error decoding JWT token:", error);
+      return null;
+    }
+  };
+
+  /*   const handleLogout = async () => {
     try {
       const response = await fetch("http://localhost:8080/api/v1/auth/logout", {
         method: "POST",
@@ -90,40 +152,30 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar position="static">
+    <IdeaAppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            Ideas
-          </Typography>
+          <div className="navbar-left">
+            <nav>
+              <Link to="/">
+                <img src={logo} alt="ideas logo" className="navbar-logo" />
+              </Link>
+              {/* Other navbar content */}
+            </nav>
+          </div>
+          <div className="navbar-center">
+            <NavBox
+              sx={{
+                flexGrow: 1,
 
-          <Box
-            sx={{
-              flexGrow: 1,
+                display: { xs: "flex", md: "none" },
 
-              display: { xs: "flex", md: "none" },
-
-              // display: "flex",
-              // justifyContent: "center", // Center horizontally
-              // alignItems: "center", // Center vertically
-            }}
-          >
-            <IconButton
+                // display: "flex",
+                // justifyContent: "center", // Center horizontally
+                // alignItems: "center", // Center vertically
+              }}
+            >
+              {/* <IconButton
               size="large"
               aria-label="account of current user"
               aria-controls="menu-appbar"
@@ -132,107 +184,71 @@ function ResponsiveAppBar() {
               color="inherit"
             >
               <MenuIcon />
-            </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: "block", md: "none" },
-              }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">
-                    <Link
-                      style={{ textDecoration: "none", color: "white" }}
-                      to={`/${page}`}
-                    >
-                      {page}
-                    </Link>
-                  </Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: "flex", md: "none" },
-              flexGrow: 1,
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            LOGO
-          </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: "white", display: "block" }}
+            </IconButton> */}
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorElNav}
+                anchorOrigin={{
+                  vertical: "bottom",
+                  horizontal: "left",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "left",
+                }}
+                open={Boolean(anchorElNav)}
+                onClose={handleCloseNavMenu}
+                sx={{
+                  display: { xs: "block", md: "none" },
+                }}
               >
-                <Link
-                  style={{ textDecoration: "none", color: "white" }}
-                  to={`/${page}`}
-                >
-                  {page}
-                </Link>
-              </Button>
-            ))}
-          </Box>
+                {pages.map((page) => (
+                  <MenuItem key={page} onClick={handleCloseNavMenu}>
+                    <Typography textAlign="center">
+                      <Link
+                        style={{ textDecoration: "none", color: "white" }}
+                        to={`/${page}`}
+                      >
+                        {page}
+                      </Link>
+                    </Typography>
+                  </MenuItem>
+                ))}
+              </Menu>
+            </NavBox>
+            <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
 
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: "45px" }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "right",
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
-                </MenuItem>
+            <NavBox sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+              {pages.map((page) => (
+                <NavButton
+                  key={page}
+                  onClick={handleCloseNavMenu}
+                  sx={{ my: 2, color: "white", display: "block" }}
+                >
+                  <Link
+                    style={{ textDecoration: "none", color: "white" }}
+                    to={`/${page}`}
+                  >
+                    {page}
+                  </Link>
+                </NavButton>
               ))}
-            </Menu>
-          </Box>
+            </NavBox>
+          </div>
+          <div className="navbar-right">
+            <NavBox sx={{ flexGrow: 0 }}>
+              <HelloText>
+                {jwtToken ? "Welcome, " + displayNameFromToken(jwtToken) : ""}
+              </HelloText>
+              {jwtToken ? <Link to="/login" onClick={handleLogout} style={{ textDecoration: "none" }}>
+                <LogoutButton variant="contained">Log out</LogoutButton>
+              </Link> : ""}
+            </NavBox>
+          </div>
         </Toolbar>
       </Container>
-    </AppBar>
+    </IdeaAppBar>
   );
 }
 export default ResponsiveAppBar;

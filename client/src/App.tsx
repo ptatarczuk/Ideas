@@ -11,6 +11,7 @@ import { Registration } from "./pages/Registration/Registration";
 import {ThreadPage} from './pages/Thread/Thread'
 import { ForgotPassword } from "./components/Password/ForgotPassword";
 import { ResetPassword } from "./components/Password/ResetPassword";
+import { ChangePassword } from "./components/Password/ChangePassword";
 import AddThread from "./components/AddThread/AddThread";
 
 
@@ -43,8 +44,9 @@ function App() {
           <Route path="add_thread" element={<AddThread />} />
           <Route path="thread/:id" element={<ThreadPage />} />
           <Route path="*" element={<NotFound />} />
-          <Route path="api/v1/auth/reset-password/" element={<ForgotPassword />} />
-          <Route path="api/v1/auth/reset-password/:token" element={<ResetPassword />} />
+          <Route path="reset-password" element={<ForgotPassword />} />
+          <Route path="reset-password/:token" element={<ResetPassword />} />
+          <Route path="change-password" element={<ChangePassword />} />
         </Route>
 
         <Route
