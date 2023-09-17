@@ -1,20 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Category } from '../../models/Category';
+import jwt_decode from 'jwt-decode';
+import { UserContext } from '../../context/UserContext';
 
+interface Token {
+    user: string;
+    setUser: () => void;
+}
 
-const Ideas: React.FC = () => {
+const AddThread: React.FC = () => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [justification, setJustification] = useState('');
     const [categories, setCategories] = useState<Category[]>([]);
     const [selectedCategory, setSelectedCategory] = useState("");
     const [attachments, setAttachments] = useState<File[]>([]);
+    const token: Token | null = useContext(UserContext);
+    const decodedToken: object | any = token ? jwt_decode(token.user) : null;
 
     useEffect(() => {
         const fetchCategories = async () => {
             try {
                 const response = await fetch('http://localhost:8080/categories/');
-                console.log(response);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
@@ -28,9 +35,6 @@ const Ideas: React.FC = () => {
         fetchCategories();
     }, []);
 
-
-
-
     const handleAttachmentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const selectedFiles = e.target.files;
         if (selectedFiles) {
@@ -42,24 +46,23 @@ const Ideas: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-
         try {
-            const newThread = {
-                title,
-                description,
-                justification,
-                user: {
-                    "userId": 1
-                },
-                category: { categoryId: selectedCategory },
-            };
+            const formData = new FormData();
+            formData.append('title', title);
+            formData.append('description', description);
+            formData.append('justification', justification);
+            formData.append('userEmail', decodedToken.sub);
+            formData.append('categoryId', selectedCategory);
+
+            if (attachments.length > 0) {
+                for (const file of attachments) {
+                    formData.append('file', file);
+                }
+            }
 
             const response = await fetch('http://localhost:8080/threads/addThread', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(newThread),
+                body: formData,
             });
 
             if (!response.ok) {
@@ -67,13 +70,10 @@ const Ideas: React.FC = () => {
             }
 
             console.log(response);
-            console.log(newThread);
         } catch (error) {
             console.error('Error adding thread:', error);
         }
     };
-
-
 
     return (
         <div>
@@ -92,7 +92,7 @@ const Ideas: React.FC = () => {
                             {category.categoryName}
                         </option>
                     ))}
-                </select>   
+                </select>
                 <label>Attachments:</label>
                 <input type="file" multiple onChange={handleAttachmentChange} />
                 <button type="submit">Submit</button>
@@ -101,4 +101,4 @@ const Ideas: React.FC = () => {
     );
 };
 
-export default Ideas;
+export default AddThread;
