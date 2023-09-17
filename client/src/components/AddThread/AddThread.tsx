@@ -17,6 +17,26 @@ const AddThread: React.FC = () => {
     const [attachments, setAttachments] = useState<File[]>([]);
     const token: Token | null = useContext(UserContext);
     const decodedToken: object | any = token ? jwt_decode(token.user) : null;
+    const [userData, setUserData] = useState(null); 
+    
+    
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const response = await fetch(`http://localhost:8080/users/id/${decodedToken.userId}`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+    
+                const data = await response.json();
+                setUserData(data);
+            } catch (error) {
+                console.error('Error fetching user data:', error);
+            }
+        };
+        fetchUserData();
+    }, [decodedToken.userId]);
+
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -53,6 +73,7 @@ const AddThread: React.FC = () => {
             formData.append('justification', justification);
             formData.append('userEmail', decodedToken.sub);
             formData.append('categoryId', selectedCategory);
+            formData.append('user', JSON.stringify(userData));
 
             if (attachments.length > 0) {
                 for (const file of attachments) {
