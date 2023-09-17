@@ -21,6 +21,7 @@ const AddThread: React.FC = () => {
     
     
     useEffect(() => {
+        console.log(decodedToken);
         const fetchUserData = async () => {
             try {
                 const response = await fetch(`http://localhost:8080/users/id/${decodedToken.user_id}`);
@@ -35,6 +36,7 @@ const AddThread: React.FC = () => {
             }
         };
         fetchUserData();
+       
     }, [decodedToken.userId]);
 
 
@@ -65,7 +67,7 @@ const AddThread: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
+        console.log(userData);
         try {
             const formData = new FormData();
             formData.append('title', title);
@@ -84,6 +86,7 @@ const AddThread: React.FC = () => {
             const response = await fetch('http://localhost:8080/threads/addThread', {
                 method: 'POST',
                 body: formData,
+                headers: {  'Content-Type': 'multipart/form-data' },
             });
 
             if (!response.ok) {
