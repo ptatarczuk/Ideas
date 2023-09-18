@@ -132,7 +132,9 @@ const Login: React.FC = () => {
         console.log("Login successful!");
         const data: { access_token: string } = await response.json();
         console.log(data);
-        sessionStorage.setItem("token", JSON.stringify(data.access_token));
+        //localStorage.setItem("token", JSON.stringify(data.access_token)); // tutaj trzeba bylo usunac stringify bo robilo podwojny cudzyslow !
+        localStorage.setItem("token", data.access_token);
+        console.log(data)
         setUser(data.access_token); //lub nazwa uzytkownika?
         setFailedAttempts(0);
         navigate("/");
@@ -212,7 +214,7 @@ const Login: React.FC = () => {
             Sign in
           </LoginButton>
           <div className="login-form__links-forgot-password">
-            <LinkText href="/api/v1/auth/reset-password">Forgot <SignupInText>Password</SignupInText></LinkText>
+            <LinkText href="/reset-password">Forgot <SignupInText>Password</SignupInText></LinkText>
           </div>
           <div className="login-form__links-register">
             <LinkText href="/register">

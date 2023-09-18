@@ -7,5 +7,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileWithMetaData {
 
     private MultipartFile file;
-    private ThreadCreateDTO threadCreateDTO;
+    private String threadCreateDTO;
+//    private ThreadCreateDTO threadCreateDTO;
 }

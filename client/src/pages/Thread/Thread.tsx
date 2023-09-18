@@ -6,6 +6,7 @@ import { UserContext } from '../../context/UserContext';
 import { ThreadComponent } from '../../components/Thread/Thread';
 import Comments from '../../components/Comments/Comments';
 import { Likes } from '../../components/Likes';
+import { Conclusion } from '../../components/Opinion/Conclusion';
 
 
 
@@ -57,6 +58,7 @@ export const ThreadPage: React.FC = () => {
             <h1>Thread</h1>
             <ThreadComponent thread={thread} decodedToken={decodedToken} />
             <Comments threadId={id} decodedToken={decodedToken}/>
+            <Conclusion thread={thread} decodedToken={decodedToken} />
             <Likes thread={thread} fetchThread={fetchThread} />
         </div>
     );

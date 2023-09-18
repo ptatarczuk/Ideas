@@ -5,6 +5,7 @@ import com.example.ideas.exception.NoAuthorizationException;
 import com.example.ideas.thread.model.Thread;
 import com.example.ideas.thread.service.ThreadService;
 import com.example.ideas.thread.utils.EmailSender;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,7 +74,13 @@ public class ThreadController {
     public ResponseEntity<Thread> addThread(
             @ModelAttribute FileWithMetaData fileWithMetaData
     ) throws EntityNotFoundException, IOException {
-        return new ResponseEntity<>(threadService.addThread(fileWithMetaData.getFile(), fileWithMetaData.getThreadCreateDTO()), HttpStatus.CREATED);
+        ObjectMapper mapper = new ObjectMapper();
+        System.out.println(fileWithMetaData.getThreadCreateDTO());
+        return new ResponseEntity<>(threadService.addThread(
+                fileWithMetaData.getFile(),
+                mapper.readValue(fileWithMetaData.getThreadCreateDTO(), ThreadCreateDTO.class)),
+                HttpStatus.CREATED
+        );
     }
 
     @DeleteMapping("/{thread_id}")
