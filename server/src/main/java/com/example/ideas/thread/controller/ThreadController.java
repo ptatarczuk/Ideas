@@ -60,6 +60,7 @@ public class ThreadController {
 
     // czy tu beda potrzebne getByStatus getByCategory getByStage itp ?
 
+
     @RequestMapping(path = "/addThread", method = POST, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Thread> addThread(
             @RequestPart @Valid ThreadCreateDTO threadCreateDTO,
