@@ -5,6 +5,7 @@ import com.example.ideas.exception.NoAuthorizationException;
 import com.example.ideas.thread.model.Thread;
 import com.example.ideas.thread.service.ThreadService;
 import com.example.ideas.thread.utils.EmailSender;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -63,10 +64,12 @@ public class ThreadController {
 
     @RequestMapping(path = "/addThread", method = POST, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Thread> addThread(
-            @RequestPart @Valid ThreadCreateDTO threadCreateDTO,
-            @RequestPart(value = "file", required = false) MultipartFile multipartFile
+            @ModelAttribute FileWithMetaData fileWithMetaData
     ) throws EntityNotFoundException, IOException {
-        return new ResponseEntity<>(threadService.addThread(multipartFile, threadCreateDTO), HttpStatus.CREATED);
+//        ObjectMapper mapper = new ObjectMapper();
+//        System.out.println(fileWithMetaData.getThreadCreateDTO());
+        return new ResponseEntity<>(threadService.addThread(fileWithMetaData.getFile(), fileWithMetaData.getThreadCreateDTO()), HttpStatus.CREATED);
+//        return new ResponseEntity<>(threadService.addThread(fileWithMetaData.getFile(), new ThreadCreateDTO("xxxssssssx", "xxxx", "xxxxx", "a2a.pl", 1L)), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{thread_id}")

@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { Category } from '../../models/Category';
 import jwt_decode from 'jwt-decode';
 import { UserContext } from '../../context/UserContext';
+import axios from 'axios';
 
 interface Token {
     user: string;
@@ -13,8 +14,8 @@ const AddThread: React.FC = () => {
     const [description, setDescription] = useState('');
     const [justification, setJustification] = useState('');
     const [categories, setCategories] = useState<Category[]>([]);
-    const [selectedCategory, setSelectedCategory] = useState("");
-    //const [attachments, setAttachments] = useState<File[]>([]);
+    const [selectedCategory, setSelectedCategory] = useState<number | "">(0);
+    const [attachments, setAttachments] = useState<File[]>([]);
     const token: Token | null = useContext(UserContext);
     const decodedToken: object | any = token ? jwt_decode(token.user) : null;
 
@@ -50,32 +51,25 @@ const AddThread: React.FC = () => {
         e.preventDefault();
         try {
             const formData = new FormData();
-            formData.append('title', title);
-            formData.append('description', description);
-            formData.append('justification', justification);
-            formData.append('userEmail', decodedToken.sub);
-            formData.append('categoryId', selectedCategory);
-
-            // if (attachments.length > 0) {
-            //     for (const file of attachments) {
-            //         formData.append('file', file);
-            //     }
-            // }
-
-            const response = await fetch('http://localhost:8080/threads/addThread', {
-                method: 'POST',
-                body: formData,
-                headers: 
-                {
-                    'Content-Type': 'multipart/form-data'
-                },
-            });
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
+            const requestData = {
+                title: title,
+                description: description,
+                justification: justification,
+                userEmail: decodedToken.sub,
+                categoryId: parseInt(selectedCategory.toString()), 
             }
+            formData.append('threadCreateDTO', JSON.stringify(requestData));
 
+            if (attachments.length > 0) {
+                for (const file of attachments) {
+                    formData.append('file', file);
+                }
+            }
+            console.log(formData.values);
+            const response = await axios.post('http://localhost:8080/threads/addThread', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
             console.log(response);
+
+
         } catch (error) {
             console.error('Error adding thread:', error);
         }
@@ -91,7 +85,7 @@ const AddThread: React.FC = () => {
                 <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
                 <label>Justification:</label>
                 <textarea value={justification} onChange={(e) => setJustification(e.target.value)} />
-                <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
+                <select value={selectedCategory === "" ? "" : selectedCategory.toString()} onChange={(e) => setSelectedCategory(parseInt(e.target.value, 10) || 0)}>
                     <option value="">Select a category</option>
                     {categories.map((category) => (
                         <option key={category.categoryId} value={category.categoryId}>
