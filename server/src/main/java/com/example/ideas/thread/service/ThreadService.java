@@ -89,54 +89,16 @@ public class ThreadService {
     }
 
     // Walidacja?
-//    @Transactional
-//    public Thread updateThreadById(
-//            String token,
-//                                   Long threadId, MultipartFile multipartFile, ThreadUpdateDTO threadUpdateDTO) throws IOException, EntityNotFoundException, NoAuthorizationException {
-//
-//        Thread thread = getObjectFromDB(threadId, threadRepository);
-//
-//        if(!(thread.getUser().getEmail().equals(getUserEmail(token)) || getUserRole(token).equals("Admin"))) {
-//            throw new NoAuthorizationException("only thread author or user with role \"Admin\" can modify thread");
-//        }
-//
-//        Long categoryId = threadUpdateDTO.getCategoryId();
-//        Long stageId = threadUpdateDTO.getStageId();
-//        Long statusId = threadUpdateDTO.getStatusId();
-//
-//        if (threadUpdateDTO.getTitle() != null) {
-//            thread.setTitle(threadUpdateDTO.getTitle());
-//        }
-//        if (threadUpdateDTO.getDescription() != null) {
-//            thread.setDescription(threadUpdateDTO.getDescription());
-//        }
-//        if (threadUpdateDTO.getJustification() != null) {
-//            thread.setJustification(threadUpdateDTO.getJustification());
-//        }
-//        if (!(multipartFile == null || multipartFile.isEmpty())) {
-//            uploadNewPhoto(multipartFile, thread);
-//        }
-//        if (threadUpdateDTO.getPoints() != null) {
-//            thread.setPoints(threadUpdateDTO.getPoints());
-//        }
-//        if (categoryId != null) {
-//            thread.setCategory(getObjectFromDB(categoryId, categoryRepository));
-//        }
-//        if (stageId != null) {
-//            thread.setStage(getObjectFromDB(stageId, stageRepository));
-//        }
-//        if (statusId != null) {
-//            thread.setStatus(getObjectFromDB(statusId, statusRepository));
-//        }
-//
-//        return thread;
-//    }
-
     @Transactional
     public Thread updateThreadById(
-            Long threadId, ThreadUpdateDTO threadUpdateDTO) throws IOException, EntityNotFoundException, NoAuthorizationException {
+            String token,
+            Long threadId, MultipartFile multipartFile, ThreadUpdateDTO threadUpdateDTO) throws IOException, EntityNotFoundException, NoAuthorizationException {
 
         Thread thread = getObjectFromDB(threadId, threadRepository);
+
+        if (!(thread.getUser().getEmail().equals(getUserEmail(token)) || getUserRole(token).equals("Admin"))) {
+            throw new NoAuthorizationException("only thread author or user with role \"Admin\" can modify thread");
+        }
 
         Long categoryId = threadUpdateDTO.getCategoryId();
         Long stageId = threadUpdateDTO.getStageId();
@@ -150,6 +112,9 @@ public class ThreadService {
         }
         if (threadUpdateDTO.getJustification() != null) {
             thread.setJustification(threadUpdateDTO.getJustification());
+        }
+        if (!(multipartFile == null || multipartFile.isEmpty())) {
+            uploadNewPhoto(multipartFile, thread);
         }
         if (threadUpdateDTO.getPoints() != null) {
             thread.setPoints(threadUpdateDTO.getPoints());
@@ -166,6 +131,41 @@ public class ThreadService {
 
         return thread;
     }
+
+//    @Transactional
+//    public Thread updateThreadById(
+//            Long threadId, ThreadUpdateDTO threadUpdateDTO) throws IOException, EntityNotFoundException, NoAuthorizationException {
+//
+//        Thread thread = getObjectFromDB(threadId, threadRepository);
+//
+//        Long categoryId = threadUpdateDTO.getCategoryId();
+//        Long stageId = threadUpdateDTO.getStageId();
+//        Long statusId = threadUpdateDTO.getStatusId();
+//
+//        if (threadUpdateDTO.getTitle() != null) {
+//            thread.setTitle(threadUpdateDTO.getTitle());
+//        }
+//        if (threadUpdateDTO.getDescription() != null) {
+//            thread.setDescription(threadUpdateDTO.getDescription());
+//        }
+//        if (threadUpdateDTO.getJustification() != null) {
+//            thread.setJustification(threadUpdateDTO.getJustification());
+//        }
+//        if (threadUpdateDTO.getPoints() != null) {
+//            thread.setPoints(threadUpdateDTO.getPoints());
+//        }
+//        if (categoryId != null) {
+//            thread.setCategory(getObjectFromDB(categoryId, categoryRepository));
+//        }
+//        if (stageId != null) {
+//            thread.setStage(getObjectFromDB(stageId, stageRepository));
+//        }
+//        if (statusId != null) {
+//            thread.setStatus(getObjectFromDB(statusId, statusRepository));
+//        }
+//
+//        return thread;
+//    }
 
     public String getUserRole(String token) {
         String jwt = jwtService.getJWT(token);

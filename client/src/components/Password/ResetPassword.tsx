@@ -1,5 +1,5 @@
 import { Box, Button, TextField } from "@mui/material";
-import { useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 interface ResetPasswordComponentProps {
@@ -7,8 +7,8 @@ interface ResetPasswordComponentProps {
 }
 
 export const ResetPassword: React.FC<ResetPasswordComponentProps> = ({}) => {
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [password, setPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
    const { token } = useParams();
   // const [tokenValue, setTokenValue] = useState(token);
 
@@ -62,14 +62,14 @@ export const ResetPassword: React.FC<ResetPasswordComponentProps> = ({}) => {
     id="outlined-required"
     label="Password"
     value={password}
-    onChange={(e) => setPassword(e.target.value)}
+    onChange={(event: ChangeEvent<HTMLInputElement>) => setPassword(event.target.value)}
   />
     <TextField
     required
     id="outlined-required"
     label="Confirm Password"
     value={confirmPassword}
-    onChange={(e) => setConfirmPassword(e.target.value)}
+    onChange={(event: ChangeEvent<HTMLInputElement>) => setConfirmPassword(event.target.value)}
   />
   <Button onClick={handleSubmit} >
     Confirm Password

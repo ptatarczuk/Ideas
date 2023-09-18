@@ -6,7 +6,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 interface ForgotPasswordComponentProps {}
 
 export const ForgotPassword: React.FC<ForgotPasswordComponentProps> = ({}) => {
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState<String>("");
 
   const handleSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
     //event.preventDefault();
@@ -58,7 +58,7 @@ export const ForgotPassword: React.FC<ForgotPasswordComponentProps> = ({}) => {
         id="outlined-required"
         label="Email"
         value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
+        onChange={(event: ChangeEvent<HTMLInputElement>) => setInputValue(event.target.value)}
       />
       <Button onClick={handleSubmit} >
         Reset Password
