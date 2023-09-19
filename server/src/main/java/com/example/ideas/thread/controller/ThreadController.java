@@ -6,17 +6,11 @@ import com.example.ideas.thread.model.Thread;
 import com.example.ideas.thread.service.ThreadService;
 import com.example.ideas.thread.utils.EmailSender;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 
 import java.io.IOException;
 import java.util.List;
@@ -77,8 +71,6 @@ public class ThreadController {
     ) throws EntityNotFoundException, IOException {
 
         ObjectMapper mapper = new ObjectMapper();
-        System.out.println("************************************************************************************************");
-        System.out.println(mapper.readValue(model, ThreadCreateDTO.class).toString());
 
         return new ResponseEntity<>(threadService.addThread(
                 multipartFile,
