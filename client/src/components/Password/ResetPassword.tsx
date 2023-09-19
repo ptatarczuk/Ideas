@@ -7,13 +7,8 @@ interface ResetPasswordComponentProps {
 }
 
 export const ResetPassword: React.FC<ResetPasswordComponentProps> = ({}) => {
-<<<<<<< HEAD
   const [password, setPassword] = useState<string>("");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
-=======
-  const [password, setPassword] = useState<String>("");
-  const [confirmPassword, setConfirmPassword] = useState<String>("");
->>>>>>> 969a9a9334f2230a071cf66ad2975ea56708c6ae
    const { token } = useParams();
   // const [tokenValue, setTokenValue] = useState(token);
 
