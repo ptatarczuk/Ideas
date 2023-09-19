@@ -61,7 +61,8 @@ const LogoutButton = styled(Button)`
   }
 `;
 
-const pages = ["Threads", "Users"]; // TODO: przerobic na enum -> poki co nie wiem jak zrobic mapowanie przez ten enum
+const pages = ["Add", "Threads", "Users"]; // TODO: przerobic na enum -> poki co nie wiem jak zrobic mapowanie przez ten enum
+//zrobić tak, zeby dodać dwa słowa
 const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 function ResponsiveAppBar() {
