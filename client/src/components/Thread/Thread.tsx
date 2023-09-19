@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Thread } from '../../models/Thread';
 import { getJwtToken } from '../../authHelpers/authHelpers'
 import { Description } from '@mui/icons-material';
+import axios from 'axios';
 
 
 interface ThreadComponentProps {
@@ -33,45 +34,46 @@ export const ThreadComponent: React.FC<ThreadComponentProps> = ({ thread, decode
 
 
 
-    const handleSave =async (e: React.FormEvent) => {
+    const handleSave = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
             const jwtToken = await getJwtToken();
+            
             if (!jwtToken) {
                 return;
             }
+    
             const updatedThread = {
                 title: editedThread.title,
                 description: editedThread.description,
                 justification: editedThread.justification,
             };
-
+    
             const formData = new FormData();
             formData.append('thread', JSON.stringify(updatedThread));
-
-
-
-            const response = await fetch(`http://localhost:8080/threads/id/${thread.threadId}`, {
-                method: 'PATCH',
-                body: JSON.stringify(formData),
+           
+    
+            const config = {
                 headers: {
                     'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${jwtToken}`
+                    Authorization: `Bearer ${jwtToken}`,
                 },
-            });
-
-
-            if (!response.ok) {
-                const errorData = await response.json();
+            };
+    
+            const response = await axios.patch(`http://localhost:8080/threads/id/${thread.threadId}`, formData, config);
+    
+            if (response.status !== 200) {
+                const errorData = response.data;
                 throw new Error(`Network response was not ok. Error data: ${JSON.stringify(errorData)}`);
             }
-
+    
             setIsEditing(false);
             setButtonText("EDIT");
         } catch (error) {
             console.error('An error occurred while saving data', error);
         }
     };
+    
 
     return (
         <Box
