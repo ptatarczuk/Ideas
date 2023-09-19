@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { Category } from '../../models/Category';
 import jwt_decode from 'jwt-decode';
 import { UserContext } from '../../context/UserContext';
+import { getJwtToken } from '../../authHelpers/authHelpers'
 import axios from 'axios';
 
 interface Token {
@@ -22,6 +23,7 @@ const AddThread: React.FC = () => {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
+
                 const response = await fetch('http://localhost:8080/categories/');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -36,19 +38,23 @@ const AddThread: React.FC = () => {
     }, []);
 
     const handleAttachmentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const selectedFile = e.target.files?.[0]; 
+        const selectedFile = e.target.files?.[0];
         if (selectedFile) {
             setAttachment(selectedFile);
         }
     };
 
     const handleRemoveAttachment = () => {
-        setAttachment(null); 
+        setAttachment(null);
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
+            const jwtToken = await getJwtToken();
+            if (!jwtToken) {
+                return;
+            }
             const requestData = {
                 title: title,
                 description: description,
@@ -70,7 +76,7 @@ const AddThread: React.FC = () => {
                 {
                     headers: {
                         'Content-Type': 'multipart/form-data',
-                        Authorization: `Bearer ${token.user}`,
+                        Authorization: `Bearer ${jwtToken}`,
                     },
                 }
             );
@@ -98,7 +104,7 @@ const AddThread: React.FC = () => {
                         </option>
                     ))}
                 </select>
-                <label>Attachment:</label> 
+                <label>Attachment:</label>
                 <input type="file" onChange={handleAttachmentChange} />
                 {attachment && (
                     <div>
