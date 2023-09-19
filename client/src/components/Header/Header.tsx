@@ -15,6 +15,7 @@ import { styled } from "@mui/system";
 import logo from "../../assets/logo.svg";
 import "./Header.css";
 import jwt_decode from "jwt-decode";
+import { handleLogout } from "../../authHelpers/authHelpers"
 
 type DecodedToken = {
   name: string;
@@ -69,33 +70,33 @@ function ResponsiveAppBar() {
   const [jwtToken, setJwtToken] = useState<string | null>(jwtToken2);
 
 
-  const handleLogout = async () => {
-    try {
-      const response = await axios.post(
-        "http://localhost:8080/api/v1/auth/logout",
-        {},
-        {
-          headers: {
-            // TODO: Dodac interceptory zebysmy  nie musieli w kazdym zapytaniu wpisywac headerow
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
+  // const handleLogout = async () => {
+  //   try {
+  //     const response = await axios.post(
+  //       "http://localhost:8080/api/v1/auth/logout",
+  //       {},
+  //       {
+  //         headers: {
+  //           // TODO: Dodac interceptory zebysmy  nie musieli w kazdym zapytaniu wpisywac headerow
+  //           Authorization: `Bearer ${localStorage.getItem('token')}`,
+  //         },
+  //       }
+  //     );
 
-      if (response.status === 200) {
-        console.log("User logged out on the server.");
-      } else {
-        console.log("Failed to log out user on the server.");
-      }
-    } catch (error) {
-      console.log("An error occurred while logging out on the server:", error);
-    }
+  //     if (response.status === 200) {
+  //       console.log("User logged out on the server.");
+  //     } else {
+  //       console.log("Failed to log out user on the server.");
+  //     }
+  //   } catch (error) {
+  //     console.log("An error occurred while logging out on the server:", error);
+  //   }
 
-    localStorage.clear();
-    sessionStorage.removeItem("token");
-    userContext.setUser(null);
-    setJwtToken("")
-  };
+  //   localStorage.clear();
+  //   sessionStorage.removeItem("token");
+  //   userContext.setUser(null);
+  //   setJwtToken("")
+  // };
 
 
   const displayNameFromToken = (jwtToken: string): string | null => {
