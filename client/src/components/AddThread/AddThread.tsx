@@ -70,7 +70,7 @@ const AddThread: React.FC = () => {
                 {
                     headers: {
                         'Content-Type': 'multipart/form-data',
-                        Authorization: `Bearer ${token.user}`,
+                        Authorization: `Bearer ${token.user}`
                     },
                 }
             );
