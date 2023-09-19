@@ -17,6 +17,7 @@ import {
 } from "@mui/material";
 import AutocompleteComponent from "../Filters/AutocompleteComponent";
 import { useNavigate } from "react-router-dom";
+import { getJwtToken } from "../../authHelpers/authHelpers";
 
 export const Threads: React.FC = () => {
   interface Token {
@@ -39,8 +40,16 @@ export const Threads: React.FC = () => {
   useEffect(() => {
     const fetchThreads = async () => {
       try {
+        const jwtToken = await getJwtToken();
+        if (!jwtToken) {
+          return;
+        }
         const url = "http://localhost:8080/threads/";
-        const response = await axios.get(url);
+        const response = await axios.get(url, {
+          headers: {
+            Authorization: `Bearer ${jwtToken}`,
+          },
+        });
         setThreads(response.data);
         setFilteredThreads(response.data);
         setIsLoading(false);
@@ -70,7 +79,7 @@ export const Threads: React.FC = () => {
           <Grid item>
             <AutocompleteComponent
               options={threads.map((thread) => thread.title)}
-              value={selectedThreadTitle || null} 
+              value={selectedThreadTitle || null}
               onChange={(newValue) => {
                 setSelectedThreadTitle(newValue);
                 const filtered = threads.filter(

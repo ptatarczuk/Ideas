@@ -188,10 +188,11 @@ public class ThreadService {
 
     private void deleteOldPhotoIfPresent(Thread thread) throws IOException {
         String downloadUri = thread.getPhoto();
-        if (!downloadUri.isEmpty()) {
-            String fileCode = downloadUri.substring(downloadUri.lastIndexOf("/") + 1);
-            fileService.deleteFile(fileCode);
+        if (downloadUri == null || downloadUri.isEmpty()) {
+            return;
         }
+        String fileCode = downloadUri.substring(downloadUri.lastIndexOf("/") + 1);
+        fileService.deleteFile(fileCode);
     }
 
 
