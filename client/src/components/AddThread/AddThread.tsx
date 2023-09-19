@@ -15,10 +15,9 @@ const AddThread: React.FC = () => {
     const [justification, setJustification] = useState('');
     const [categories, setCategories] = useState<Category[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<number | "">(0);
-    const [attachments, setAttachments] = useState<File[]>([]);
+    const [attachment, setAttachment] = useState<File | null>(null);
     const token: Token | null = useContext(UserContext);
     const decodedToken: object | any = token ? jwt_decode(token.user) : null;
-
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -27,7 +26,6 @@ const AddThread: React.FC = () => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-
                 const data = await response.json();
                 setCategories(data);
             } catch (error) {
@@ -38,51 +36,49 @@ const AddThread: React.FC = () => {
     }, []);
 
     const handleAttachmentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const selectedFiles = e.target.files;
-        if (selectedFiles) {
-            const filesArray = Array.from(selectedFiles);
-            setAttachments(filesArray);
+        const selectedFile = e.target.files?.[0]; 
+        if (selectedFile) {
+            setAttachment(selectedFile);
         }
     };
 
+    const handleRemoveAttachment = () => {
+        setAttachment(null); 
+    };
 
-const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-        const requestData = {
-            title: title,
-            description: description,
-            justification: justification,
-            userEmail: decodedToken.sub,
-            categoryId: parseInt(selectedCategory.toString()),
-        };
-        
-        const formData = new FormData();
-        formData.append('model', JSON.stringify(requestData)); 
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            const requestData = {
+                title: title,
+                description: description,
+                justification: justification,
+                userEmail: decodedToken.sub,
+                categoryId: parseInt(selectedCategory.toString()),
+            };
 
-        if (attachments.length > 0) {
-            for (const file of attachments) {
-                formData.append('file', file);
+            const formData = new FormData();
+            formData.append('model', JSON.stringify(requestData));
+
+            if (attachment) {
+                formData.append('file', attachment);
             }
+
+            const response = await axios.post(
+                'http://localhost:8080/threads/addThread',
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                        Authorization: `Bearer ${token.user}`,
+                    },
+                }
+            );
+            console.log(response);
+        } catch (error) {
+            console.error('Error adding thread:', error);
         }
-
-        const response = await axios.post(
-            'http://localhost:8080/threads/addThread',
-            formData,
-            {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${token.user}`,
-                },
-            }
-        );
-        console.log(response);
-    } catch (error) {
-        console.error('Error adding thread:', error);
-    }
-};
-
-
+    };
 
     return (
         <div>
@@ -102,8 +98,14 @@ const handleSubmit = async (e: React.FormEvent) => {
                         </option>
                     ))}
                 </select>
-                <label>Attachments:</label>
-                <input type="file" multiple onChange={handleAttachmentChange} />
+                <label>Attachment:</label> 
+                <input type="file" onChange={handleAttachmentChange} />
+                {attachment && (
+                    <div>
+                        <img src={URL.createObjectURL(attachment)} alt="Attachment" style={{ maxWidth: '100px' }} />
+                        <button onClick={handleRemoveAttachment}>Remove</button>
+                    </div>
+                )}
                 <button type="submit">Submit</button>
             </form>
         </div>
