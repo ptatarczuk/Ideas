@@ -38,14 +38,13 @@ const AddThread: React.FC = () => {
     }, []);
 
     const handleAttachmentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        // const selectedFiles = e.target.files;
-        // if (selectedFiles) {
-        //     const filesArray = Array.from(selectedFiles);
-        //     setAttachments(filesArray);
-        // }
+        const selectedFiles = e.target.files;
+        if (selectedFiles) {
+            const filesArray = Array.from(selectedFiles);
+            setAttachments(filesArray);
+        }
     };
 
-    // ...
 
 const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,7 +58,7 @@ const handleSubmit = async (e: React.FormEvent) => {
         };
         
         const formData = new FormData();
-        formData.append('model', JSON.stringify(requestData)); // Umieść dane JSON jako pole "model" w formularzu
+        formData.append('model', JSON.stringify(requestData)); 
 
         if (attachments.length > 0) {
             for (const file of attachments) {
@@ -83,7 +82,6 @@ const handleSubmit = async (e: React.FormEvent) => {
     }
 };
 
-// ...
 
 
     return (
