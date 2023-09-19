@@ -26,6 +26,7 @@ export const UserContextProvider: React.FC<UserContextProviderType> = ({ childre
     });
   
     useEffect(() => {
+      console.log(user);
       if (user) {
         localStorage.setItem("user", JSON.stringify(user));
       } else {

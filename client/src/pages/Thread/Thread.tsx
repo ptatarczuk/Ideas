@@ -7,6 +7,7 @@ import { ThreadComponent } from '../../components/Thread/Thread';
 import Comments from '../../components/Comments/Comments';
 import { Likes } from '../../components/Likes';
 import { Conclusion } from '../../components/Opinion/Conclusion';
+import { getJwtToken } from '../../authHelpers/authHelpers';
 
 
 
@@ -19,10 +20,10 @@ export const ThreadPage: React.FC = () => {
         setUser: () => void;
     }
 
-    
+
     const token: Token | null = useContext(UserContext);
     const decodedToken: object | any = token ? jwt_decode(token.user) : null;
-//to any zmienic    
+    //to any zmienic    
 
 
     useEffect(() => {
@@ -31,6 +32,7 @@ export const ThreadPage: React.FC = () => {
     }, [id]);
 
 
+    
     const fetchThread = async () => {
         try {
             const response = await fetch(`http://localhost:8080/threads/id/${id}`);
@@ -53,13 +55,14 @@ export const ThreadPage: React.FC = () => {
     }
 
     return (
-        
+
         <div>
             <h1>Thread</h1>
             <ThreadComponent thread={thread} decodedToken={decodedToken} />
-            <Comments threadId={id} decodedToken={decodedToken}/>
+            <Comments threadId={id} decodedToken={decodedToken} />
             <Conclusion thread={thread} decodedToken={decodedToken} />
             <Likes thread={thread} fetchThread={fetchThread} />
+            <button onClick={getJwtToken}>KLIKNIJ TUTAJ!!!!!!!!!!</button>
         </div>
     );
 };

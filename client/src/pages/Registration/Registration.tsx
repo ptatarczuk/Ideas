@@ -269,10 +269,13 @@ export const Registration: React.FC = () => {
       const responseData = await register("/api/v1/auth/register", regFormData);
       console.log("Response: ", responseData);
       const token = responseData.accessToken;
+      const refreshToken = responseData.refreshToken;
       console.log(token);
       if (token) {
         //localStorage.setItem("token", JSON.stringify(token));
         localStorage.setItem("token", token);
+        localStorage.setItem("refresh_token", refreshToken);
+
         setUser(token);
       }
       const decoded = jwt_decode(token);

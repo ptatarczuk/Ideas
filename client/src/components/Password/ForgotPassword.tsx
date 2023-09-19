@@ -58,7 +58,11 @@ export const ForgotPassword: React.FC<ForgotPasswordComponentProps> = ({}) => {
         id="outlined-required"
         label="Email"
         value={inputValue}
+<<<<<<< HEAD
+        onChange={(event: ChangeEvent<HTMLInputElement>) => setInputValue(event.target.value)}
+=======
         onChange={(e: ChangeEvent<HTMLInputElement>) => setInputValue(e.target.value)}
+>>>>>>> 969a9a9334f2230a071cf66ad2975ea56708c6ae
       />
       <Button onClick={handleSubmit} >
         Reset Password

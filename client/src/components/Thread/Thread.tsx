@@ -34,7 +34,7 @@ export const ThreadComponent: React.FC<ThreadComponentProps> = ({ thread, decode
 
     const handleSave = async () => {
         try {
-            //const accessToken = localStorage.getItem('user');
+            //const accessToken = localStorage.getItem('token') ? user?;
             const updatedThread = { title: editedThread.title };
 
 

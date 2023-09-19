@@ -1,6 +1,7 @@
 package com.example.ideas.security.auth;
 
 import com.example.ideas.user.service.UserService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -51,8 +52,10 @@ public class AuthenticationController {
     @PatchMapping("reset-password/{token}")
     public ResponseEntity<String> changePassword(
             @PathVariable("token") String token,
-            @RequestBody String newPassword
+            @RequestBody NewPasswordRequest newPasswordRequest
     ) {
+        String newPassword = newPasswordRequest.password();
+//        return authenticationService.changePassword(token, newPasswordRequest.password());
         System.out.println(newPassword);
         String trimmedPassword = newPassword.substring(1, newPassword.length() - 1);
         System.out.println(trimmedPassword);
