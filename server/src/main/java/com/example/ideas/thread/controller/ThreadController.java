@@ -70,15 +70,33 @@ public class ThreadController {
 //        return new ResponseEntity<>(threadService.addThread(multipartFile, threadCreateDTO), HttpStatus.CREATED);
 //    }
 
+//    @RequestMapping(path = "/addThread", method = POST, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
+//    public ResponseEntity<Thread> addThread(
+//            @ModelAttribute FileWithMetaData fileWithMetaData
+//    ) throws EntityNotFoundException, IOException {
+//
+//
+//        ObjectMapper mapper = new ObjectMapper();
+//
+//        return new ResponseEntity<>(threadService.addThread(
+//                fileWithMetaData.getFile(),
+//                mapper.readValue(fileWithMetaData.getThreadCreateDTO(), ThreadCreateDTO.class)),
+//                HttpStatus.CREATED
+//        );
+//    }
+
     @RequestMapping(path = "/addThread", method = POST, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Thread> addThread(
-            @ModelAttribute FileWithMetaData fileWithMetaData
+            @RequestParam("model") String model,
+            @RequestParam(value = "file", required = false) MultipartFile multipartFile
     ) throws EntityNotFoundException, IOException {
+
+
         ObjectMapper mapper = new ObjectMapper();
-        System.out.println(fileWithMetaData.getThreadCreateDTO());
+
         return new ResponseEntity<>(threadService.addThread(
-                fileWithMetaData.getFile(),
-                mapper.readValue(fileWithMetaData.getThreadCreateDTO(), ThreadCreateDTO.class)),
+                multipartFile,
+                mapper.readValue(model, ThreadCreateDTO.class)),
                 HttpStatus.CREATED
         );
     }
