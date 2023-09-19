@@ -41,7 +41,7 @@ function App() {
             }
           ></Route> */}
           <Route path="threads" element={<Threads />} />
-          <Route path="add_thread" element={<AddThread />} />
+          <Route path="add" element={<AddThread />} />
           <Route path="thread/:id" element={<ThreadPage />} />
           <Route path="*" element={<NotFound />} />
           <Route path="reset-password" element={<ForgotPassword />} />
