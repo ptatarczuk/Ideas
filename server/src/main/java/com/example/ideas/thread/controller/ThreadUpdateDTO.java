@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Getter
 @Builder
+@NoArgsConstructor
 public class ThreadUpdateDTO {
     @Email(message = "invalid email address")
     private String email;
