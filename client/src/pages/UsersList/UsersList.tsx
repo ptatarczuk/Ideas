@@ -82,7 +82,7 @@ const UsersList: React.FC = () => {
             labelId="role-select-label"
             id="role-select"
             value={selectedRole?.toString() || ""}
-            label="Role"
+            label="Select Role"
             onChange={handleRoleChange}
           >
             {roles
