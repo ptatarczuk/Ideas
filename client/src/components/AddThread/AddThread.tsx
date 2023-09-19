@@ -75,7 +75,7 @@ const AddThread: React.FC = () => {
                 formData,
                 {
                     headers: {
-                        'Content-Type': 'multipart/form-data',
+                        'Content-Type': 'multipart/fo
                         Authorization: `Bearer ${jwtToken}`,
                     },
                 }
