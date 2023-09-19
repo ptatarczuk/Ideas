@@ -64,7 +64,7 @@ const Comments: React.FC<CommentsProps> = ({ threadId, decodedToken }) => {
     try {
       const dataToSend = {
         commentText: newComment,
-        userId: 2,
+        userId: decodedToken.user_id,
         threadId: threadId,
       };
 
