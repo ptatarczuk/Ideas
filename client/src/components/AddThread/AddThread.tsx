@@ -20,8 +20,6 @@ const AddThread: React.FC = () => {
     const decodedToken: object | any = token ? jwt_decode(token.user) : null;
 
 
-
-
     useEffect(() => {
         const fetchCategories = async () => {
             try {
@@ -47,33 +45,46 @@ const AddThread: React.FC = () => {
         // }
     };
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        try {
-            const formData = new FormData();
-            const requestData = {
-                title: title,
-                description: description,
-                justification: justification,
-                userEmail: decodedToken.sub,
-                categoryId: parseInt(selectedCategory.toString()), 
+    // ...
+
+const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+        const requestData = {
+            title: title,
+            description: description,
+            justification: justification,
+            userEmail: decodedToken.sub,
+            categoryId: parseInt(selectedCategory.toString()),
+        };
+        
+        const formData = new FormData();
+        formData.append('model', JSON.stringify(requestData)); // Umieść dane JSON jako pole "model" w formularzu
+
+        if (attachments.length > 0) {
+            for (const file of attachments) {
+                formData.append('file', file);
             }
-            formData.append('threadCreateDTO', JSON.stringify(requestData));
-
-            if (attachments.length > 0) {
-                for (const file of attachments) {
-                    formData.append('file', file);
-                }
-            }
-            console.log(formData.values);
-            const response = await axios.post('http://localhost:8080/threads/addThread', formData, { headers: { 'Content-Type': 'multipart/form-data' } });
-            console.log(response);
-
-
-        } catch (error) {
-            console.error('Error adding thread:', error);
         }
-    };
+
+        const response = await axios.post(
+            'http://localhost:8080/threads/addThread',
+            formData,
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${token.user}`,
+                },
+            }
+        );
+        console.log(response);
+    } catch (error) {
+        console.error('Error adding thread:', error);
+    }
+};
+
+// ...
+
 
     return (
         <div>
