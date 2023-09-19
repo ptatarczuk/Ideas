@@ -240,7 +240,7 @@ function ResponsiveAppBar() {
           <div className="navbar-right">
             <NavBox sx={{ flexGrow: 0 }}>
               <HelloText>
-                {jwtToken ? "Welcome, " + displayNameFromToken(jwtToken) : ""}
+                {jwtToken ? "Welcome, " + displayNameFromToken(jwtToken) : "Dev: *Not logged in*"}
               </HelloText>
               {jwtToken ? <Link to="/login" onClick={handleLogout} style={{ textDecoration: "none" }}>
                 <LogoutButton variant="contained">Log out</LogoutButton>
