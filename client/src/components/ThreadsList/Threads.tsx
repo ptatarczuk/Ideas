@@ -49,6 +49,7 @@ export const Threads: React.FC = () => {
       try {
         const jwtToken = await getJwtToken();
         if (!jwtToken) {
+          console.error("No token available")
           return;
         }
         const url = "http://localhost:8080/threads/";
@@ -116,7 +117,7 @@ export const Threads: React.FC = () => {
             />
           </Grid>
           <Grid item>
-            <Button
+            <Button sx={{ marginTop: '8px', height: '55px' }}
               variant="outlined"
               onClick={handleButtonClick}
               disabled={isButtonDisabled}

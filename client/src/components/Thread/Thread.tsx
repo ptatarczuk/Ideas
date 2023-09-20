@@ -1,6 +1,8 @@
 import { TextField, Button, Box } from '@mui/material';
 import React, { useState } from 'react';
 import { Thread } from '../../models/Thread';
+import { getJwtToken } from '../../authHelpers/authHelpers'
+import axios from 'axios';
 
 
 interface ThreadComponentProps {
@@ -13,9 +15,9 @@ export const ThreadComponent: React.FC<ThreadComponentProps> = ({ thread, decode
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const [buttonText, setButtonText] = useState<string>("EDIT");
     const isAuthor = editedThread.user.email === decodedToken.sub;
+    const [newImage, setNewImage] = useState<File | null>(null);
     const isUser = decodedToken.role === "User";
     const isAdmin = decodedToken.role === "Admin";
-
 
 
     const handleFieldChange = (field: keyof Thread, value: any) => {
@@ -28,27 +30,54 @@ export const ThreadComponent: React.FC<ThreadComponentProps> = ({ thread, decode
     const handleEdit = () => {
         setIsEditing(true);
         setButtonText("SAVE");
+        console.log(thread)
+    };
+
+    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const selectedFile = e.target.files?.[0];
+        if (selectedFile) {
+            setNewImage(selectedFile);
+        }
+    };
+
+    const handleRemoveImage = () => {
+        setNewImage(null);
     };
 
 
 
-    const handleSave = async () => {
+    const handleSave = async (e: React.FormEvent) => {
+        e.preventDefault();
         try {
-            //const accessToken = localStorage.getItem('token') ? user?;
-            const updatedThread = { title: editedThread.title };
+            const jwtToken = await getJwtToken();
+            if (!jwtToken) {
+                return;
+            }
 
+            const updatedThread = {
+                title: editedThread.title,
+                description: editedThread.description,
+                justification: editedThread.justification,
+            };
 
-            const response = await fetch(`http://localhost:8080/threads/id/${thread.threadId}`, {
-                method: 'PATCH',
-                body: JSON.stringify(updatedThread),
+            const formData = new FormData();
+            formData.append('thread', JSON.stringify(updatedThread));
+
+            if (newImage) {
+                formData.append('file', newImage);
+            }
+
+            const config = {
                 headers: {
-                    'Content-Type': 'application/json', 
+                    'Content-Type': 'multipart/form-data',
+                    Authorization: `Bearer ${jwtToken}`,
                 },
-            });
-    
+            };
 
-            if (!response.ok) {
-                const errorData = await response.json();
+            const response = await axios.patch(`http://localhost:8080/threads/id/${thread.threadId}`, formData, config);
+
+            if (response.status !== 200) {
+                const errorData = response.data;
                 throw new Error(`Network response was not ok. Error data: ${JSON.stringify(errorData)}`);
             }
 
@@ -58,6 +87,7 @@ export const ThreadComponent: React.FC<ThreadComponentProps> = ({ thread, decode
             console.error('An error occurred while saving data', error);
         }
     };
+
 
     return (
         <Box
@@ -89,7 +119,6 @@ export const ThreadComponent: React.FC<ThreadComponentProps> = ({ thread, decode
                 disabled={true}
                 value={editedThread.user.name}
             />
-            <img src={editedThread.photo} alt="Thread Photo" />
             <TextField
                 required
                 id="outlined-required"
@@ -106,6 +135,21 @@ export const ThreadComponent: React.FC<ThreadComponentProps> = ({ thread, decode
                 onChange={(e) => handleFieldChange('justification', e.target.value)}
                 disabled={!isEditing}
             />
+            {thread.photo && <img src={thread.photo} alt="Thread Photo" />}
+            {isEditing && (
+                <div>
+                    <input type="file" onChange={handleImageChange} style={{ maxWidth: '1000px' }} />
+                    <button onClick={handleRemoveImage}>Remove Image</button>
+                    {newImage && (
+                        <div>
+                            <img src={URL.createObjectURL(newImage)} alt="New Image" style={{ maxWidth: '100px' }} />
+                        </div>
+                    )}
+                </div>
+            )}
+            <div>
+            </div>
+
         </Box>
     );
 };

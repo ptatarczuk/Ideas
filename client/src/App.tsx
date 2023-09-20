@@ -1,4 +1,3 @@
-
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/Layout/Layout";
 import UsersList from "./pages/UsersList/UsersList";
@@ -8,12 +7,11 @@ import { Threads } from "./components/ThreadsList/Threads";
 import { NotFound } from "./pages/NotFound/NotFound";
 import { UnauthorizedRoute } from "./components/UnauthorizedRoute";
 import { Registration } from "./pages/Registration/Registration";
-import {ThreadPage} from './pages/Thread/Thread'
+import { ThreadPage } from "./pages/Thread/Thread";
 import { ForgotPassword } from "./components/Password/ForgotPassword";
 import { ResetPassword } from "./components/Password/ResetPassword";
 import { ChangePassword } from "./components/Password/ChangePassword";
 import AddThread from "./components/AddThread/AddThread";
-
 
 function App() {
   return (
@@ -21,7 +19,7 @@ function App() {
     //TODO: ograniczyć dostęp do LOGIN dla ju zalogowanych uytkowników
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Layout />} >
+        <Route path="/" element={<Layout />}>
           <Route index element={<Threads />} />
           <Route path="users" element={<UsersList />} />
           {/* <Route
@@ -44,10 +42,12 @@ function App() {
           <Route path="add" element={<AddThread />} />
           <Route path="thread/:id" element={<ThreadPage />} />
           <Route path="*" element={<NotFound />} />
-          <Route path="reset-password" element={<ForgotPassword />} />
-          <Route path="reset-password/:token" element={<ResetPassword />} />
+          {/* <Route path="reset-password" element={<ForgotPassword />} /> */}
+          {/* <Route path="reset-password/:token" element={<ResetPassword />} /> */}
           <Route path="change-password" element={<ChangePassword />} />
         </Route>
+
+        <Route path="reset-password/:token" element={<UnauthorizedRoute><ResetPassword /></UnauthorizedRoute>} />
 
         <Route
           path="/login"
@@ -57,7 +57,6 @@ function App() {
             </UnauthorizedRoute>
           }
         ></Route>
-
         <Route
           path="/register"
           element={
@@ -66,9 +65,17 @@ function App() {
             </UnauthorizedRoute>
           }
         ></Route>
+
+        <Route
+          path="/reset-password"
+          element={
+            <UnauthorizedRoute>
+              <ForgotPassword />
+            </UnauthorizedRoute>
+          }
+        ></Route>
       </Routes>
     </BrowserRouter>
-
   );
 }
 
