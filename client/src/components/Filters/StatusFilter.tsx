@@ -1,6 +1,5 @@
 import axios from "axios";
 import { Status } from "../../models/Status";
-import { Thread } from "../../models/Thread";
 import React, { useState, useEffect } from "react";
 
 import Select, { SelectChangeEvent } from "@mui/material/Select";
@@ -10,16 +9,14 @@ import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 
 export const StatusFilter: React.FC<{
-  threads: Thread[];
-  setFilteredThreads: React.Dispatch<React.SetStateAction<Thread[]>>;
-  setDisplayedThreads: React.Dispatch<React.SetStateAction<Thread[]>>;
-}> = ({ threads, setFilteredThreads, setDisplayedThreads }) => {
-  const [selectedStatus, setSelectedStatus] = useState<number | undefined>(1);
+  selectedStatus: number | null;
+  setSelectedStatus: React.Dispatch<React.SetStateAction<number | null>>;
+}> = ({ selectedStatus, setSelectedStatus }) => {
   const [statuses, setStatuses] = useState<Status[] | null>(null);
 
   const handleStatusChange = (event: SelectChangeEvent) => {
     setSelectedStatus(
-      event.target.value ? parseInt(event.target.value) : undefined
+      event.target.value ? parseInt(event.target.value) : null
     );
   };
 
@@ -37,18 +34,7 @@ export const StatusFilter: React.FC<{
     fetchStatuses();
   }, []);
 
-  useEffect(() => {
-    if (!selectedStatus) {
-      setDisplayedThreads(threads);
-    } else {
-      const filtered = threads.filter(
-        (thread) => thread.status.statusId === selectedStatus
-      );
-      setDisplayedThreads(filtered);
-      setFilteredThreads(filtered)
-      //console.log(selectedStatus);
-    }
-  }, [selectedStatus, threads, setFilteredThreads, setDisplayedThreads]);
+ 
 
   return (
     <div>

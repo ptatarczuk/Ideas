@@ -47,7 +47,7 @@ public class ThreadController {
             @RequestParam Integer pageNo,
             @RequestParam Integer pageSize,
             @RequestParam(required = false, defaultValue = "") String searchedTitle,
-            @RequestParam Long filterStatusId
+            @RequestParam(required = false, defaultValue = "1") Long filterStatusId
     ) throws EntityNotFoundException {
         return threadService.getThreads(pageNo, pageSize, searchedTitle, filterStatusId);
     }

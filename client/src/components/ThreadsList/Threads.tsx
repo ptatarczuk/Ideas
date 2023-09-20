@@ -14,12 +14,11 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TextField,
 } from "@mui/material";
-import Typography from '@mui/material/Typography';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
-import AutocompleteComponent from "../Filters/AutocompleteComponent";
 import { useNavigate } from "react-router-dom";
 import { getJwtToken } from "../../authHelpers/authHelpers";
 
@@ -33,18 +32,17 @@ export const Threads: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-  const [filteredThreads, setFilteredThreads] = useState<Thread[]>([]); // zmienic na obiekt
-  const [searchedThreadTitle, setSearchedThreadTitle] = useState<
-    // polaczyc z filteredThreads
-    string | null
-  >(); //to jest stan ze stringiem z searchbara
+  // const [filteredThreads, setFilteredThreads] = useState<Thread[]>([]); // zmienic na obiekt
+  const [searchedThreadTitle, setSearchedThreadTitle] = useState<string | null>("");
+  const [selectedStatus, setSelectedStatus] = useState<number | null>(1);
   const [page, setPage] = React.useState(1);
   const [totalPages, setTotalPages] = useState<number>(2);
   const [rowsNumber, setRowsNumber] = useState<number>(3);
-  const [displayedThreads, setDisplayedThreads] = useState<Thread[]>([]);
+  // const [displayedThreads, setDisplayedThreads] = useState<Thread[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
+    setIsLoading(true);
     const fetchThreads = async () => {
       try {
         const jwtToken = await getJwtToken();
@@ -56,6 +54,8 @@ export const Threads: React.FC = () => {
         const queryParams = {
           pageNo: page-1,
           pageSize: rowsNumber,
+          searchedTitle: searchedThreadTitle,
+          filterStatusId: selectedStatus,
         };
         const response = await axios.get(url, {
           headers: {
@@ -63,11 +63,8 @@ export const Threads: React.FC = () => {
           },
           params: queryParams,
         });
-        // console.log(response.data);
         setTotalPages(response.data.totalPages);
-        
         setThreads(response.data.threads);
-        setFilteredThreads(response.data.threads);
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching threads:", error);
@@ -76,15 +73,21 @@ export const Threads: React.FC = () => {
     };
 
     fetchThreads();
-  }, [page]);
+  }, [page, searchedThreadTitle, selectedStatus]);
 
   useEffect(() => {
-    setIsButtonDisabled(displayedThreads === filteredThreads);
-  }, [displayedThreads, filteredThreads]);
+    if(searchedThreadTitle !== "" || selectedStatus !== 1) {
+      setIsButtonDisabled(false);
+    } 
+    if((searchedThreadTitle === "") && selectedStatus === 1) {
+      setIsButtonDisabled(true);
+    }
+      
+  }, [searchedThreadTitle, selectedStatus]);
 
   const handleButtonClick = () => {
-    setDisplayedThreads(filteredThreads);
-    setSearchedThreadTitle(null);
+    setSearchedThreadTitle("");
+    setSelectedStatus(1);
     setIsButtonDisabled(true);
   };
 
@@ -98,23 +101,17 @@ export const Threads: React.FC = () => {
       <Box>
         <Grid container spacing={2} alignItems="left">
           <Grid item>
-            <AutocompleteComponent
-              options={threads.map((thread) => thread.title)}
-              value={searchedThreadTitle || null}
-              onChange={(newValue) => {
-                setSearchedThreadTitle(newValue);
-                const filtered = threads.filter(
-                  (thread) => thread.title === newValue
-                );
-                setDisplayedThreads(filtered);
-              }}
-            />
+        <TextField
+          id="outlined-helperText"
+          label="Helper text"
+          value={searchedThreadTitle}
+          onChange={(e)=>setSearchedThreadTitle(e.target.value)}
+        />
           </Grid>
           <Grid item>
             <StatusFilter
-              threads={threads}
-              setFilteredThreads={setFilteredThreads}
-              setDisplayedThreads={setDisplayedThreads}
+              selectedStatus={selectedStatus}
+              setSelectedStatus={setSelectedStatus}
             />
           </Grid>
           <Grid item>
