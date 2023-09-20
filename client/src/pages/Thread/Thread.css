@@ -26,5 +26,10 @@ main {
     opacity: 1;
 }
 
+.thread-and-likes__container {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
 
 

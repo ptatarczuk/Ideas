@@ -80,3 +80,4 @@ export const handleLogout = async () => {
     localStorage.clear();
     // userContext.setUser(null);
 };
+

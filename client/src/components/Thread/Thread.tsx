@@ -119,7 +119,6 @@ useEffect(() => {
             noValidate
             autoComplete="off"
         >
-            <h1>Thread</h1>
             {(isUser && isAuthor) || isAdmin ? (
                 <Button variant="contained" onClick={buttonText === "EDIT" ? handleEdit : handleSave}>
                     {buttonText}
