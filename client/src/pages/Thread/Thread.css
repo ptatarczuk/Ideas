@@ -12,7 +12,8 @@ main {
     border-radius: 11px;
     opacity: 1;
     max-height: 100vh;
-    align-items: center
+    align-items: center;
+    
 }
 
 .orange-bar {

@@ -2,6 +2,7 @@ import { TextField, Button, Box, FormControl, InputLabel, Input } from '@mui/mat
 import React, { useState, useEffect } from 'react';
 import { Thread } from '../../models/Thread';
 import { getJwtToken } from '../../authHelpers/authHelpers'
+
 import axios from 'axios';
 import './Thread.css';
 
