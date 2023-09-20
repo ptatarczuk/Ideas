@@ -15,6 +15,10 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import Typography from '@mui/material/Typography';
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
+
 import AutocompleteComponent from "../Filters/AutocompleteComponent";
 import { useNavigate } from "react-router-dom";
 import { getJwtToken } from "../../authHelpers/authHelpers";
@@ -34,6 +38,9 @@ export const Threads: React.FC = () => {
     // polaczyc z filteredThreads
     string | null
   >();
+  const [page, setPage] = React.useState(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [rowsNumber, setRowsNumber] = useState<number>(3);
   const [displayedThreads, setDisplayedThreads] = useState<Thread[]>([]);
   const navigate = useNavigate();
 
@@ -46,13 +53,21 @@ export const Threads: React.FC = () => {
           return;
         }
         const url = "http://localhost:8080/threads/";
+        const queryParams = {
+          pageNo: page-1,
+          pageSize: rowsNumber,
+        };
         const response = await axios.get(url, {
           headers: {
             Authorization: `Bearer ${jwtToken}`,
           },
+          params: queryParams,
         });
-        setThreads(response.data);
-        setFilteredThreads(response.data);
+        // console.log(response.data);
+        setTotalPages(response.data.totalPages);
+        
+        setThreads(response.data.threads);
+        setFilteredThreads(response.data.threads);
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching threads:", error);
@@ -61,7 +76,7 @@ export const Threads: React.FC = () => {
     };
 
     fetchThreads();
-  }, []);
+  }, [page]);
 
   useEffect(() => {
     setIsButtonDisabled(displayedThreads === filteredThreads);
@@ -71,6 +86,10 @@ export const Threads: React.FC = () => {
     setDisplayedThreads(filteredThreads);
     setSelectedThreadTitle(null);
     setIsButtonDisabled(true);
+  };
+
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
   };
 
   return (
@@ -169,6 +188,10 @@ export const Threads: React.FC = () => {
           </Table>
         </TableContainer>
       )}
+      <Stack spacing={2}>
+      <Typography>Page: {page}</Typography>
+        <Pagination count={totalPages} page={page} onChange={handleChange} />
+    </Stack>
     </div>
   );
 };
