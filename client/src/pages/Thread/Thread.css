@@ -12,7 +12,6 @@ main {
     border-radius: 11px;
     opacity: 1;
     max-height: 100vh;
-    gap: 20px;
     align-items: center
 }
 
@@ -30,8 +29,7 @@ main {
     display: flex;
     flex-direction: row-reverse;
     gap: 10%;
-    padding: 5%;
-    margin: 0;
+    padding: 5% 5% 0 5%;    margin: 0;
 }
 
 

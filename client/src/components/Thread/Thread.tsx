@@ -8,6 +8,26 @@ import './Thread.css';
 //czemu klikniecie w remove powoduje wylaczenie opcji edycji
 //wysokosc obrazu?
 
+const buttonStyles = {
+    minWidth: '120px',
+    height: '30.5px',
+    background: '#C198F0',
+    opacity: 1,
+    borderRadius: '15px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontSize: '1em',
+    color: '#ffffff',
+    cursor: 'pointer',
+    transition: 'transform 0.2s, opacity 0.2s, filter 0.2s',
+  };
+  
+  const hoverStyles = {
+    transform: 'scale(1.1)',
+    opacity: 0.8,
+  };
+
 interface ThreadComponentProps {
     thread: Thread;
     decodedToken: any;
@@ -122,12 +142,19 @@ export const ThreadComponent: React.FC<ThreadComponentProps> = ({ thread, decode
           noValidate
           autoComplete="off"
         >
-          <div className="title__container">
-            {(isUser && isAuthor) || isAdmin ? (
-              <button className='edit__button' onClick={buttonText === 'EDIT' ? handleEdit : handleSave}>
-                {buttonText}
-              </button>
-            ) : null}
+         <div className="title__container">
+        {(isUser && isAuthor) || isAdmin ? (
+          <Button
+            variant="contained"
+            style={{
+              ...buttonStyles,
+              ...(buttonText === 'EDIT' && !isEditing ? {} : hoverStyles),
+            }}
+            onClick={buttonText === 'EDIT' ? handleEdit : handleSave}
+          >
+            {buttonText}
+          </Button>
+        ) : null}
             <FormControl fullWidth sx={{ m: 1 }}>
               <InputLabel htmlFor="outlined-title">Title</InputLabel>
               <Input
@@ -152,11 +179,11 @@ export const ThreadComponent: React.FC<ThreadComponentProps> = ({ thread, decode
               )}
             </div>
             <div className="thread-details__container">
-              <FormControl fullWidth sx={{ m: 1 }}>
+              <FormControl fullWidth sx={{ m: 0.85 }}>
                 <InputLabel htmlFor="outlined-author">Author</InputLabel>
                 <Input required id="outlined-author" disabled={true} value={editedThread.user.name} />
               </FormControl>
-              <FormControl fullWidth sx={{ m: 1 }}>
+              <FormControl fullWidth sx={{ m: 0.85  }}>
                 <InputLabel htmlFor="outlined-department">Departament</InputLabel>
                 <Input
                   required
@@ -165,22 +192,22 @@ export const ThreadComponent: React.FC<ThreadComponentProps> = ({ thread, decode
                   value={editedThread.user.department.departmentName}
                 />
               </FormControl>
-              <FormControl fullWidth sx={{ m: 1 }}>
+              <FormControl fullWidth sx={{ m: 0.85  }}>
                 <InputLabel htmlFor="outlined-category">Category</InputLabel>
                 <Input required id="outlined-category" disabled={true} value={editedThread.category.categoryName} />
               </FormControl>
-              <FormControl fullWidth sx={{ m: 1 }}>
+              <FormControl fullWidth sx={{ m: 0.85  }}>
                 <InputLabel htmlFor="outlined-stage">Stage</InputLabel>
                 <Input required id="outlined-stage" disabled={true} value={editedThread.stage.stageName} />
               </FormControl>
-              <FormControl fullWidth sx={{ m: 1 }}>
+              <FormControl fullWidth sx={{ m: 0.85  }}>
                 <InputLabel htmlFor="outlined-status">Status</InputLabel>
                 <Input required id="outlined-status" disabled={true} value={editedThread.status.name} />
               </FormControl>
             </div>
           </div>
           <div className="description__container">
-            <FormControl fullWidth sx={{ m: 1 }}>
+            <FormControl fullWidth sx={{ m: 0.85 }}>
               <InputLabel htmlFor="outlined-description">Description</InputLabel>
               <Input
                 required
@@ -190,7 +217,7 @@ export const ThreadComponent: React.FC<ThreadComponentProps> = ({ thread, decode
                 disabled={!isEditing}
               />
             </FormControl>
-            <FormControl fullWidth sx={{ m: 1 }}>
+            <FormControl fullWidth sx={{ m: 0.85  }}>
               <InputLabel htmlFor="outlined-justification">Justification</InputLabel>
               <Input
                 required
