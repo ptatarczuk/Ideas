@@ -74,7 +74,7 @@ const UsersList: React.FC = () => {
   }, [selectedRole, users]);
 
   return (
-    <div>
+    <Box marginLeft="13%" marginRight="11%">
       <Box sx={{ minWidth: 120, maxWidth: 200, marginLeft: '10%', paddingTop: 1 }}>
         <FormControl fullWidth>
           <InputLabel id="role-select-label">Select Role</InputLabel>
@@ -128,7 +128,7 @@ const UsersList: React.FC = () => {
           </TableBody>
         </Table>
       </TableContainer>
-    </div>
+    </Box>
   );
 };
 
