@@ -21,5 +21,5 @@
 .add-like__button:hover,
 .add-dislike__button:hover {
   transform: scale(1.1); 
-  opacity: 0.8; /* Przyciemnienie kolorów */
+  opacity: 0.8; 
 }
