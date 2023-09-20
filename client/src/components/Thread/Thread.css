@@ -1,0 +1,65 @@
+.MuiBox-root css-13r4j3i {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+}
+
+ .title__container {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center; 
+    align-items: center; 
+}
+
+.thread-information__container {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.thread-details__container {
+    display: block;
+    max-width: 50%;
+}
+
+.description__container {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.image__container {
+    max-width: 50%; 
+    max-height: 100%; 
+    overflow: hidden; 
+    position: relative; 
+    padding: 3%;
+  }
+  
+  .image__container img {
+    width: 100%; 
+    height: auto; 
+    display: block; 
+    max-height: 100%
+  }
+
+  .edit__button {
+    min-width: 120px; 
+    height: 30.5px; 
+    background: #C198F0;
+    opacity: 1;
+    border: none;
+    border-radius: 5px; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1em; 
+    color: #ffffff;
+    cursor: pointer;
+    transition: transform 0.2s, opacity 0.2s, filter 0.2s;
+  }
+  
+  .edit__button:hover {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  

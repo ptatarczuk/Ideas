@@ -78,7 +78,8 @@ export const Likes: React.FC<LikesProps> = ({ thread, fetchThread }) => {
         }
     };
 
-    return (<div>
+    return (
+    <div className='likes__container'>
         <button className='add-like__button' onClick={handleAddLike}>+</button>
         <h1>{points}</h1>
         <button className='add-dislike__button' onClick={handleAddDislike}>-</button>

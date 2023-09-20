@@ -11,7 +11,9 @@ main {
     box-shadow: 20px 16px 16px #00000029;
     border-radius: 11px;
     opacity: 1;
-    max-height: 70vh;
+    max-height: 100vh;
+    gap: 20px;
+    align-items: center
 }
 
 .orange-bar {
@@ -29,6 +31,7 @@ main {
     flex-direction: row-reverse;
     gap: 10%;
     padding: 5%;
+    margin: 0;
 }
 
 
