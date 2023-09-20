@@ -34,10 +34,10 @@ export const Threads: React.FC = () => {
   const [error, setError] = useState("");
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const [filteredThreads, setFilteredThreads] = useState<Thread[]>([]); // zmienic na obiekt
-  const [selectedThreadTitle, setSelectedThreadTitle] = useState<
+  const [searchedThreadTitle, setSearchedThreadTitle] = useState<
     // polaczyc z filteredThreads
     string | null
-  >();
+  >(); //to jest stan ze stringiem z searchbara
   const [page, setPage] = React.useState(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [rowsNumber, setRowsNumber] = useState<number>(3);
@@ -84,7 +84,7 @@ export const Threads: React.FC = () => {
 
   const handleButtonClick = () => {
     setDisplayedThreads(filteredThreads);
-    setSelectedThreadTitle(null);
+    setSearchedThreadTitle(null);
     setIsButtonDisabled(true);
   };
 
@@ -99,9 +99,9 @@ export const Threads: React.FC = () => {
           <Grid item>
             <AutocompleteComponent
               options={threads.map((thread) => thread.title)}
-              value={selectedThreadTitle || null}
+              value={searchedThreadTitle || null}
               onChange={(newValue) => {
-                setSelectedThreadTitle(newValue);
+                setSearchedThreadTitle(newValue);
                 const filtered = threads.filter(
                   (thread) => thread.title === newValue
                 );
@@ -160,7 +160,7 @@ export const Threads: React.FC = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {displayedThreads.map((thread) => (
+              {threads.map((thread) => (
                 <TableRow
                   key={thread.threadId}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}

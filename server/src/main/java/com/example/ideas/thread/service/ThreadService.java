@@ -45,16 +45,25 @@ public class ThreadService {
     private final FileService fileService;
     private final JwtService jwtService;
 
-    public Map<String, Object> getThreads(Integer pageNo, Integer pageSize) {
+    public Map<String, Object> getThreads(Integer pageNo, Integer pageSize, String searchedTitle, Long filterStatusId) throws EntityNotFoundException {
+
         Map<String, Object> response = new HashMap<>();
-        Pageable paging = PageRequest.of(pageNo, pageSize);
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Status filteredStatus = getObjectFromDB(filterStatusId, statusRepository);
 
-        Page<Thread> pagedResult = threadRepository.findAll(paging);
+        Page<Thread> filteredPagedResult;
 
-        response.put("totalPages", pagedResult.getTotalPages());
+        if (searchedTitle != null && !searchedTitle.isEmpty()) {
+            filteredPagedResult = threadRepository.findByTitleContainsIgnoreCaseAndStatus(searchedTitle, filteredStatus, pageable);
+        } else {
+            filteredPagedResult = threadRepository.findByStatus(filteredStatus, pageable);
+        }
 
-        if (pagedResult.hasContent()) {
-            response.put("threads", pagedResult.getContent());
+        response.put("totalPages", filteredPagedResult.getTotalPages());
+        response.put("totalResults", filteredPagedResult.getTotalElements());
+
+        if (filteredPagedResult.hasContent()) {
+            response.put("threads", filteredPagedResult.getContent());
         } else {
             response.put("threads", new ArrayList<Thread>());
         }

@@ -45,13 +45,11 @@ public class ThreadController {
     @GetMapping("/")
     public Map<String, Object> getThreads(
             @RequestParam Integer pageNo,
-            @RequestParam Integer pageSize
-    ) {
-        System.out.println("*************************************************");
-        System.out.println(pageNo);
-        System.out.println(pageSize);
-        System.out.println("*************************************************");
-        return threadService.getThreads(pageNo, pageSize);
+            @RequestParam Integer pageSize,
+            @RequestParam(required = false, defaultValue = "") String searchedTitle,
+            @RequestParam Long filterStatusId
+    ) throws EntityNotFoundException {
+        return threadService.getThreads(pageNo, pageSize, searchedTitle, filterStatusId);
     }
 
     @GetMapping("/id/{thread_id}")
