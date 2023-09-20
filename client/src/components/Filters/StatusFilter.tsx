@@ -53,7 +53,7 @@ export const StatusFilter: React.FC<{
   return (
     <div>
       <Box
-        sx={{ minWidth: 120, maxWidth: 200, marginLeft: "10%", paddingTop: 1 }}
+        sx={{ minWidth: 120, maxWidth: 200, paddingTop: 1 }}
       >
         <FormControl fullWidth>
           <InputLabel id="status-select-label">Status</InputLabel>
