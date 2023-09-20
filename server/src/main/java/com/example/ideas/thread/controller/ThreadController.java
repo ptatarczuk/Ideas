@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -42,8 +43,15 @@ public class ThreadController {
 //    @PreAuthorize("hasRole('Admin')")
 //    @PreAuthorize("hasAnyRole('Admin', 'User')")
     @GetMapping("/")
-    public List<Thread> getThreads() {  // TODO: zmienic void na List<Thread>
-        return threadService.getThreads();
+    public Map<String, Object> getThreads(
+            @RequestParam Integer pageNo,
+            @RequestParam Integer pageSize
+    ) {
+        System.out.println("*************************************************");
+        System.out.println(pageNo);
+        System.out.println(pageSize);
+        System.out.println("*************************************************");
+        return threadService.getThreads(pageNo, pageSize);
     }
 
     @GetMapping("/id/{thread_id}")

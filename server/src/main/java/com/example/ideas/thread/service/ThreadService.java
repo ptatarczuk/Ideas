@@ -19,6 +19,9 @@ import com.example.ideas.util_Entities.status.model.Status;
 import com.example.ideas.util_Entities.status.repository.StatusRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -26,8 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static com.example.ideas.thread.utils.ObjectProvider.getObjectFromDB;
 
@@ -43,8 +45,21 @@ public class ThreadService {
     private final FileService fileService;
     private final JwtService jwtService;
 
-    public List<Thread> getThreads() {
-        return threadRepository.findAll();
+    public Map<String, Object> getThreads(Integer pageNo, Integer pageSize) {
+        Map<String, Object> response = new HashMap<>();
+        Pageable paging = PageRequest.of(pageNo, pageSize);
+
+        Page<Thread> pagedResult = threadRepository.findAll(paging);
+
+        response.put("totalPages", pagedResult.getTotalPages());
+
+        if (pagedResult.hasContent()) {
+            response.put("threads", pagedResult.getContent());
+        } else {
+            response.put("threads", new ArrayList<Thread>());
+        }
+
+        return response;
     }
 
     public Optional<Thread> getThreadById(Long id) {
