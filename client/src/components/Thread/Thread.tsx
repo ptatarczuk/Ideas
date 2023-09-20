@@ -1,5 +1,5 @@
 import { TextField, Button, Box } from '@mui/material';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Thread } from '../../models/Thread';
 import { getJwtToken } from '../../authHelpers/authHelpers'
 import axios from 'axios';
@@ -16,8 +16,27 @@ export const ThreadComponent: React.FC<ThreadComponentProps> = ({ thread, decode
     const [buttonText, setButtonText] = useState<string>("EDIT");
     const isAuthor = editedThread.user.email === decodedToken.sub;
     const [newImage, setNewImage] = useState<File | null>(null);
+    const [image, setImage] = useState<string>("");
     const isUser = decodedToken.role === "User";
     const isAdmin = decodedToken.role === "Admin";
+//
+
+
+useEffect(() => {
+    const fetchData = async () => {
+        try {
+            const response = await axios.get(`http://localhost:8080${thread.photo}`);
+            const blob = new Blob([response.data], { type: 'image/png' }); 
+            const blobUrl = URL.createObjectURL(blob);
+            setImage(blobUrl);
+            console.log(blobUrl)
+        } catch (error) {
+            console.error('An error occurred while fetching data', error);
+        }
+    };
+
+    fetchData();
+}, [thread]);
 
 
     const handleFieldChange = (field: keyof Thread, value: any) => {
@@ -28,6 +47,7 @@ export const ThreadComponent: React.FC<ThreadComponentProps> = ({ thread, decode
     };
 
     const handleEdit = () => {
+        console.log(image)
         setIsEditing(true);
         setButtonText("SAVE");
         console.log(thread)
@@ -47,6 +67,7 @@ export const ThreadComponent: React.FC<ThreadComponentProps> = ({ thread, decode
 
 
     const handleSave = async (e: React.FormEvent) => {
+        console.log(image)
         e.preventDefault();
         try {
             const jwtToken = await getJwtToken();
@@ -135,16 +156,11 @@ export const ThreadComponent: React.FC<ThreadComponentProps> = ({ thread, decode
                 onChange={(e) => handleFieldChange('justification', e.target.value)}
                 disabled={!isEditing}
             />
-            {thread.photo && <img src={thread.photo} alt="Thread Photo" />}
+            {<img src={image} alt="Thread Photo" />}
             {isEditing && (
                 <div>
                     <input type="file" onChange={handleImageChange} style={{ maxWidth: '1000px' }} />
                     <button onClick={handleRemoveImage}>Remove Image</button>
-                    {newImage && (
-                        <div>
-                            <img src={URL.createObjectURL(newImage)} alt="New Image" style={{ maxWidth: '100px' }} />
-                        </div>
-                    )}
                 </div>
             )}
             <div>
