@@ -29,6 +29,8 @@ main {
 .thread-and-likes__container {
     display: flex;
     flex-direction: row-reverse;
+    gap: 10%;
+    padding: 5%;
 }
 
 
