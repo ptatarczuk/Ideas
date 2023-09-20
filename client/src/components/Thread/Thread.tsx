@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Thread } from '../../models/Thread';
 import { getJwtToken } from '../../authHelpers/authHelpers'
 import axios from 'axios';
+import './Thread.css';
 
 
 interface ThreadComponentProps {
@@ -19,24 +20,24 @@ export const ThreadComponent: React.FC<ThreadComponentProps> = ({ thread, decode
     const [image, setImage] = useState<string>("");
     const isUser = decodedToken.role === "User";
     const isAdmin = decodedToken.role === "Admin";
-//
+    //
 
 
-useEffect(() => {
-    const fetchData = async () => {
-        try {
-            const response = await axios.get(`http://localhost:8080${thread.photo}`);
-            const blob = new Blob([response.data], { type: 'image/png' }); 
-            const blobUrl = URL.createObjectURL(blob);
-            setImage(blobUrl);
-            console.log(blobUrl)
-        } catch (error) {
-            console.error('An error occurred while fetching data', error);
-        }
-    };
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(`http://localhost:8080${thread.photo}`);
+                const blob = new Blob([response.data], { type: 'image/png' });
+                const blobUrl = URL.createObjectURL(blob);
+                setImage(blobUrl);
+                console.log(blobUrl)
+            } catch (error) {
+                console.error('An error occurred while fetching data', error);
+            }
+        };
 
-    fetchData();
-}, [thread]);
+        fetchData();
+    }, [thread]);
 
 
     const handleFieldChange = (field: keyof Thread, value: any) => {
@@ -132,6 +133,16 @@ useEffect(() => {
                 onChange={(e) => handleFieldChange('title', e.target.value)}
                 disabled={!isEditing}
             />
+            
+            <div>
+            {<img src={image} alt="Thread Photo" />}
+            {isEditing && (
+                <div>
+                    <input type="file" onChange={handleImageChange} style={{ maxWidth: '1000px' }} />
+                    <button onClick={handleRemoveImage}>Remove Image</button>
+                </div>
+            )}
+            <div>
             <TextField
                 required
                 id="outlined-required"
@@ -139,6 +150,36 @@ useEffect(() => {
                 disabled={true}
                 value={editedThread.user.name}
             />
+            <TextField
+                required
+                id="outlined-required"
+                label="Departament"
+                disabled={true}
+                value={editedThread.user.department.departmentName}
+            />
+            <TextField
+                required
+                id="outlined-required"
+                label="Category"
+                disabled={true}
+                value={editedThread.category.categoryName}
+            />
+            <TextField
+                required
+                id="outlined-required"
+                label="Stage"
+                disabled={true}
+                value={editedThread.stage.stageName}
+            />
+            <TextField
+                required
+                id="outlined-required"
+                label="Status"
+                disabled={true}
+                value={editedThread.status.name}
+            />
+            </div>
+            </div>
             <TextField
                 required
                 id="outlined-required"
@@ -155,13 +196,6 @@ useEffect(() => {
                 onChange={(e) => handleFieldChange('justification', e.target.value)}
                 disabled={!isEditing}
             />
-            {<img src={image} alt="Thread Photo" />}
-            {isEditing && (
-                <div>
-                    <input type="file" onChange={handleImageChange} style={{ maxWidth: '1000px' }} />
-                    <button onClick={handleRemoveImage}>Remove Image</button>
-                </div>
-            )}
             <div>
             </div>
 
