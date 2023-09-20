@@ -71,9 +71,9 @@ export const ChangePassword: React.FC<ChangePasswordComponentProps> = ({}) => {
         id="outlined-required"
         label="Email"
         value={email}
-        InputProps={{
-          disableUnderline: true,
-        }}
+        // InputProps={{
+        //   disableUnderline: true,
+        // }}
         onChange={(e: ChangeEvent<HTMLInputElement>) =>
           setEmail(e.target.value)
         }
@@ -84,9 +84,9 @@ export const ChangePassword: React.FC<ChangePasswordComponentProps> = ({}) => {
         id="outlined-required"
         label="Current Password"
         type={showPassword ? "text" : "password"}
-        InputProps={{
-          disableUnderline: true,
-        }}
+        // InputProps={{
+        //   disableUnderline: true,
+        // }}
         value={oldPassword}
         onChange={(e: ChangeEvent<HTMLInputElement>) =>
           setOldPassword(e.target.value)
@@ -98,9 +98,9 @@ export const ChangePassword: React.FC<ChangePasswordComponentProps> = ({}) => {
         id="outlined-required"
         label="New Password"
         type={showPassword ? "text" : "password"}
-        InputProps={{
-          disableUnderline: true,
-        }}
+        // InputProps={{
+        //   disableUnderline: true,
+        // }}
         value={newPassword}
         onChange={(e: ChangeEvent<HTMLInputElement>) =>
           setNewPassword(e.target.value)
@@ -112,9 +112,9 @@ export const ChangePassword: React.FC<ChangePasswordComponentProps> = ({}) => {
         id="outlined-required"
         label="Confirm New Password"
         type={showPassword ? "text" : "password"}
-        InputProps={{
-          disableUnderline: true,
-        }}
+        // InputProps={{
+        //   disableUnderline: true,
+        // }}
         value={confirmNewPassword}
         onChange={(e: ChangeEvent<HTMLInputElement>) =>
           setConfirmNewPassword(e.target.value)

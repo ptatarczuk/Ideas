@@ -39,7 +39,7 @@ export const Threads: React.FC = () => {
     string | null
   >();
   const [page, setPage] = React.useState(1);
-  const [totalPages, setTotalPages] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(2);
   const [rowsNumber, setRowsNumber] = useState<number>(3);
   const [displayedThreads, setDisplayedThreads] = useState<Thread[]>([]);
   const navigate = useNavigate();
@@ -93,8 +93,9 @@ export const Threads: React.FC = () => {
   };
 
   return (
-    <div>
-      <Box marginLeft="9%">
+    <>
+    <Box marginLeft="13%" marginRight="11%">
+      <Box>
         <Grid container spacing={2} alignItems="left">
           <Grid item>
             <AutocompleteComponent
@@ -128,23 +129,30 @@ export const Threads: React.FC = () => {
         </Grid>
       </Box>
       {isLoading ? (
-        <p>Loading...</p>
+        <p>Cant load resources...</p>
       ) : error ? (
         <p>{error}</p>
       ) : (
         <TableContainer component={Paper}>
           <Table
             sx={{
-              minWidth: 650,
-              marginLeft: "10%",
+              minWidth: 800,
               marginRight: "10%",
-              maxWidth: "80%",
-            }} // remove margins from here and add css file later
+              maxWidth: "100%",
+              "& .table-cell-date": { width: "5%" },
+              "& .table-cell-title": { width: "20%" }, 
+              "& .table-cell-points": { width: "5%" }, 
+              "& .table-cell-category": { width: "10%" }, 
+              "& .table-cell-stage": { width: "8%" }, 
+              "& .table-cell-author": { width: "8%" }, 
+              "& .table-cell-department": { width: "15%" },
+            }} 
             aria-label="simple table"
           >
             <TableHead>
               <TableRow>
                 {[
+                  
                   "Date",
                   "Title",
                   "Points",
@@ -153,14 +161,14 @@ export const Threads: React.FC = () => {
                   "Author",
                   "Department",
                 ].map((name) => (
-                  <TableCell key={name} align="right">
+                  <TableCell key={name} align="left" className={`table-cell-${name.toLowerCase()}`}>
                     <b>{name}</b>
                   </TableCell>
                 ))}
               </TableRow>
             </TableHead>
             <TableBody>
-              {displayedThreads.map((thread) => (
+              {threads.map((thread) => (
                 <TableRow
                   key={thread.threadId}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -169,17 +177,17 @@ export const Threads: React.FC = () => {
                     navigate(url);
                   }}
                 >
-                  <TableCell component="th" scope="row" align="right">
+                  <TableCell component="th" scope="row" align="left">
                     {thread.date}
                   </TableCell>
-                  <TableCell align="right">{thread.title}</TableCell>
-                  <TableCell align="right">{thread.points}</TableCell>
-                  <TableCell align="right">
+                  <TableCell align="left">{thread.title}</TableCell>
+                  <TableCell align="left">{thread.points}</TableCell>
+                  <TableCell align="left">
                     {thread.category.categoryName}
                   </TableCell>
-                  <TableCell align="right">{thread.stage.stageName}</TableCell>
-                  <TableCell align="right">{thread.user.name}</TableCell>
-                  <TableCell align="right">
+                  <TableCell align="left">{thread.stage.stageName}</TableCell>
+                  <TableCell align="left">{thread.user.name}</TableCell>
+                  <TableCell align="left">
                     {thread.user.department.departmentName}
                   </TableCell>
                 </TableRow>
@@ -188,10 +196,12 @@ export const Threads: React.FC = () => {
           </Table>
         </TableContainer>
       )}
-      <Stack spacing={2}>
-      <Typography>Page: {page}</Typography>
+      
+      <Stack spacing={2} style={{ marginTop: "20px", float: "right" }} >
         <Pagination count={totalPages} page={page} onChange={handleChange} />
     </Stack>
-    </div>
+    
+    </Box>
+    </>
   );
 };

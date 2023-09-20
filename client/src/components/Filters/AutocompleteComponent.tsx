@@ -20,7 +20,7 @@ const AutocompleteComponent: React.FC<AutocompleteComponentProps> = ({
       id="combo-box-demo"
       options={options}
       value={value}
-      sx={{ minWidth: 300, maxWidth: 600, marginLeft: "10%", paddingTop: 1 }}
+      sx={{ minWidth: 300, maxWidth: 600, marginLeft: "0%", marginBottom: "2%", paddingTop: 1 }}
       onChange={(event, newValue) => {
         onChange(newValue);
       }}
