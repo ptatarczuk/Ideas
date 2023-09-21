@@ -86,9 +86,4 @@ public class Thread {
     @OneToOne(mappedBy = "thread", fetch = FetchType.LAZY)
     private Conclusion conclusion;
 
-
-    //@OneToMany
-    //@JoinColumn -  czy join column sie pisze tylko tam gdzie jest foreign key czy wszedzie ?
-    //categoryId jako pole czy obiekt ?
-
 }

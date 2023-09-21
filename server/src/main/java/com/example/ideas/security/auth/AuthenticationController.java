@@ -44,7 +44,6 @@ public class AuthenticationController {
             HttpServletRequest request,
             @RequestParam("email") String userEmail
     ) {
-        //String baseUrl = request.getRequestURL().toString();
         String baseUrl = "http://localhost:3000/reset-password";
         return authenticationService.resetPassword(userEmail, baseUrl);
     }
@@ -54,12 +53,7 @@ public class AuthenticationController {
             @PathVariable("token") String token,
             @RequestBody NewPasswordRequest newPasswordRequest
     ) {
-        String newPassword = newPasswordRequest.password();
-//        return authenticationService.changePassword(token, newPasswordRequest.password());
-        System.out.println(newPassword);
-        String trimmedPassword = newPassword.substring(1, newPassword.length() - 1);
-        System.out.println(trimmedPassword);
-        return authenticationService.changePassword(token, trimmedPassword);
+        return authenticationService.changePassword(token, newPasswordRequest.password());
     }
 
     @PostMapping("/refresh-token")

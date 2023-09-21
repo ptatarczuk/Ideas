@@ -19,6 +19,9 @@ import com.example.ideas.util_Entities.status.model.Status;
 import com.example.ideas.util_Entities.status.repository.StatusRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -26,8 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static com.example.ideas.thread.utils.ObjectProvider.getObjectFromDB;
 
@@ -43,8 +45,30 @@ public class ThreadService {
     private final FileService fileService;
     private final JwtService jwtService;
 
-    public List<Thread> getThreads() {
-        return threadRepository.findAll();
+    public Map<String, Object> getThreads(Integer pageNo, Integer pageSize, String searchedTitle, Long filterStatusId) throws EntityNotFoundException {
+
+        Map<String, Object> response = new HashMap<>();
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Status filteredStatus = getObjectFromDB(filterStatusId, statusRepository);
+
+        Page<Thread> filteredPagedResult;
+
+        if (searchedTitle != null && !searchedTitle.isEmpty()) {
+            filteredPagedResult = threadRepository.findByTitleContainsIgnoreCaseAndStatus(searchedTitle, filteredStatus, pageable);
+        } else {
+            filteredPagedResult = threadRepository.findByStatus(filteredStatus, pageable);
+        }
+
+        response.put("totalPages", filteredPagedResult.getTotalPages());
+        response.put("totalResults", filteredPagedResult.getTotalElements());
+
+        if (filteredPagedResult.hasContent()) {
+            response.put("threads", filteredPagedResult.getContent());
+        } else {
+            response.put("threads", new ArrayList<Thread>());
+        }
+
+        return response;
     }
 
     public Optional<Thread> getThreadById(Long id) {

@@ -6,20 +6,15 @@ import com.example.ideas.thread.model.Thread;
 import com.example.ideas.thread.service.ThreadService;
 import com.example.ideas.thread.utils.EmailSender;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
@@ -48,8 +43,13 @@ public class ThreadController {
 //    @PreAuthorize("hasRole('Admin')")
 //    @PreAuthorize("hasAnyRole('Admin', 'User')")
     @GetMapping("/")
-    public List<Thread> getThreads() {  // TODO: zmienic void na List<Thread>
-        return threadService.getThreads();
+    public Map<String, Object> getThreads(
+            @RequestParam Integer pageNo,
+            @RequestParam Integer pageSize,
+            @RequestParam(required = false, defaultValue = "") String searchedTitle,
+            @RequestParam(required = false, defaultValue = "1") Long filterStatusId
+    ) throws EntityNotFoundException {
+        return threadService.getThreads(pageNo, pageSize, searchedTitle, filterStatusId);
     }
 
     @GetMapping("/id/{thread_id}")
@@ -70,21 +70,6 @@ public class ThreadController {
 //        return new ResponseEntity<>(threadService.addThread(multipartFile, threadCreateDTO), HttpStatus.CREATED);
 //    }
 
-//    @RequestMapping(path = "/addThread", method = POST, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-//    public ResponseEntity<Thread> addThread(
-//            @ModelAttribute FileWithMetaData fileWithMetaData
-//    ) throws EntityNotFoundException, IOException {
-//
-//
-//        ObjectMapper mapper = new ObjectMapper();
-//
-//        return new ResponseEntity<>(threadService.addThread(
-//                fileWithMetaData.getFile(),
-//                mapper.readValue(fileWithMetaData.getThreadCreateDTO(), ThreadCreateDTO.class)),
-//                HttpStatus.CREATED
-//        );
-//    }
-
     @RequestMapping(path = "/addThread", method = POST, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Thread> addThread(
             @RequestParam("model") String model,
@@ -99,19 +84,6 @@ public class ThreadController {
                 HttpStatus.CREATED
         );
     }
-
-//    @RequestMapping(path = "/addThread", method = POST, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-//    public ResponseEntity<Thread> addThread(
-//            @RequestBody ThreadCreateDTO threadCreateDTO,
-//            @RequestParam(value = "file", required = false) MultipartFile multipartFile
-//    ) throws EntityNotFoundException, IOException {
-//
-//        return new ResponseEntity<>(threadService.addThread(
-//                multipartFile,
-//                threadCreateDTO),
-//                HttpStatus.CREATED
-//        );
-//    }
 
     @DeleteMapping("/{thread_id}")
     public ResponseEntity<Thread> deleteThread(@PathVariable("thread_id") Long threadId) {
@@ -133,43 +105,5 @@ public class ThreadController {
                 mapper.readValue(model, ThreadUpdateDTO.class)
         ), HttpStatus.OK);
     }
-
-
-//    @PatchMapping(value = "/id/{thread_id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-//    public ResponseEntity<Thread> updateThreadById(
-//            @RequestHeader("Authorization") String token,
-//            @PathVariable("thread_id") Long threadId,
-//            @RequestParam(value ="file", required = false) MultipartFile multipartFile,
-//            @RequestParam(value = "thread") String model
-//    ) throws IOException, EntityNotFoundException, NoAuthorizationException {
-//        ObjectMapper mapper = new ObjectMapper();
-//        return new  ResponseEntity<>(threadService.updateThreadById(
-//                token,
-//                threadId,
-//                multipartFile,
-//                mapper.readValue(model, ThreadUpdateDTO.class)
-//        ), HttpStatus.OK);
-//    }
-
-//    @PatchMapping(value = "/id/{thread_id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-//    public ResponseEntity<Thread> updateThreadById(
-//            @RequestHeader("Authorization") String token,
-//            @PathVariable("thread_id") Long threadId,
-//            @RequestPart(value ="file", required = false) MultipartFile multipartFile,
-//            @RequestPart(value = "thread") @Valid ThreadUpdateDTO updatedThread
-//    ) throws IOException, EntityNotFoundException, NoAuthorizationException {
-//        return new  ResponseEntity<>(threadService.updateThreadById(
-//                token,
-//                threadId, multipartFile,updatedThread), HttpStatus.OK);
-//    }
-
-//    @PatchMapping("/id/{thread_id}")
-//    public ResponseEntity<Thread> updateThreadById(
-//            @PathVariable("thread_id") Long threadId,
-//            @RequestBody @Valid ThreadUpdateDTO updatedThread
-//    ) throws IOException, EntityNotFoundException, NoAuthorizationException {
-//        return new  ResponseEntity<>(threadService.updateThreadById(
-//                threadId, updatedThread), HttpStatus.OK);
-//    }
 
 }

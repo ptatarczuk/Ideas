@@ -14,8 +14,11 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  TextField,
 } from "@mui/material";
-import AutocompleteComponent from "../Filters/AutocompleteComponent";
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
+
 import { useNavigate } from "react-router-dom";
 import { getJwtToken } from "../../authHelpers/authHelpers";
 
@@ -29,29 +32,39 @@ export const Threads: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-  const [filteredThreads, setFilteredThreads] = useState<Thread[]>([]); // zmienic na obiekt
-  const [selectedThreadTitle, setSelectedThreadTitle] = useState<
-    // polaczyc z filteredThreads
-    string | null
-  >();
-  const [displayedThreads, setDisplayedThreads] = useState<Thread[]>([]);
+  // const [filteredThreads, setFilteredThreads] = useState<Thread[]>([]); // zmienic na obiekt
+  const [searchedThreadTitle, setSearchedThreadTitle] = useState<string | null>("");
+  const [selectedStatus, setSelectedStatus] = useState<number | null>(1);
+  const [page, setPage] = React.useState(1);
+  const [totalPages, setTotalPages] = useState<number>(2);
+  const [rowsNumber, setRowsNumber] = useState<number>(3);
+  // const [displayedThreads, setDisplayedThreads] = useState<Thread[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
+    setIsLoading(true);
     const fetchThreads = async () => {
       try {
         const jwtToken = await getJwtToken();
         if (!jwtToken) {
+          console.error("No token available")
           return;
         }
         const url = "http://localhost:8080/threads/";
+        const queryParams = {
+          pageNo: page-1,
+          pageSize: rowsNumber,
+          searchedTitle: searchedThreadTitle,
+          filterStatusId: selectedStatus,
+        };
         const response = await axios.get(url, {
           headers: {
             Authorization: `Bearer ${jwtToken}`,
           },
+          params: queryParams,
         });
-        setThreads(response.data);
-        setFilteredThreads(response.data);
+        setTotalPages(response.data.totalPages);
+        setThreads(response.data.threads);
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching threads:", error);
@@ -60,44 +73,49 @@ export const Threads: React.FC = () => {
     };
 
     fetchThreads();
-  }, []);
+  }, [page, searchedThreadTitle, selectedStatus]);
 
   useEffect(() => {
-    setIsButtonDisabled(displayedThreads === filteredThreads);
-  }, [displayedThreads, filteredThreads]);
+    if(searchedThreadTitle !== "" || selectedStatus !== 1) {
+      setIsButtonDisabled(false);
+    } 
+    if((searchedThreadTitle === "") && selectedStatus === 1) {
+      setIsButtonDisabled(true);
+    }
+      
+  }, [searchedThreadTitle, selectedStatus]);
 
   const handleButtonClick = () => {
-    setDisplayedThreads(filteredThreads);
-    setSelectedThreadTitle(null);
+    setSearchedThreadTitle("");
+    setSelectedStatus(1);
     setIsButtonDisabled(true);
   };
 
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+  };
+
   return (
-    <div>
-      <Box marginLeft="9%">
+    <>
+    <Box marginLeft="13%" marginRight="11%">
+      <Box>
         <Grid container spacing={2} alignItems="left">
           <Grid item>
-            <AutocompleteComponent
-              options={threads.map((thread) => thread.title)}
-              value={selectedThreadTitle || null}
-              onChange={(newValue) => {
-                setSelectedThreadTitle(newValue);
-                const filtered = threads.filter(
-                  (thread) => thread.title === newValue
-                );
-                setDisplayedThreads(filtered);
-              }}
-            />
+        <TextField
+          id="outlined-helperText"
+          label="Helper text"
+          value={searchedThreadTitle}
+          onChange={(e)=>setSearchedThreadTitle(e.target.value)}
+        />
           </Grid>
           <Grid item>
             <StatusFilter
-              threads={threads}
-              setFilteredThreads={setFilteredThreads}
-              setDisplayedThreads={setDisplayedThreads}
+              selectedStatus={selectedStatus}
+              setSelectedStatus={setSelectedStatus}
             />
           </Grid>
           <Grid item>
-            <Button
+            <Button sx={{ marginTop: '8px', height: '55px' }}
               variant="outlined"
               onClick={handleButtonClick}
               disabled={isButtonDisabled}
@@ -108,23 +126,30 @@ export const Threads: React.FC = () => {
         </Grid>
       </Box>
       {isLoading ? (
-        <p>Loading...</p>
+        <p>Cant load resources...</p>
       ) : error ? (
         <p>{error}</p>
       ) : (
         <TableContainer component={Paper}>
           <Table
             sx={{
-              minWidth: 650,
-              marginLeft: "10%",
+              minWidth: 800,
               marginRight: "10%",
-              maxWidth: "80%",
-            }} // remove margins from here and add css file later
+              maxWidth: "100%",
+              "& .table-cell-date": { width: "5%" },
+              "& .table-cell-title": { width: "20%" }, 
+              "& .table-cell-points": { width: "5%" }, 
+              "& .table-cell-category": { width: "10%" }, 
+              "& .table-cell-stage": { width: "8%" }, 
+              "& .table-cell-author": { width: "8%" }, 
+              "& .table-cell-department": { width: "15%" },
+            }} 
             aria-label="simple table"
           >
             <TableHead>
               <TableRow>
                 {[
+                  
                   "Date",
                   "Title",
                   "Points",
@@ -133,14 +158,14 @@ export const Threads: React.FC = () => {
                   "Author",
                   "Department",
                 ].map((name) => (
-                  <TableCell key={name} align="right">
+                  <TableCell key={name} align="left" className={`table-cell-${name.toLowerCase()}`}>
                     <b>{name}</b>
                   </TableCell>
                 ))}
               </TableRow>
             </TableHead>
             <TableBody>
-              {displayedThreads.map((thread) => (
+              {threads.map((thread) => (
                 <TableRow
                   key={thread.threadId}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -149,17 +174,17 @@ export const Threads: React.FC = () => {
                     navigate(url);
                   }}
                 >
-                  <TableCell component="th" scope="row" align="right">
+                  <TableCell component="th" scope="row" align="left">
                     {thread.date}
                   </TableCell>
-                  <TableCell align="right">{thread.title}</TableCell>
-                  <TableCell align="right">{thread.points}</TableCell>
-                  <TableCell align="right">
+                  <TableCell align="left">{thread.title}</TableCell>
+                  <TableCell align="left">{thread.points}</TableCell>
+                  <TableCell align="left">
                     {thread.category.categoryName}
                   </TableCell>
-                  <TableCell align="right">{thread.stage.stageName}</TableCell>
-                  <TableCell align="right">{thread.user.name}</TableCell>
-                  <TableCell align="right">
+                  <TableCell align="left">{thread.stage.stageName}</TableCell>
+                  <TableCell align="left">{thread.user.name}</TableCell>
+                  <TableCell align="left">
                     {thread.user.department.departmentName}
                   </TableCell>
                 </TableRow>
@@ -168,6 +193,12 @@ export const Threads: React.FC = () => {
           </Table>
         </TableContainer>
       )}
-    </div>
+      
+      <Stack spacing={2} style={{ marginTop: "20px", float: "right" }} >
+        <Pagination count={totalPages} page={page} onChange={handleChange} />
+    </Stack>
+    
+    </Box>
+    </>
   );
 };
