@@ -172,7 +172,7 @@ export const ThreadComponent: React.FC<ThreadComponentProps> = ({
             <div className="image__container" >
                 {/* {ma być image, src tylko testowo} */}
               {<img 
-              src="https://blogit.itu.dk/lucarossi/wp-content/uploads/sites/80/2019/09/1_ATVm5uCixG7ntr40XlQbrg.jpeg" alt="Thread Photo" />}
+              src={image} alt="Thread Photo" />}
               {isEditing && (
                 <div>
                   <input type="file" onChange={handleImageChange} style={{ maxWidth: '1000px' }} />
