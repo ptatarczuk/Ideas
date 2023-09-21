@@ -44,8 +44,8 @@ export const ThreadPage: React.FC = () => {
         } catch (error) {
             console.error('An error occurred while fetching data', error);
         }
+       
     };
-
 
 
 
@@ -62,7 +62,7 @@ export const ThreadPage: React.FC = () => {
                 <Likes thread={thread} fetchThread={fetchThread} />
                 </div>
                 <Comments threadId={id} decodedToken={decodedToken} />
-                <Conclusion thread={thread} decodedToken={decodedToken} />
+                <Conclusion thread={thread} decodedToken={decodedToken} fetchThread={fetchThread} />
             </div>
             </div>
            
