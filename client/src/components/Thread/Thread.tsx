@@ -168,7 +168,7 @@ export const ThreadComponent: React.FC<ThreadComponentProps> = ({ thread, decode
             </FormControl>
           </div>
           <div className="thread-information__container">
-            <div className="image__container">
+            <div className="image__container" >
                 {/* {ma być image, src tylko testowo} */}
               {<img 
               src="https://blogit.itu.dk/lucarossi/wp-content/uploads/sites/80/2019/09/1_ATVm5uCixG7ntr40XlQbrg.jpeg" alt="Thread Photo" />}
