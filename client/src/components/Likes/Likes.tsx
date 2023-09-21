@@ -55,7 +55,7 @@ export const Likes: React.FC<LikesProps> = ({ thread, fetchThread }) => {
                 throw new Error('Error while adding DISLIKE vote');
             }
             fetchThread();
-            setPoints(points + 100 )
+            setPoints(points + 100 ) //tutaj wystarczy zaktualizowac punkty, nie wazne jaka wartosc,  potem to trzeba naprawic !
         } catch (error: any) {
             console.error('Error:', error.message);
         }

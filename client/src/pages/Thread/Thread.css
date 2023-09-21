@@ -11,7 +11,7 @@ main {
     box-shadow: 20px 16px 16px #00000029;
     border-radius: 11px;
     opacity: 1;
-    max-height: 100vh;
+    max-height: 85vh;
     align-items: center;
     
 }
@@ -33,5 +33,7 @@ main {
     padding: 5% 5% 0 5%;    margin: 0;
 }
 
-
+.image__container {
+    max-height: 350px;
+}
 
