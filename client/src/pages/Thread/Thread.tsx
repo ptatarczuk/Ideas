@@ -19,6 +19,7 @@ export const ThreadPage: React.FC = () => {
         user: string;
         setUser: () => void;
     }
+    const [refreshThread, setRefreshThread] = useState<boolean>(false);
 
 
     const token: Token | null = useContext(UserContext);
@@ -30,6 +31,13 @@ export const ThreadPage: React.FC = () => {
         console.log(decodedToken);
         fetchThread();
     }, [id]);
+
+    useEffect(() => {
+        if (refreshThread) {
+            fetchThread();
+            setRefreshThread(false); // Wyłącz odświeżanie
+        }
+    }, [refreshThread]);
 
 
     const fetchThread = async () => {
@@ -58,8 +66,8 @@ export const ThreadPage: React.FC = () => {
             <div className='orange-bar'>
             <div className='thread-container'>
                 <div className='thread-and-likes__container'>
-                <ThreadComponent thread={thread} decodedToken={decodedToken} />
-                <Likes thread={thread} fetchThread={fetchThread} />
+                <ThreadComponent thread={thread} decodedToken={decodedToken} setRefreshThread={setRefreshThread} />
+                <Likes thread={thread} fetchThread={fetchThread}  />
                 </div>
                 <Comments threadId={id} decodedToken={decodedToken} />
                 <Conclusion thread={thread} decodedToken={decodedToken} fetchThread={fetchThread} />
