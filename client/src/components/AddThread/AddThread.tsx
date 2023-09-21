@@ -170,7 +170,7 @@ const AddThread: React.FC = () => {
         </Box>
       </form>
       {attachment && (
-          <div style={{ position: "absolute", top: 430, left: 320,  display: "flex", flexDirection: "column", alignItems: "center"}}>
+          <div style={{ position: "absolute", top: 430, left: 560,  display: "flex", flexDirection: "column", alignItems: "center"}}>
             
           <img
             src={URL.createObjectURL(attachment)}

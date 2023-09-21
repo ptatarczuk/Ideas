@@ -175,7 +175,7 @@ export const ThreadComponent: React.FC<ThreadComponentProps> = ({
               src={image} alt="Thread Photo" />}
               {isEditing && (
                 <div>
-                  <input type="file" onChange={handleImageChange} style={{ maxWidth: '1000px' }} />
+                  <input type="file" onChange={handleImageChange} style={{ maxWidth: '1000px'}} />
                   {newImage && <button onClick={handleRemoveImage}>Remove Image</button>}
                 </div>
               )}
