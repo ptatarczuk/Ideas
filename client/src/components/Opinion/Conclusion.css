@@ -1,0 +1,22 @@
+.justification__container {
+    position: absolute;
+    left: 7.5%;
+    width: 85%;
+    height: 20%;
+    background: #FFFFFF;
+    border-radius: 11px;
+    opacity: 1;
+    max-height: 100vh;
+    align-items: center;
+    margin-top: 5%;
+
+
+}
+
+
+.justification-preview, .justification-edit {
+    display: 'flex'; flex-direction: 'column'; 
+    justify-content: center;
+}
+
+
