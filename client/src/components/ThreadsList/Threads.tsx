@@ -101,9 +101,9 @@ export const Threads: React.FC = () => {
       <Box>
         <Grid container spacing={2} alignItems="left">
           <Grid item>
-        <TextField
+        <TextField sx={{ marginTop: '8px'}}
           id="outlined-helperText"
-          label="Helper text"
+          label="Search by title"
           value={searchedThreadTitle}
           onChange={(e)=>setSearchedThreadTitle(e.target.value)}
         />
