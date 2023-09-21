@@ -1,11 +1,31 @@
 import React, { useState } from 'react';
 import { Avatar, Grid, Divider, Paper, TextField, Button } from '@mui/material';
 import { Thread } from '../../models/Thread';
+import './Conclusion.css'
 
 interface ConclusionProps {
     thread: Thread;
     decodedToken: any;
 }
+
+
+const buttonStyles = {
+    minWidth: '120px',
+    height: '30.5px',
+    background: '#C198F0',
+    opacity: 1,
+    borderRadius: '15px',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontSize: '1em',
+    color: '#ffffff',
+    cursor: 'pointer',
+    transition: 'transform 0.2s, opacity 0.2s, filter 0.2s',
+    marginRight: '5%',
+    marginLeft: '2.5%'
+  };
+
 
 export const Conclusion: React.FC<ConclusionProps> = ({ thread, decodedToken }) => {
     const isAdmin = decodedToken.role === 'Admin';
@@ -15,10 +35,12 @@ export const Conclusion: React.FC<ConclusionProps> = ({ thread, decodedToken }) 
         try {
             const dataToSend = {
                 content: newConclusion,
-                userId: decodedToken.userId, 
+                userId: 1, 
                 threadId: thread.threadId,
                 stageId: stage === "APPROVED" ? 3 : 2, 
             };
+
+            console.log(dataToSend)
         
             const response = await fetch(`http://localhost:8080/conclusion/add`, {
                 method: 'POST',
@@ -28,6 +50,8 @@ export const Conclusion: React.FC<ConclusionProps> = ({ thread, decodedToken }) 
                 body: JSON.stringify(dataToSend),
             });
         
+            console.log(response)
+
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -42,10 +66,9 @@ export const Conclusion: React.FC<ConclusionProps> = ({ thread, decodedToken }) 
     };
 
     return (
-        <div>
+        <div className='justification__container'>
             {thread.conclusion ? (
-                <Paper style={{ padding: '40px 20px' }}>
-                    <h2>Conclusion:</h2>
+                <div className='justification-preview' style={{ padding: '40px 20px'  }}>
                     <Grid container wrap="nowrap" spacing={2}>
                         <Grid item>
                             <Avatar alt={thread.conclusion.user.name} src={''} />
@@ -58,10 +81,10 @@ export const Conclusion: React.FC<ConclusionProps> = ({ thread, decodedToken }) 
                         </Grid>
                     </Grid>
                     <Divider variant="fullWidth" style={{ margin: '30px 0' }} />
-                </Paper>
+                </div>
             ) : null}
             {isAdmin && !thread.conclusion ? (
-                <div>
+                <div className='justification-edit'>
                     <TextField
                         required
                         id="outlined-required"
@@ -71,6 +94,9 @@ export const Conclusion: React.FC<ConclusionProps> = ({ thread, decodedToken }) 
                     />
                     <Button
                         variant="contained"
+                        style={{
+                            ...buttonStyles,
+                          }}
                         color="primary"
                         onClick={() => handleAddConclusion("APPROVED")}
                     >
@@ -78,6 +104,9 @@ export const Conclusion: React.FC<ConclusionProps> = ({ thread, decodedToken }) 
                     </Button>
                     <Button
                         variant="contained"
+                        style={{
+                            ...buttonStyles,
+                          }}
                         color="primary"
                         onClick={() => handleAddConclusion("NOT APPROVED")}
                     >

@@ -5,8 +5,9 @@ import jwt_decode from 'jwt-decode';
 import { UserContext } from '../../context/UserContext';
 import { ThreadComponent } from '../../components/Thread/Thread';
 import Comments from '../../components/Comments/Comments';
-import { Likes } from '../../components/Likes';
+import { Likes } from '../../components/Likes/Likes';
 import { Conclusion } from '../../components/Opinion/Conclusion';
+import './Thread.css'
 
 
 
@@ -19,10 +20,10 @@ export const ThreadPage: React.FC = () => {
         setUser: () => void;
     }
 
-    
+
     const token: Token | null = useContext(UserContext);
     const decodedToken: object | any = token ? jwt_decode(token.user) : null;
-//to any zmienic    
+    //to any zmienic    
 
 
     useEffect(() => {
@@ -53,14 +54,18 @@ export const ThreadPage: React.FC = () => {
     }
 
     return (
-        
-        <div>
-            <h1>Thread</h1>
-            <ThreadComponent thread={thread} decodedToken={decodedToken} />
-            <Comments threadId={id} decodedToken={decodedToken}/>
-            <Conclusion thread={thread} decodedToken={decodedToken} />
-            <Likes thread={thread} fetchThread={fetchThread} />
-        </div>
+       
+            <div className='orange-bar'>
+            <div className='thread-container'>
+                <div className='thread-and-likes__container'>
+                <ThreadComponent thread={thread} decodedToken={decodedToken} />
+                <Likes thread={thread} fetchThread={fetchThread} />
+                </div>
+                <Comments threadId={id} decodedToken={decodedToken} />
+                <Conclusion thread={thread} decodedToken={decodedToken} />
+            </div>
+            </div>
+           
     );
 };
 

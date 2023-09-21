@@ -1,0 +1,56 @@
+.MuiBox-root css-13r4j3i {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+}
+
+.title__container {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center;
+    align-items: center;
+}
+
+.thread-information__container {
+    display: flex;
+    flex-direction: row-reverse;
+    margin-top: 3%;
+   
+}
+
+.thread-details__container {
+    display: block;
+    max-width: 50%;
+}
+
+.description__container {
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    margin: 0;
+}
+
+
+.image__container {
+    max-width: 50%;
+    max-height: 50%;
+    overflow: hidden;
+    position: relative;
+    padding: 3%;
+    margin: 0;
+}
+
+.image__container img {
+    width: 100%;
+    height: auto;
+    display: block;
+    max-height: 70%;
+    padding: 0;
+    margin: 0;
+}
+
+.description__container {
+    margin: 0;
+    padding: 0;
+}
+

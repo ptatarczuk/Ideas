@@ -1,12 +1,28 @@
 import { useEffect, useState } from "react";
-import { Grid, Paper, Divider, Avatar, TextField, Button } from "@mui/material";
+import { Grid, Paper, Divider, Avatar, TextField, Button, FormControl, InputLabel, Input } from "@mui/material";
 import { Comment } from "../../models/Comment";
+import "./Comments.css";
 
 //czy dajemuy mozliwosc edycji komentarza? tylko autorowi? Jak ma to wygladac?
 interface CommentsProps {
   threadId: string | undefined;
   decodedToken: any;
 }
+
+const buttonStyles = {
+  minWidth: '120px',
+  height: '30.5px',
+  background: '#C198F0',
+  opacity: 1,
+  borderRadius: '15px',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  fontSize: '1em',
+  color: '#ffffff',
+  cursor: 'pointer',
+  transition: 'transform 0.2s, opacity 0.2s, filter 0.2s',
+};
 
 //czy pobierać ściezke zdjęcia uzytkownika fetchem czy nie? - jeśli pobierać to w bazie nie powinno być nic więcej nic id uytkownika
 // i wtedy pobieramy osobno email itp
@@ -15,7 +31,7 @@ const Comments: React.FC<CommentsProps> = ({ threadId, decodedToken }) => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState<string>('');
 
-  
+
   const fetchComments = async () => {
     try {
       const response = await fetch(
@@ -91,9 +107,9 @@ const Comments: React.FC<CommentsProps> = ({ threadId, decodedToken }) => {
 
 
   return (
-    <div>
-      <div>
-        <Paper style={{ padding: "40px 20px" }}>   {/* stworzyc odzielny plik css */}
+    <div className="comments__container">
+      <div className="comment__container" style={{ padding: "40px 20px" }}>
+        <Paper style={{ padding: "40px 20px" }}>
           {comments.map((comment) => (
             <div key={comment.commentId}>
               <Grid container wrap="nowrap" spacing={2}>
@@ -113,34 +129,44 @@ const Comments: React.FC<CommentsProps> = ({ threadId, decodedToken }) => {
                     {comment.commentDate}
                   </p>
                   {(isUserComment(comment) || isAdmin) && (
-                    <button
+                    <Button
+                      variant="contained"
+                      style={{
+                        ...buttonStyles,
+                      }}
                       onClick={() => handleDeleteComment(comment.commentId)}
                     >
                       Remove Comment
-                    </button>
+                    </Button>
                   )}
                 </Grid>
               </Grid>
               <Divider variant="fullWidth" style={{ margin: "30px 0" }} />
             </div>
           ))}
+          <div className="add-comment-form">
+            <FormControl fullWidth style={{ margin: "5%" }}>
+              <InputLabel htmlFor="outlined-required">Type your comment</InputLabel>
+              <Input
+                style={{ marginRight: "10%" }}
+                required
+                id="outlined-required"
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)
+                }
+              />
+            </FormControl>
+            <Button
+              variant="contained"
+              style={{
+                ...buttonStyles,
+              }}
+              onClick={handleAddComment}
+            >
+              SEND
+            </Button>
+          </div>
         </Paper>
-      </div>
-      <div>
-        <TextField
-          required
-          id="outlined-required"
-          label="Type your comment"
-          value={newComment}
-          onChange={(e) => setNewComment(e.target.value)}
-        />
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={handleAddComment}
-        >
-          SEND
-        </Button>
       </div>
     </div>
   );
