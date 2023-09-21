@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Avatar, Grid, Divider, Paper, TextField, Button } from '@mui/material';
 import { Thread } from '../../models/Thread';
 import './Conclusion.css'
@@ -6,6 +6,7 @@ import './Conclusion.css'
 interface ConclusionProps {
     thread: Thread;
     decodedToken: any;
+    fetchThread: () => void;
 }
 
 
@@ -27,9 +28,14 @@ const buttonStyles = {
   };
 
 
-export const Conclusion: React.FC<ConclusionProps> = ({ thread, decodedToken }) => {
+export const Conclusion: React.FC<ConclusionProps> = ({ thread, decodedToken, fetchThread }) => {
     const isAdmin = decodedToken.role === 'Admin';
     const [newConclusion, setNewConclusion] = useState<string>('');
+
+    useEffect(() => {
+        setNewConclusion(newConclusion);
+    }, [thread])
+
 
     const handleAddConclusion = async (stage: string) => {
         try {
@@ -37,7 +43,7 @@ export const Conclusion: React.FC<ConclusionProps> = ({ thread, decodedToken }) 
                 content: newConclusion,
                 userId: 1, 
                 threadId: thread.threadId,
-                stageId: stage === "APPROVED" ? 3 : 2, 
+                stageId: stage === "APPROVED" ? 4 : 5, 
             };
 
             console.log(dataToSend)
@@ -51,7 +57,7 @@ export const Conclusion: React.FC<ConclusionProps> = ({ thread, decodedToken }) 
             });
         
             console.log(response)
-
+            fetchThread();
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }

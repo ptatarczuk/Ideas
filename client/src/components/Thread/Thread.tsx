@@ -1,149 +1,150 @@
-import { TextField, Button, Box, FormControl, InputLabel, Input } from '@mui/material';
 import React, { useState, useEffect } from 'react';
+import { Button, Box, FormControl, InputLabel, Input } from '@mui/material';
 import { Thread } from '../../models/Thread';
-import { getJwtToken } from '../../authHelpers/authHelpers'
-
+import { getJwtToken } from '../../authHelpers/authHelpers';
 import axios from 'axios';
 import './Thread.css';
 
-//czemu klikniecie w remove powoduje wylaczenie opcji edycji
-//wysokosc obrazu?
-
 const buttonStyles = {
-    minWidth: '120px',
-    height: '30.5px',
-    background: '#C198F0',
-    opacity: 1,
-    borderRadius: '15px',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    fontSize: '1em',
-    color: '#ffffff',
-    cursor: 'pointer',
-    transition: 'transform 0.2s, opacity 0.2s, filter 0.2s',
-  };
-  
-  const hoverStyles = {
-    transform: 'scale(1.1)',
-    opacity: 0.8,
-  };
+  minWidth: '120px',
+  height: '30.5px',
+  background: '#C198F0',
+  opacity: 1,
+  borderRadius: '15px',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  fontSize: '1em',
+  color: '#ffffff',
+  cursor: 'pointer',
+  transition: 'transform 0.2s, opacity 0.2s, filter 0.2s',
+};
+
+const hoverStyles = {
+  transform: 'scale(1.1)',
+  opacity: 0.8,
+};
 
 interface ThreadComponentProps {
-    thread: Thread;
-    decodedToken: any;
+  thread: Thread;
+  decodedToken: any;
+  setRefreshThread: (refresh: boolean) => void;
 }
 
-export const ThreadComponent: React.FC<ThreadComponentProps> = ({ thread, decodedToken }) => {
-    const [editedThread, setEditedThread] = useState<Thread>({ ...thread });
-    const [isEditing, setIsEditing] = useState<boolean>(false);
-    const [buttonText, setButtonText] = useState<string>("EDIT");
-    const isAuthor = editedThread.user.email === decodedToken.sub;
-    const [newImage, setNewImage] = useState<File | null>(null);
-    const [image, setImage] = useState<string>("");
-    const isUser = decodedToken.role === "User";
-    const isAdmin = decodedToken.role === "Admin";
-    //
+export const ThreadComponent: React.FC<ThreadComponentProps> = ({
+  thread,
+  decodedToken,
+  setRefreshThread,
+}) => {
+  const [editedThread, setEditedThread] = useState<Thread>({ ...thread });
+  const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [buttonText, setButtonText] = useState<string>('EDIT');
+  const isAuthor = editedThread.user.email === decodedToken.sub;
+  const [newImage, setNewImage] = useState<File | null>(null);
+  const [image, setImage] = useState<string>(
+    'https://blogit.itu.dk/lucarossi/wp-content/uploads/sites/80/2019/09/1_ATVm5uCixG7ntr40XlQbrg.jpeg'
+  );
+  const isUser = decodedToken.role === 'User';
+  const isAdmin = decodedToken.role === 'Admin';
 
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get(`http://localhost:8080${thread.photo}`);
-                const blob = new Blob([response.data], { type: 'image/png' });
-                const blobUrl = URL.createObjectURL(blob);
-                setImage(blobUrl);
-                console.log(blobUrl)
-            } catch (error) {
-                console.error('An error occurred while fetching data', error);
-            }
-        };
-
-        fetchData();
-    }, [thread]);
-
-
-    const handleFieldChange = (field: keyof Thread, value: any) => {
-        setEditedThread((prevThread) => ({
-            ...prevThread,
-            [field]: value,
-        }));
-    };
-
-    const handleEdit = () => {
-        console.log(image)
-        setIsEditing(true);
-        setButtonText("SAVE");
-        console.log(thread)
-    };
-
-    const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const selectedFile = e.target.files?.[0];
-        if (selectedFile) {
-            setNewImage(selectedFile);
+  useEffect(() => {
+    const fetchImage = async () => {
+      try {
+        if (thread.photo) {
+          const response = await fetch(`http://localhost:8080${thread.photo}`);
+          const blob = await response.blob();
+          const blobUrl = window.URL.createObjectURL(blob);
+          setImage(blobUrl);
         }
+      } catch (error) {
+        console.error('An error occurred while fetching data', error);
+      }
     };
 
-    const handleRemoveImage = () => {
-        setNewImage(null);
-    };
+    fetchImage();
+  }, [thread]);
 
+  const handleFieldChange = (field: keyof Thread, value: any) => {
+    setEditedThread((prevThread) => ({
+      ...prevThread,
+      [field]: value,
+    }));
+  };
 
+  const handleEdit = () => {
+    setIsEditing(true);
+    setButtonText('SAVE');
+  };
 
-    const handleSave = async (e: React.FormEvent) => {
-        console.log(image)
-        e.preventDefault();
-        try {
-            const jwtToken = await getJwtToken();
-            if (!jwtToken) {
-                return;
-            }
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0];
+    if (selectedFile) {
+      setNewImage(selectedFile);
+    }
+  };
 
-            const updatedThread = {
-                title: editedThread.title,
-                description: editedThread.description,
-                justification: editedThread.justification,
-            };
+  const handleRemoveImage = () => {
+    setNewImage(null);
+  };
 
-            const formData = new FormData();
-            formData.append('thread', JSON.stringify(updatedThread));
+  const handleSave = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      const jwtToken = await getJwtToken();
+      if (!jwtToken) {
+        return;
+      }
 
-            if (newImage) {
-                formData.append('file', newImage);
-            }
+      const updatedThread = {
+        title: editedThread.title,
+        description: editedThread.description,
+        justification: editedThread.justification,
+      };
 
-            const config = {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    Authorization: `Bearer ${jwtToken}`,
-                },
-            };
+      const formData = new FormData();
+      formData.append('thread', JSON.stringify(updatedThread));
 
-            const response = await axios.patch(`http://localhost:8080/threads/id/${thread.threadId}`, formData, config);
+      if (newImage) {
+        formData.append('file', newImage);
+      }
 
-            if (response.status !== 200) {
-                const errorData = response.data;
-                throw new Error(`Network response was not ok. Error data: ${JSON.stringify(errorData)}`);
-            }
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      };
 
-            setIsEditing(false);
-            setButtonText("EDIT");
-        } catch (error) {
-            console.error('An error occurred while saving data', error);
-        }
-    };
+      const response = await axios.patch(
+        `http://localhost:8080/threads/id/${thread.threadId}`,
+        formData,
+        config
+      );
 
+      if (response.status !== 200) {
+        const errorData = response.data;
+        throw new Error(`Network response was not ok. Error data: ${JSON.stringify(errorData)}`);
+      }
 
-    return (
-        <Box
-          component="form"
-          sx={{
-            '& .MuiFormControl-root': { m: 1, width: '100%' },
-          }}
-          noValidate
-          autoComplete="off"
-        >
-         <div className="title__container">
+      setIsEditing(false);
+      setButtonText('EDIT');
+
+      setRefreshThread(true); 
+    } catch (error) {
+      console.error('An error occurred while saving data', error);
+    }
+  };
+
+  return (
+    <Box
+      component="form"
+      sx={{
+        '& .MuiFormControl-root': { m: 1, width: '100%' },
+      }}
+      noValidate
+      autoComplete="off"
+    >
+      <div className="title__container">
         {(isUser && isAuthor) || isAdmin ? (
           <Button
             variant="contained"
@@ -171,7 +172,7 @@ export const ThreadComponent: React.FC<ThreadComponentProps> = ({ thread, decode
             <div className="image__container" >
                 {/* {ma być image, src tylko testowo} */}
               {<img 
-              src="https://blogit.itu.dk/lucarossi/wp-content/uploads/sites/80/2019/09/1_ATVm5uCixG7ntr40XlQbrg.jpeg" alt="Thread Photo" />}
+              src={image} alt="Thread Photo" />}
               {isEditing && (
                 <div>
                   <input type="file" onChange={handleImageChange} style={{ maxWidth: '1000px' }} />
