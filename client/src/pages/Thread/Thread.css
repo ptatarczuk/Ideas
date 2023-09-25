@@ -3,7 +3,6 @@ main {
 }
 
 .thread-container {
-    position: absolute;
     top: 15%;
     left: 7.5%;
     width: 85%;
@@ -11,9 +10,9 @@ main {
     box-shadow: 20px 16px 16px #00000029;
     border-radius: 11px;
     opacity: 1;
-    max-height: 85vh;
-    align-items: center;
-    
+    display: flex;
+    flex-direction: column;
+    z-index: 999;
 }
 
 .orange-bar {
@@ -37,3 +36,8 @@ main {
     max-height: 350px;
 }
 
+.page-wrapper {
+    display: flex;
+    justify-content: center;
+    padding-top: 35px;
+}

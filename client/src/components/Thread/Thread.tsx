@@ -129,7 +129,7 @@ export const ThreadComponent: React.FC<ThreadComponentProps> = ({
       setIsEditing(false);
       setButtonText('EDIT');
 
-      setRefreshThread(true); 
+      setRefreshThread(true);
     } catch (error) {
       console.error('An error occurred while saving data', error);
     }
@@ -157,26 +157,31 @@ export const ThreadComponent: React.FC<ThreadComponentProps> = ({
             {buttonText}
           </Button>
         ) : null}
-            <FormControl fullWidth sx={{ m: 1 }}>
-              <InputLabel htmlFor="outlined-title">Title</InputLabel>
-              <Input
-                required
-                id="outlined-title"
-                value={editedThread.title}
-                onChange={(e) => handleFieldChange('title', e.target.value)}
-                disabled={!isEditing}
-              />
-            </FormControl>
-          </div>
-          <div className="thread-information__container">
-            <div className="image__container" >
-                {/* {ma być image, src tylko testowo} */}
-              {<img 
-              src={image} alt="Thread Photo" />}
-              {isEditing && (
-                <div>
-                  <input type="file" onChange={handleImageChange} style={{ maxWidth: '1000px'}} />
-                  {newImage && <button onClick={handleRemoveImage}>Remove Image</button>}
+        <FormControl fullWidth sx={{ m: 1 }}>
+          <InputLabel htmlFor="outlined-title">Title</InputLabel>
+          <Input
+            sx={{
+              "& .MuiInputBase-input.Mui-disabled": {
+                WebkitTextFillColor: "#000000",
+              },
+            }}
+            required
+            id="outlined-title"
+            value={editedThread.title}
+            onChange={(e) => handleFieldChange('title', e.target.value)}
+            disabled={!isEditing}
+          />
+        </FormControl>
+      </div>
+      <div className="thread-information__container">
+        <div className="image__container" >
+          {/* {ma być image, src tylko testowo} */}
+          {<img
+            src={image} alt="Thread Photo" />}
+          {isEditing && (
+            <div>
+              <input type="file" onChange={handleImageChange} style={{ maxWidth: '1000px' }} />
+              {newImage && <button onClick={handleRemoveImage}>Remove Image</button>}
                 </div>
               )}
             </div>
@@ -206,30 +211,30 @@ export const ThreadComponent: React.FC<ThreadComponentProps> = ({
                 <InputLabel htmlFor="outlined-status">Status</InputLabel>
                 <Input required id="outlined-status" disabled={true} value={editedThread.status.name} />
               </FormControl>
-            </div>
-          </div>
-          <div className="description__container">
-            <FormControl fullWidth sx={{ m: 0.85 }}>
-              <InputLabel htmlFor="outlined-description">Description</InputLabel>
-              <Input
-                required
-                id="outlined-description"
-                value={editedThread.description}
-                onChange={(e) => handleFieldChange('description', e.target.value)}
-                disabled={!isEditing}
-              />
-            </FormControl>
-            <FormControl fullWidth sx={{ m: 0.85  }}>
-              <InputLabel htmlFor="outlined-justification">Justification</InputLabel>
-              <Input
-                required
-                id="outlined-justification"
-                value={editedThread.justification}
-                onChange={(e) => handleFieldChange('justification', e.target.value)}
-                disabled={!isEditing}
-              />
-            </FormControl>
-          </div>
-        </Box>
-      );
-    };
+        </div>
+      </div>
+      <div className="description__container">
+        <FormControl fullWidth sx={{ m: 0.85 }}>
+          <InputLabel htmlFor="outlined-description">Description</InputLabel>
+          <Input
+            required
+            id="outlined-description"
+            value={editedThread.description}
+            onChange={(e) => handleFieldChange('description', e.target.value)}
+            disabled={!isEditing}
+          />
+        </FormControl>
+        <FormControl fullWidth sx={{ m: 0.85 }}>
+          <InputLabel htmlFor="outlined-justification">Justification</InputLabel>
+          <Input
+            required
+            id="outlined-justification"
+            value={editedThread.justification}
+            onChange={(e) => handleFieldChange('justification', e.target.value)}
+            disabled={!isEditing}
+          />
+        </FormControl>
+      </div>
+    </Box>
+  );
+};
