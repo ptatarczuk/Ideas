@@ -182,35 +182,35 @@ export const ThreadComponent: React.FC<ThreadComponentProps> = ({
             <div>
               <input type="file" onChange={handleImageChange} style={{ maxWidth: '1000px' }} />
               {newImage && <button onClick={handleRemoveImage}>Remove Image</button>}
+                </div>
+              )}
             </div>
-          )}
-        </div>
-        <div className="thread-details__container">
-          <FormControl fullWidth sx={{ m: 0.85 }}>
-            <InputLabel htmlFor="outlined-author">Author</InputLabel>
-            <Input required id="outlined-author" disabled={true} value={editedThread.user.name} />
-          </FormControl>
-          <FormControl fullWidth sx={{ m: 0.85 }}>
-            <InputLabel htmlFor="outlined-department">Departament</InputLabel>
-            <Input
-              required
-              id="outlined-department"
-              disabled={true}
-              value={editedThread.user.department.departmentName}
-            />
-          </FormControl>
-          <FormControl fullWidth sx={{ m: 0.85 }}>
-            <InputLabel htmlFor="outlined-category">Category</InputLabel>
-            <Input required id="outlined-category" disabled={true} value={editedThread.category.categoryName} />
-          </FormControl>
-          <FormControl fullWidth sx={{ m: 0.85 }}>
-            <InputLabel htmlFor="outlined-stage">Stage</InputLabel>
-            <Input required id="outlined-stage" disabled={true} value={editedThread.stage.stageName} />
-          </FormControl>
-          <FormControl fullWidth sx={{ m: 0.85 }}>
-            <InputLabel htmlFor="outlined-status">Status</InputLabel>
-            <Input required id="outlined-status" disabled={true} value={editedThread.status.name} />
-          </FormControl>
+            <div className="thread-details__container">
+              <FormControl fullWidth sx={{ m: 0.85 }}>
+                <InputLabel htmlFor="outlined-author">Author</InputLabel>
+                <Input required id="outlined-author" disabled={true} value={editedThread.user.name} />
+              </FormControl>
+              <FormControl fullWidth sx={{ m: 0.85  }}>
+                <InputLabel htmlFor="outlined-department">Departament</InputLabel>
+                <Input
+                  required
+                  id="outlined-department"
+                  disabled={true}
+                  value={editedThread.user.department.departmentName}
+                />
+              </FormControl>
+              <FormControl fullWidth sx={{ m: 0.85  }}>
+                <InputLabel htmlFor="outlined-category">Category</InputLabel>
+                <Input required id="outlined-category" disabled={true} value={editedThread.category.categoryName} />
+              </FormControl>
+              <FormControl fullWidth sx={{ m: 0.85  }}>
+                <InputLabel htmlFor="outlined-stage">Stage</InputLabel>
+                <Input required id="outlined-stage" disabled={true} value={editedThread.stage.stageName} />
+              </FormControl>
+              <FormControl fullWidth sx={{ m: 0.85  }}>
+                <InputLabel htmlFor="outlined-status">Status</InputLabel>
+                <Input required id="outlined-status" disabled={true} value={editedThread.status.name} />
+              </FormControl>
         </div>
       </div>
       <div className="description__container">

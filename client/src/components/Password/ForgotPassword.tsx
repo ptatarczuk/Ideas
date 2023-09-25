@@ -1,4 +1,4 @@
-import { Input, TextField, Box, Button } from "@mui/material";
+import { Input, TextField, Box, Button, Typography } from "@mui/material";
 import { ChangeEvent, useState } from "react";
 import { Form, useSubmit } from "react-router-dom";
 import { BrowserRouter as Router } from "react-router-dom";
@@ -9,6 +9,7 @@ interface ForgotPasswordComponentProps {}
 
 export const ForgotPassword: React.FC<ForgotPasswordComponentProps> = ({}) => {
   const [inputValue, setInputValue] = useState<String>("");
+  const [isSent, setIsSent] = useState<boolean>(true);
 
   const handleSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
     //event.preventDefault();
@@ -38,6 +39,7 @@ export const ForgotPassword: React.FC<ForgotPasswordComponentProps> = ({}) => {
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
+      setIsSent(true);
     } catch (error) {
       console.error("An error occurred while saving data", error);
     }
@@ -59,6 +61,8 @@ export const ForgotPassword: React.FC<ForgotPasswordComponentProps> = ({}) => {
           height: "70vh",
         }}
       >
+        {!isSent ? (
+          <>
         <TextField
           className="form_field"
           required
@@ -86,6 +90,12 @@ export const ForgotPassword: React.FC<ForgotPasswordComponentProps> = ({}) => {
         >
           Reset Password
         </Button>
+        </>
+        ) : (
+          <Typography variant="h6" style={{ marginTop: "50px", color: "white", fontSize: "30px" }}>
+          Reset password request has been sent.
+        </Typography>
+        )}
       </Box>
     </main>
   );

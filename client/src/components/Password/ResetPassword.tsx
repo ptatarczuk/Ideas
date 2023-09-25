@@ -27,9 +27,9 @@ export const ResetPassword: React.FC<ResetPasswordComponentProps> = ({}) => {
 
   const handlePasswordChange = async () => {
     try {
-      //   const dataToSend = {
-      //     password
-      // };
+      const dataToSend = {
+        password: password, 
+      };
       const response = await fetch(
         `http://localhost:8080/api/v1/auth/reset-password/${token}`,
         {
@@ -37,7 +37,7 @@ export const ResetPassword: React.FC<ResetPasswordComponentProps> = ({}) => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(password),
+          body: JSON.stringify(dataToSend),
         }
       );
 
