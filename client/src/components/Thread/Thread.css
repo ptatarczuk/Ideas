@@ -4,6 +4,8 @@
     margin: 0;
 }
 
+
+
 .title__container {
     display: flex;
     flex-direction: row-reverse;
@@ -38,6 +40,8 @@
     position: relative;
     padding: 3%;
     margin: 0;
+    width: 400px;
+    height: 300px;
 }
 
 .image__container img {
