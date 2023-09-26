@@ -49,21 +49,33 @@ VALUES ('Jowita', 'jowita@test.com', '123', 1, 5),
        ('Alex', 'alex@test.com', '321', 4, 6),
        ('Tomek', 'tomek@test.com', '555', 3, 3),
        ('Piotr', 'piotr@test.com', '987', 2, 4),
-       ('test', 'a@a.pl', '000', 1, 1);
+       ('test', 'a@a.pl', '000', 1, 1),
+       ('admin', 'admin@admin.pl', '$2a$10$0fN5YqsNup0xeB.u6Q4QU.neP4XZPp8zNcwvU6AVxlxn2MGTNSLf.', 1, 1);
 
 
-INSERT INTO threads (thread_date, thread_title, thread_description, thread_justification, thread_photo, thread_points, user_id,
+INSERT INTO threads (thread_date, thread_title, thread_description, thread_justification, thread_photo, thread_points,
+                     user_id,
                      category_id, stage_id, status_id)
-VALUES ('2023-05-10','Monday Thread 1', 'Description for Thread 1', 'Justification for Thread 1', 'photo1.jpg', 10, 1, 1, 1, 1),
-       ('2023-05-10','Monday Thread 2', 'Description for Thread 2', 'Justification for Thread 2', 'photo2.jpg', 20, 2, 2, 2, 1),
-       ('2023-05-10','Tuesday Thread 3', 'Description for Thread 3', 'Justification for Thread 3', 'photo3.jpg', 15, 3, 1, 1, 2),
-       ('2023-05-10','Tuesday Thread 4', 'Description for Thread 4', 'Justification for Thread 4', 'photo4.jpg', 25, 4, 2, 2, 2),
-       ('2023-05-10','Tuesday Thread 5', 'Description for Thread 5', 'Justification for Thread 5', 'photo5.jpg', 18, 1, 1, 1, 1),
-       ('2023-05-10','Wednesday Thread 6', 'Description for Thread 6', 'Justification for Thread 6', 'photo6.jpg', 12, 2, 2, 2, 1),
-       ('2023-05-10','Wednesday Thread 7', 'Description for Thread 7', 'Justification for Thread 7', 'photo7.jpg', 30, 3, 1, 1, 2),
-       ('2023-05-10','Wednesday Thread 8', 'Description for Thread 8', 'Justification for Thread 8', 'photo8.jpg', 22, 4, 2, 2, 2),
-       ('2023-05-10','Wednesday Thread 9', 'Description for Thread 9', 'Justification for Thread 9', 'photo9.jpg', 17, 1, 1, 1, 1),
-       ('2023-05-10','Wednesday Thread 10', 'Description for Thread 10', 'Justification for Thread 10', 'photo10.jpg', 28, 2, 2, 2, 1);
+VALUES ('2023-05-10', 'Monday Thread 1', 'Description for Thread 1', 'Justification for Thread 1', 'photo1.jpg', 10, 1,
+        1, 1, 1),
+       ('2023-05-10', 'Monday Thread 2', 'Description for Thread 2', 'Justification for Thread 2', 'photo2.jpg', 20, 2,
+        2, 2, 1),
+       ('2023-05-10', 'Tuesday Thread 3', 'Description for Thread 3', 'Justification for Thread 3', 'photo3.jpg', 15, 3,
+        1, 1, 2),
+       ('2023-05-10', 'Tuesday Thread 4', 'Description for Thread 4', 'Justification for Thread 4', 'photo4.jpg', 25, 4,
+        2, 2, 2),
+       ('2023-05-10', 'Tuesday Thread 5', 'Description for Thread 5', 'Justification for Thread 5', 'photo5.jpg', 18, 1,
+        1, 1, 1),
+       ('2023-05-10', 'Wednesday Thread 6', 'Description for Thread 6', 'Justification for Thread 6', 'photo6.jpg', 12,
+        2, 2, 2, 1),
+       ('2023-05-10', 'Wednesday Thread 7', 'Description for Thread 7', 'Justification for Thread 7', 'photo7.jpg', 30,
+        3, 1, 1, 2),
+       ('2023-05-10', 'Wednesday Thread 8', 'Description for Thread 8', 'Justification for Thread 8', 'photo8.jpg', 22,
+        4, 2, 2, 2),
+       ('2023-05-10', 'Wednesday Thread 9', 'Description for Thread 9', 'Justification for Thread 9', 'photo9.jpg', 17,
+        1, 1, 1, 1),
+       ('2023-05-10', 'Wednesday Thread 10', 'Description for Thread 10', 'Justification for Thread 10', 'photo10.jpg',
+        28, 2, 2, 2, 1);
 
 INSERT INTO admissions (admission_id, admission_author, admission_text, admission_date)
 VALUES (1, 1, 'Admission 1', '2023-07-26'),

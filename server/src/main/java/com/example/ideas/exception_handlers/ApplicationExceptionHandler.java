@@ -16,15 +16,19 @@ import java.util.Map;
 @RestControllerAdvice
 public class ApplicationExceptionHandler {
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, String> handleInvalidArgument(MethodArgumentNotValidException ex) {
-        Map<String, String> errorMap = new HashMap<>();
-        ex.getBindingResult().getFieldErrors().forEach(error -> {
-            errorMap.put(error.getField(), error.getDefaultMessage());
-        });
-        return errorMap;
-    }
+
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    @ExceptionHandler({
+//            EntityNotFoundException.class,
+//            NoAuthorizationException.class,
+//            DataAlreadyExistsException.class,
+//            IllegalAccessException.class
+//    })
+//    public Map<String, String> handleException(Exception ex) {
+//        Map<String, String> errorMap = new HashMap<>();
+//        errorMap.put("errorMessage", ex.getMessage());
+//        return errorMap;
+//    }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(EntityNotFoundException.class)
@@ -50,6 +54,24 @@ public class ApplicationExceptionHandler {
         return errorMap;
     }
 
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(IllegalAccessException.class)
+    public Map<String, String> handleIllegalAccessException(IllegalAccessException ex) {
+        Map<String, String> errorMap = new HashMap<>();
+        errorMap.put("errorMessage", ex.getMessage());
+        return errorMap;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String, String> handleInvalidArgument(MethodArgumentNotValidException ex) {
+        Map<String, String> errorMap = new HashMap<>();
+        ex.getBindingResult().getFieldErrors().forEach(error -> {
+            errorMap.put(error.getField(), error.getDefaultMessage());
+        });
+        return errorMap;
+    }
+
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(IOException.class)
     public Map<String, String> handleIOException(IOException ex) {
@@ -57,6 +79,5 @@ public class ApplicationExceptionHandler {
         errorMap.put("errorMessage", ex.getMessage());
         return errorMap;
     }
-
 
 }

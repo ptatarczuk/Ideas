@@ -40,26 +40,27 @@ export const ThreadComponent: React.FC<ThreadComponentProps> = ({ thread, decode
     const [buttonText, setButtonText] = useState<string>("EDIT");
     const isAuthor = editedThread.user.email === decodedToken.sub;
     const [newImage, setNewImage] = useState<File | null>(null);
-    const [image, setImage] = useState<string>("");
+    const [image, setImage] = useState<string>("https://blogit.itu.dk/lucarossi/wp-content/uploads/sites/80/2019/09/1_ATVm5uCixG7ntr40XlQbrg.jpeg");
     const isUser = decodedToken.role === "User";
     const isAdmin = decodedToken.role === "Admin";
-    //
 
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get(`http://localhost:8080${thread.photo}`);
-                const blob = new Blob([response.data], { type: 'image/png' });
-                const blobUrl = URL.createObjectURL(blob);
-                setImage(blobUrl);
-                console.log(blobUrl)
-            } catch (error) {
-                console.error('An error occurred while fetching data', error);
-            }
-        };
-
-        fetchData();
+      const fetchImage = async () => {
+        try {
+          if (thread.photo) {
+            const response = await fetch(`http://localhost:8080${thread.photo}`);
+            const blob = await response.blob();
+            const blobUrl = window.URL.createObjectURL(blob);
+            console.log(blobUrl);
+            setImage(blobUrl);
+          }
+        } catch (error) {
+          console.error('An error occurred while fetching data', error);
+        }
+      };
+    
+      fetchImage();
     }, [thread]);
 
 
@@ -87,7 +88,6 @@ export const ThreadComponent: React.FC<ThreadComponentProps> = ({ thread, decode
     const handleRemoveImage = () => {
         setNewImage(null);
     };
-
 
 
     const handleSave = async (e: React.FormEvent) => {
@@ -171,7 +171,7 @@ export const ThreadComponent: React.FC<ThreadComponentProps> = ({ thread, decode
             <div className="image__container">
                 {/* {ma być image, src tylko testowo} */}
               {<img 
-              src="https://blogit.itu.dk/lucarossi/wp-content/uploads/sites/80/2019/09/1_ATVm5uCixG7ntr40XlQbrg.jpeg" alt="Thread Photo" />}
+              src={image} alt="Thread Photo" />}
               {isEditing && (
                 <div>
                   <input type="file" onChange={handleImageChange} style={{ maxWidth: '1000px' }} />

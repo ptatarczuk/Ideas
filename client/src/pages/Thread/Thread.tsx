@@ -48,7 +48,6 @@ export const ThreadPage: React.FC = () => {
 
 
 
-
     if (!thread) {
         return <p>Loading...</p>;
     }

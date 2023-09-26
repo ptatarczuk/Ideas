@@ -17,4 +17,5 @@ public interface ThreadRepository extends JpaRepository<Thread, Long> {
 
     Page<Thread> findByTitleContainsIgnoreCaseAndStatus(String searchedTitle, Status status, Pageable pageable);
     Page<Thread> findByStatus(Status status, Pageable pageable);
+
 }

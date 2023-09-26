@@ -3,6 +3,7 @@ package com.example.ideas.thread.controller;
 import com.example.ideas.exception.EntityNotFoundException;
 import com.example.ideas.exception.NoAuthorizationException;
 import com.example.ideas.thread.model.Thread;
+import com.example.ideas.thread.service.SortDirection;
 import com.example.ideas.thread.service.ThreadService;
 import com.example.ideas.thread.utils.EmailSender;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -47,17 +48,18 @@ public class ThreadController {
             @RequestParam Integer pageNo,
             @RequestParam Integer pageSize,
             @RequestParam(required = false, defaultValue = "") String searchedTitle,
-            @RequestParam(required = false, defaultValue = "1") Long filterStatusId
-    ) throws EntityNotFoundException {
-        return threadService.getThreads(pageNo, pageSize, searchedTitle, filterStatusId);
+            @RequestParam(required = false, defaultValue = "1") Long filterStatusId,
+            @RequestParam(required = false) String fieldToSort,
+            @RequestParam(required = false) SortDirection sortDirection
+            ) throws EntityNotFoundException {
+        return threadService.getThreads(pageNo, pageSize, searchedTitle, filterStatusId, fieldToSort, sortDirection);
     }
 
     @GetMapping("/id/{thread_id}")
-    public ResponseEntity<Thread> getThreadById(
+    public ResponseEntity<ThreadResponseDTO> getThreadById(
             @PathVariable("thread_id") Long threadId
-    ) {
-        Thread thread = threadService.getThreadById(threadId).orElse(null);
-        return thread != null ? ResponseEntity.ok(thread) : ResponseEntity.notFound().build();
+    ) throws EntityNotFoundException {
+        return ResponseEntity.ok(threadService.getThreadById(threadId));
     }
 
     // czy tu beda potrzebne getByStatus getByCategory getByStage itp ?
@@ -71,7 +73,7 @@ public class ThreadController {
 //    }
 
     @RequestMapping(path = "/addThread", method = POST, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<Thread> addThread(
+    public ResponseEntity<ThreadResponseDTO> addThread(
             @RequestParam("model") String model,
             @RequestParam(value = "file", required = false) MultipartFile multipartFile
     ) throws EntityNotFoundException, IOException {
@@ -86,12 +88,13 @@ public class ThreadController {
     }
 
     @DeleteMapping("/{thread_id}")
-    public ResponseEntity<Thread> deleteThread(@PathVariable("thread_id") Long threadId) {
-        return threadService.deleteThread(threadId);
+    public ResponseEntity<ThreadResponseDTO> deleteThread(@PathVariable("thread_id") Long threadId)
+            throws EntityNotFoundException {
+        return ResponseEntity.ok(threadService.deleteThread(threadId));
     }
 
     @PatchMapping(value = "/id/{thread_id}", consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<Thread> updateThreadById(
+    public ResponseEntity<ThreadResponseDTO> updateThreadById(
             @RequestHeader("Authorization") String token,
             @PathVariable("thread_id") Long threadId,
             @RequestParam(value ="file", required = false) MultipartFile multipartFile,

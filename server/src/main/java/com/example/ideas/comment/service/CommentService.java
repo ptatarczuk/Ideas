@@ -11,19 +11,16 @@ import com.example.ideas.thread.repository.ThreadRepository;
 import com.example.ideas.user.model.User;
 import com.example.ideas.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import static com.example.ideas.thread.utils.ObjectProvider.getObjectFromDB;
+import static com.example.ideas.helpers.ObjectProvider.getObjectFromDB;
 
 
 @Service

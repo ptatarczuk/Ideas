@@ -1,11 +1,15 @@
 package com.example.ideas.security.auth;
 
 
+import com.example.ideas.exception.DataAlreadyExistsException;
+import com.example.ideas.exception.EntityNotFoundException;
 import com.example.ideas.security.config.JwtService;
 import com.example.ideas.security.token.*;
 import com.example.ideas.thread.utils.EmailSender;
 import com.example.ideas.user.model.User;
 import com.example.ideas.user.repository.UserRepository;
+import com.example.ideas.util_Entities.department.repository.DepartmentRepository;
+import com.example.ideas.util_Entities.role.repository.RoleRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -21,6 +25,8 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.*;
 
+import static com.example.ideas.helpers.ObjectProvider.*;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
@@ -31,16 +37,21 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final EmailSender emailSender;
+    private final RoleRepository roleRepository;
+    private final DepartmentRepository departmentRepository;
 
 
-    public AuthenticationResponse register(RegisterRequest request) {
-        User user = User.builder()
-                .name(request.getName())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .role(request.getRole())
-                .department(request.getDepartment())
-                .build();
+    public AuthenticationResponse register(RegisterRequest request, String token)
+            throws EntityNotFoundException, DataAlreadyExistsException {
+
+        String userRoleName = getUserRoleName(token);
+
+        Optional<User> optionalUser = repository.findUserByEmail(request.getEmail());
+        if (optionalUser.isPresent()) {
+            throw new DataAlreadyExistsException("email already exists in DB");
+        }
+
+        User user = mapRegisterRequestToUser(request, userRoleName);
 
         User savedUser = repository.save(user);
         String jwtToken = getJwtToken(user);
@@ -51,6 +62,21 @@ public class AuthenticationService {
                 .refreshToken(refreshToken)
                 .build();
     }
+
+    private User mapRegisterRequestToUser(RegisterRequest request, String userRoleName) throws EntityNotFoundException {
+        return User.builder()
+                .name(request.getName())
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .role((request.getRoleId() != null && Objects.equals(userRoleName, "Admin")) ?
+                        getObjectFromDB(request.getRoleId(), roleRepository) :
+                        roleRepository.findRoleByRoleName("Employee").orElseThrow(() ->
+                                new EntityNotFoundException("Role Employee does not exist in DB"))
+                )
+                .department(getObjectFromDB(request.getDepartmentId(), departmentRepository))
+                .build();
+    }
+
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(
@@ -130,7 +156,7 @@ public class AuthenticationService {
         );
 
         // todo napisać password validator user i użyć go tutaj
-        if(request.getNewPassword().isEmpty() || request.getNewPassword().equals(request.getPassword())) {
+        if (request.getNewPassword().isEmpty() || request.getNewPassword().equals(request.getPassword())) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
                     AuthenticationResponse.builder().build()
             );
@@ -160,7 +186,7 @@ public class AuthenticationService {
 
         Optional<User> userOptional = repository.findUserByEmail(userEmail);
 
-        if(userOptional.isEmpty()) {
+        if (userOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         }
         String token = UUID.randomUUID().toString();
@@ -187,14 +213,14 @@ public class AuthenticationService {
 
         Optional<PasswordResetToken> passwordResetTokenOptional = passwordResetTokenRepository.findPasswordResetTokenByToken(token);
 
-        if(passwordResetTokenOptional.isEmpty()) {
+        if (passwordResetTokenOptional.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
         }
 
         // todo napisać password validator user i użyć go tutaj
         PasswordResetToken passwordResetToken = passwordResetTokenOptional.get();
 
-        if(passwordResetToken.getExpiryDate().before(new Date(System.currentTimeMillis()))) {
+        if (passwordResetToken.getExpiryDate().before(new Date(System.currentTimeMillis()))) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Token expired");
         }
 
@@ -211,6 +237,15 @@ public class AuthenticationService {
                 Map.of("role", user.getRole().getRoleName(), "name", user.getName(), "user_id", user.getUserId()),
                 user
         );
+    }
+
+    public String getUserRoleName(String token) {
+        String userRoleName = null;
+        if (token != null && !token.isEmpty()) {
+            String userJWTToken = jwtService.getJWT(token);
+            userRoleName = jwtService.extractUserRole(userJWTToken);
+        }
+        return userRoleName;
     }
 
 }

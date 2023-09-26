@@ -1,7 +1,8 @@
-package com.example.ideas.thread.utils;
+package com.example.ideas.helpers;
 
 import com.example.ideas.exception.EntityNotFoundException;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Service;
 
 public class ObjectProvider {
 

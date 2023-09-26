@@ -6,6 +6,7 @@ import com.example.ideas.files.FileService;
 import com.example.ideas.files.FileUploadResponse;
 import com.example.ideas.security.config.JwtService;
 import com.example.ideas.thread.controller.ThreadCreateDTO;
+import com.example.ideas.thread.controller.ThreadResponseDTO;
 import com.example.ideas.thread.controller.ThreadUpdateDTO;
 import com.example.ideas.thread.model.Thread;
 import com.example.ideas.thread.repository.ThreadRepository;
@@ -17,11 +18,13 @@ import com.example.ideas.util_Entities.stage.model.Stage;
 import com.example.ideas.util_Entities.stage.repository.StageRepository;
 import com.example.ideas.util_Entities.status.model.Status;
 import com.example.ideas.util_Entities.status.repository.StatusRepository;
+import io.jsonwebtoken.Claims;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -31,7 +34,7 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.*;
 
-import static com.example.ideas.thread.utils.ObjectProvider.getObjectFromDB;
+import static com.example.ideas.helpers.ObjectProvider.getObjectFromDB;
 
 @Service
 @RequiredArgsConstructor
@@ -44,11 +47,20 @@ public class ThreadService {
     private final StatusRepository statusRepository;
     private final FileService fileService;
     private final JwtService jwtService;
+    private final ThreadDTOMapper threadDTOMapper;
 
-    public Map<String, Object> getThreads(Integer pageNo, Integer pageSize, String searchedTitle, Long filterStatusId) throws EntityNotFoundException {
+    public Map<String, Object> getThreads(
+            Integer pageNo,
+            Integer pageSize,
+            String searchedTitle,
+            Long filterStatusId,
+            String fieldToSort,
+            SortDirection sortDirection
+    ) throws EntityNotFoundException {
 
         Map<String, Object> response = new HashMap<>();
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Pageable pageable = getPageable(pageNo, pageSize, fieldToSort, sortDirection);
+
         Status filteredStatus = getObjectFromDB(filterStatusId, statusRepository);
 
         Page<Thread> filteredPagedResult;
@@ -63,20 +75,34 @@ public class ThreadService {
         response.put("totalResults", filteredPagedResult.getTotalElements());
 
         if (filteredPagedResult.hasContent()) {
-            response.put("threads", filteredPagedResult.getContent());
+            response.put("threads", filteredPagedResult.getContent().stream().map(threadDTOMapper));
         } else {
-            response.put("threads", new ArrayList<Thread>());
+            response.put("threads", new ArrayList<ThreadResponseDTO>());
         }
 
         return response;
     }
 
-    public Optional<Thread> getThreadById(Long id) {
-        return threadRepository.findById(id);
+    private Pageable getPageable(Integer pageNo, Integer pageSize, String fieldToSort, SortDirection sortDirection) {
+
+        if (fieldToSort != null && sortDirection != null) {
+            return PageRequest.of(
+                    pageNo,
+                    pageSize,
+                    sortDirection.equals(SortDirection.ASC) ?
+                            Sort.by(fieldToSort).ascending() :
+                            Sort.by(fieldToSort).descending());
+        } else {
+            return PageRequest.of(pageNo, pageSize);
+        }
+    }
+
+    public ThreadResponseDTO getThreadById(Long id) throws EntityNotFoundException {
+        return threadDTOMapper.apply(getObjectFromDB(id, threadRepository));
     }
 
     //Walidacja?
-    public Thread addThread(MultipartFile multipartFile, ThreadCreateDTO threadDTO) throws EntityNotFoundException, IOException {
+    public ThreadResponseDTO addThread(MultipartFile multipartFile, ThreadCreateDTO threadDTO) throws EntityNotFoundException, IOException {
 
         User user = userRepository.findUserByEmail(threadDTO.getUserEmail())
                 .orElseThrow(() -> new EntityNotFoundException("User not found with email: " + threadDTO.getUserEmail()));
@@ -100,21 +126,18 @@ public class ThreadService {
             thread.setPhoto(fileUploadResponse.getDownloadUri());
         }
 
-        return threadRepository.save(thread);
+        return threadDTOMapper.apply(threadRepository.save(thread));
     }
 
-    public ResponseEntity<Thread> deleteThread(Long id) {
-        Optional<Thread> threadOptional = threadRepository.findById(id);
-        if (threadOptional.isPresent()) {
-            threadRepository.deleteById(id);
-            return ResponseEntity.status(HttpStatus.OK).body(threadOptional.get());
-        }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    public ThreadResponseDTO deleteThread(Long id) throws EntityNotFoundException {
+        Thread thread = getObjectFromDB(id, threadRepository);
+        threadRepository.delete(thread);
+        return threadDTOMapper.apply(thread);
     }
 
     // Walidacja?
     @Transactional
-    public Thread updateThreadById(
+    public ThreadResponseDTO updateThreadById(
             String token,
             Long threadId, MultipartFile multipartFile, ThreadUpdateDTO threadUpdateDTO) throws IOException, EntityNotFoundException, NoAuthorizationException {
 
@@ -153,7 +176,7 @@ public class ThreadService {
             thread.setStatus(getObjectFromDB(statusId, statusRepository));
         }
 
-        return thread;
+        return threadDTOMapper.apply(thread);
     }
 
 //    @Transactional

@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.Optional;
 
-import static com.example.ideas.thread.utils.ObjectProvider.getObjectFromDB;
+import static com.example.ideas.helpers.ObjectProvider.getObjectFromDB;
 
 @Service
 @RequiredArgsConstructor
