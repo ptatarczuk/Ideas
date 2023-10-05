@@ -1,5 +1,8 @@
 ## About The Project
-Todo: stworzyc krotki opis projektu <- Alex
+The Ideas App is dedicated to companies who want to grow together with their people benefiting from their creativity and engagement.
+It offers an end to end process where every employee can share his/her own ideas for improvement which get then reviewed and fed back. It offers a great way to empower people as well as a great level of fun.
+Thanks to the application the whole process is well coordinated.
+The target companies that would benefit most might be of different background such as Manufacturing, IT, Logistics, Finance, etc... , the recommended company size however, would be ca. 100+ employees.
 
 ## Application Presentation:
 Todo: wrzucic zdjecia wazniejszych stron lub nagrac krotki film i zrobic z niego gif
@@ -49,23 +52,33 @@ This is an example of how to list things you need to use the software and how to
 
 ### Installation
 
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
+Running the Application
+To run this application on your local machine, follow these steps:
 
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
-   ```sh
-   git clone https://github.com/your_username_/Project-Name.git
-   ```
-3. Install NPM packages
-   ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
+Install Git:
+If you haven't already, make sure to install Git, the version control system, on your computer.
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+Clone the Repository:
+Copy the project's repository URL and clone it to your local machine using the following command in your terminal:
+
+git clone <repository-url>
+Replace <repository-url> with the actual URL of the project (you can use either HTTPS or SSH).
+
+Install Dependencies:
+Navigate to the project directory. On the client side, install the required dependencies using the following command:
+
+npm install
+On the server side, install the necessary dependencies as well.
+
+Configure Backend:
+Set up the backend of the application, including the application logic and the database (e.g., PostgreSQL). Make sure to configure the backend files and database connections as needed.
+
+Run the Application:
+After completing the above steps, you can now run the application. Start the server and client components to see the application in action.
+
+Now, you should have the application up and running on your local machine. If you encounter any issues, refer to the project's documentation or contact the project maintainers for further assistance.
+
+
 
 ## Roadmap:
 Todo: Dodac juz jakies skonczone taski zeby to nie wygladalo ze zostalo zostawione na pastwe losu !!!!!
@@ -78,13 +91,15 @@ Todo: Dodac juz jakies skonczone taski zeby to nie wygladalo ze zostalo zostawio
 
 
 ## Contact / Authors <- wybrac jeden 
-Jowita Druciak <a  href="https://github.com/ptatarczuk"  title="github"><img  src="https://github.com/get-icon/geticon/raw/master/icons/linkedin.svg"  alt="github"  width="40px"  height="40px"></a> <a  href="https://github.com/ptatarczuk"  title="github"><img  src="https://github.com/get-icon/geticon/raw/master/icons/github.svg"  alt="github"  width="40px"  height="40px"></a>
+Jowita Druciak <a  href="https://github.com/ptatarczuk"  title="github"><img  src="https://github.com/get-icon/geticon/raw/master/icons/linkedin.svg"  alt="github"  width="50px"  height="50px"></a> <a  href="https://github.com/ptatarczuk"  title="github"><img  src="https://github.com/get-icon/geticon/raw/master/icons/github-icon.svg"  alt="github"  width="50px"  height="50px"></a>
 
-Tomek Gałązka <a  href="https://github.com/ptatarczuk"  title="github"><img  src="https://github.com/get-icon/geticon/raw/master/icons/github.svg"  alt="github"  width="21px"  height="21px"></a><a  href="https://github.com/ptatarczuk"  title="github"><img  src="https://github.com/get-icon/geticon/raw/master/icons/linkedin.svg"  alt="github"  width="21px"  height="21px"></a>
+Tomek Gałązka <a  href="https://github.com/ptatarczuk"  title="github"><img  src="https://github.com/get-icon/geticon/raw/master/icons/github.svg"  alt="github"  width="50px"  height="50px"></a><a  href="https://github.com/ptatarczuk"  title="github"><img  src="https://github.com/get-icon/geticon/raw/master/icons/linkedin.svg"  alt="github"  width="50px"  height="50px"></a>
 
-Synoradzki Aleksander <a  href="https://github.com/ptatarczuk"  title="github"><img  src="https://github.com/get-icon/geticon/raw/master/icons/github.svg"  alt="github"  width="21px"  height="21px"></a> <a  href="https://github.com/ptatarczuk"  title="github"><img  src="https://github.com/get-icon/geticon/raw/master/icons/linkedin.svg"  alt="github"  width="21px"  height="21px"></a>
+Synoradzki Aleksander <a  href="https://github.com/ptatarczuk"  title="github"><img  src="https://github.com/get-icon/geticon/raw/master/icons/github.svg"  alt="github"  width="50px"  height="50px"></a> <a  href="https://github.com/ptatarczuk"  title="github"><img  src="https://github.com/get-icon/geticon/raw/master/icons/linkedin.svg"  alt="github"  width="50px"  height="50px"></a>
 
-Piotr Tatarczuk <a  href="https://github.com/ptatarczuk"  title="github"><img  src="https://github.com/get-icon/geticon/raw/master/icons/github.svg"  alt="github"  width="21px"  height="21px"></a> <a  href="https://github.com/ptatarczuk"  title="github"><img  src="https://github.com/get-icon/geticon/raw/master/icons/linkedin.svg"  alt="github"  width="21px"  height="21px"></a>
+Piotr Tatarczuk <a  href="https://github.com/ptatarczuk"  title="github"><img  src="https://github.com/get-icon/geticon/raw/master/icons/github.svg"  alt="github"  width="50px"  height="50px"></a> <a  href="https://github.com/ptatarczuk"  title="github"><img  src="https://github.com/get-icon/geticon/raw/master/icons/linkedin.svg"  alt="github"  width="50px"  height="50px"></a>
 
 Todo: Zdjecia ? Linki do githubow i LinkIn (i ewentualnie onthejob jezeli jest publiczny) 
 PYtanie do mentora : Czy linkedIn w tym projekcie ?
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
