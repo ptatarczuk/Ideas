@@ -1,20 +1,58 @@
-# Ideas App 
+## About The Project
+Todo: stworzyc krotki opis projektu <- Alex
 
-Rationale : 
+## Built With
+Todo <- wrzucic technologie (logo albo opisy) <- Piotr
+Frontend: TS/JS/React , Mui, VSC Axios(dodac ikone)
+Backend: Java/String, Postgres, Intellij
+Other tech: Figma, Trello, discord, git, github , docker
 
-How to run project: 
+## Getting Started: 
+Todo : <- Tomek 
+This is an example of how you may give instructions on setting up your project locally.
+To get a local copy up and running follow these simple example steps.
 
-Future plans for the project: 
+### Prerequisites
 
-TODO : 
+This is an example of how to list things you need to use the software and how to install them.
+* npm
+  ```sh
+  npm install npm@latest -g
+  ```
 
-Authors: Tutaj linki do githuba albo linkedIn ?
+### Installation
 
-# Technology
-podzial na frontend/backend ?
+_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
 
-Frontend:
+1. Get a free API Key at [https://example.com](https://example.com)
+2. Clone the repo
+   ```sh
+   git clone https://github.com/your_username_/Project-Name.git
+   ```
+3. Install NPM packages
+   ```sh
+   npm install
+   ```
+4. Enter your API in `config.js`
+   ```js
+   const API_KEY = 'ENTER YOUR API';
+   ```
 
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Roadmap:
+Todo: Wprowadzic faktyczne plany na przyszlość <- potem kogos do teog wyznaczyc 
+- [x] Add Changelog
+- [x] Add back to top links
+- [ ] Add Additional Templates w/ Examples
+- [ ] Add "components" document to easily copy & paste sections of the readme
+
+
+## Contact / Authors <- wybrac jeden 
+Todo: Zdjecia ? Linki do githubow i LinkIn (i ewentualnie onthejob jezeli jest publiczny) 
+
+
+Do przeniesienia na gore do "Build with"
 <a href="https://code.visualstudio.com/" title="Visual Studio Code"><img src="https://github.com/get-icon/geticon/raw/master/icons/visual-studio-code.svg" alt="Visual Studio Code" width="21px" height="21px"></a>
 <a href="https://reactjs.org/" title="React"><img src="https://github.com/get-icon/geticon/raw/master/icons/react.svg" alt="React" width="21px" height="21px"></a>
 <a href="https://www.typescriptlang.org/" title="Typescript"><img src="https://github.com/get-icon/geticon/raw/master/icons/typescript-icon.svg" alt="Typescript" width="21px" height="21px"></a>
