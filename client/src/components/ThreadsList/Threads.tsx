@@ -37,7 +37,7 @@ export const Threads: React.FC = () => {
   const [selectedStatus, setSelectedStatus] = useState<number | null>(1);
   const [page, setPage] = React.useState(1);
   const [totalPages, setTotalPages] = useState<number>(2);
-  const [rowsNumber, setRowsNumber] = useState<number>(10);
+  const [rowsNumber, setRowsNumber] = useState<number>(8);
   // const [displayedThreads, setDisplayedThreads] = useState<Thread[]>([]);
   const navigate = useNavigate();
 
