@@ -82,18 +82,18 @@ Now, you should have the application up and running on your local machine. If yo
 ## Authors
 Jowita Druciak:
 
-<a  href="https://github.com/ptatarczuk"  title="github"><img  src="https://github.com/get-icon/geticon/raw/master/icons/github-icon.svg"  alt="github"  width="50px"  height="50px"></a><a  href="https://github.com/ptatarczuk"  title="github"><img  src="https://github.com/get-icon/geticon/raw/master/icons/linkedin-icon.svg"  alt="github"  width="50px"  height="50px"></a> 
+<a  href="https://github.com/ptatarczuk"  title="github"><img  src="https://github.com/get-icon/geticon/raw/master/icons/github-octocat.svg"  alt="github"  width="50px"  height="50px"></a><a  href="https://github.com/ptatarczuk"  title="github"><img  src="https://github.com/get-icon/geticon/raw/master/icons/linkedin-icon.svg"  alt="github"  width="50px"  height="50px"></a> 
 
 Tomek Gałązka:
 
-<a  href="https://github.com/ptatarczuk"  title="github"><img  src="https://github.com/get-icon/geticon/raw/master/icons/github-icon.svg"  alt="github"  width="50px"  height="50px"></a><a  href="https://github.com/ptatarczuk"  title="github"><img  src="https://github.com/get-icon/geticon/raw/master/icons/linkedin-icon.svg"  alt="github"  width="50px"  height="50px"></a> 
+<a  href="https://github.com/ptatarczuk"  title="github"><img  src="https://github.com/get-icon/geticon/raw/master/icons/github-octocat.svg"  alt="github"  width="50px"  height="50px"></a><a  href="https://github.com/ptatarczuk"  title="github"><img  src="https://github.com/get-icon/geticon/raw/master/icons/linkedin-icon.svg"  alt="github"  width="50px"  height="50px"></a> 
 
-Synoradzki Aleksander:
+Aleksander Synoradzki:
 
-<a  href="https://github.com/ptatarczuk"  title="github"><img  src="https://github.com/get-icon/geticon/raw/master/icons/github-icon.svg"  alt="github"  width="50px"  height="50px"></a><a  href="https://github.com/ptatarczuk"  title="github"><img  src="https://github.com/get-icon/geticon/raw/master/icons/linkedin-icon.svg"  alt="github"  width="50px"  height="50px"></a> 
+<a  href="https://github.com/ptatarczuk"  title="github"><img  src="https://github.com/get-icon/geticon/raw/master/icons/github-octocat.svg"  alt="github"  width="50px"  height="50px"></a><a  href="https://github.com/ptatarczuk"  title="github"><img  src="https://github.com/get-icon/geticon/raw/master/icons/linkedin-icon.svg"  alt="github"  width="50px"  height="50px"></a> 
 
 Piotr Tatarczuk:
 
-<a  href="https://github.com/ptatarczuk"  title="github"><img  src="https://github.com/get-icon/geticon/raw/master/icons/github-icon.svg"  alt="github"  width="50px"  height="50px"></a><a  href="https://github.com/ptatarczuk"  title="github"><img  src="https://github.com/get-icon/geticon/raw/master/icons/linkedin-icon.svg"  alt="github"  width="50px"  height="50px"></a> 
+<a  href="https://github.com/ptatarczuk"  title="github"><img  src="https://github.com/get-icon/geticon/raw/master/icons/github-octocat.svg"  alt="github"  width="50px"  height="50px"></a><a  href="https://github.com/ptatarczuk"  title="github"><img  src="https://github.com/get-icon/geticon/raw/master/icons/linkedin-icon.svg"  alt="github"  width="50px"  height="50px"></a> 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
