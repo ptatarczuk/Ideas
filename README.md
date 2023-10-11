@@ -1,5 +1,5 @@
 ## About The Project
-TODO: Napisac ze to jest projekt szkoleniowy , jak dlugo go robilismy i czego sie nauczylismy  <Alex>
+Ideas App is the final project of the Fullstack Developer course. The application was developed in 5 sprints by a team of four developers.  
 The Ideas App is dedicated to companies who want to grow together with their people benefiting from their creativity and engagement.
 It offers an end to end process where every employee can share his/her own ideas for improvement which get then reviewed and fed back. It offers a great way to empower people as well as a great level of fun.
 Thanks to the application the whole process is well coordinated.
