@@ -6,7 +6,9 @@ Thanks to the application the whole process is well coordinated.
 The target companies that would benefit most might be of different background such as Manufacturing, IT, Logistics, Finance, etc... , the recommended company size however, would be ca. 100+ employees.
 
 ## Application Presentation:
-Todo: wrzucic zdjecia wazniejszych stron lub nagrac krotki film i zrobic z niego gif 
+
+<img  src="https://github.com/ptatarczuk/Ideas/blob/main/client/src/assets/app.gif"  alt="github"  width="600px"  height="400px">
+
 
 ## Built With
 Frontend: 
