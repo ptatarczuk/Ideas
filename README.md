@@ -38,7 +38,7 @@ Other Technologies:
 <a  href="https://trello.com/"  title="trello"><img  src="https://github.com/get-icon/geticon/raw/master/icons/trello.svg"  alt="trello"  width="50px"  height="50px"></a>
 
 ## Getting Started: 
-TODO: Wystylowac i potem dopisac odpalanie przez DOCKERa <Tomek>
+TODO: Wystylowac i potem dopisac odpalanie przez DOCKERa -Tomek
 ### Prerequisites
 
 Running the Application
@@ -69,7 +69,7 @@ After completing the above steps, you can now run the application. Start the ser
 
 Now, you should have the application up and running on your local machine. If you encounter any issues, refer to the project's documentation or contact the project maintainers for further assistance.
 
-## Roadmap: <Jowita>
+## Roadmap: Dokonczyc roadmap - Jowita
 - [x] Add Changelog
 - [ ] Add Unit / Integration Tests
 - [ ] Add Docker
@@ -79,6 +79,7 @@ Now, you should have the application up and running on your local machine. If yo
 
 ## Authors
 TODO: Popodpinac prawidlowe linki dla Jowity, Tomka, Alexa !
+
 Jowita Druciak:
 
 <a  href="https://github.com/ptatarczuk"  title="github"><img  src="https://github.com/get-icon/geticon/raw/master/icons/github-octocat.svg"  alt="github"  width="50px"  height="50px"></a><a  href="https://github.com/ptatarczuk"  title="github"><img  src="https://github.com/get-icon/geticon/raw/master/icons/linkedin-icon.svg"  alt="github"  width="50px"  height="50px"></a> 
