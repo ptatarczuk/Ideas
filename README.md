@@ -14,10 +14,11 @@ Frontend:
 <a  href="https://www.typescriptlang.org/"  title="Typescript"><img  src="https://github.com/get-icon/geticon/raw/master/icons/typescript-icon.svg"  alt="Typescript"  width="50px"  height="50px"></a>
 <a  href="https://developer.mozilla.org/en-US/docs/Web/JavaScript"  title="JavaScript"><img  src="https://github.com/get-icon/geticon/raw/master/icons/javascript.svg"  alt="JavaScript"  width="50px"  height="50px"></a>
 <a  href="https://reactjs.org/"  title="React"><img  src="https://github.com/get-icon/geticon/raw/master/icons/react.svg"  alt="React"  width="50px"  height="50px"></a>
+<a  href="https://en.wikipedia.org/wiki/HTML5"  title="HTML"><img  src="https://github.com/get-icon/geticon/raw/master/icons/html-5.svg"  alt="HTML" height="50px"></a>
+<a  href="https://en.wikipedia.org/wiki/CSS"  title="CSS"><img  src="https://github.com/get-icon/geticon/raw/master/icons/css-3.svg"  alt="CSS" height="50px"></a>
 <a  href="https://material-ui.com/"  title="Material UI"><img  src="https://github.com/get-icon/geticon/raw/master/icons/material-ui.svg"  alt="Material UI"  width="50px"  height="50px"></a>
 <a  href="https://code.visualstudio.com/"  title="Visual Studio Code"><img  src="https://github.com/get-icon/geticon/raw/master/icons/visual-studio-code.svg"  alt="Visual Studio Code"  width="50px"  height="50px"></a>
 <a  href="https://www.npmjs.com/"  title="npm"><img  src="https://github.com/get-icon/geticon/raw/master/icons/npm.svg"  alt="npm"  width="50px"  height="50px"></a>
-TODO: znalezc ikony HTML i CSS <piotr>
 
 Backend:
 
@@ -35,8 +36,6 @@ Other Technologies:
 <a  href="https://swagger.io/"  title="swagger"><img  src="https://github.com/get-icon/geticon/raw/master/icons/swagger.svg"  alt="swagger"  width="50px"  height="50px"></a>
 <a  href="https://www.docker.com/"  title="docker"><img  src="https://github.com/get-icon/geticon/raw/master/icons/docker-icon.svg"  alt="docker"  width="50px"  height="50px"></a>
 <a  href="https://trello.com/"  title="trello"><img  src="https://github.com/get-icon/geticon/raw/master/icons/trello.svg"  alt="trello"  width="50px"  height="50px"></a>
-
-Pytania do mentora:
 
 ## Getting Started: 
 TODO: Wystylowac i potem dopisac odpalanie przez DOCKERa <Tomek>
@@ -78,8 +77,8 @@ Now, you should have the application up and running on your local machine. If yo
 - [ ] Uniform frontend style
 - [ ] Add Responsiveness 
 
-
 ## Authors
+TODO: Popodpinac prawidlowe linki dla Jowity, Tomka, Alexa !
 Jowita Druciak:
 
 <a  href="https://github.com/ptatarczuk"  title="github"><img  src="https://github.com/get-icon/geticon/raw/master/icons/github-octocat.svg"  alt="github"  width="50px"  height="50px"></a><a  href="https://github.com/ptatarczuk"  title="github"><img  src="https://github.com/get-icon/geticon/raw/master/icons/linkedin-icon.svg"  alt="github"  width="50px"  height="50px"></a> 
