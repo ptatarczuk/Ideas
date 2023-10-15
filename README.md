@@ -1,5 +1,5 @@
 ## About The Project
-Ideas App is the final project of the Fullstack Developer course. The application was developed in 5 sprints by a team of four developers.  
+Ideas App is the final project of the Fullstack Developer Bootcamp. The application was developed in 5 sprints by a team of four developers.  
 The Ideas App is dedicated to companies who want to grow together with their people benefiting from their creativity and engagement.
 It offers an end to end process where every employee can share his/her own ideas for improvement which get then reviewed and fed back. It offers a great way to empower people as well as a great level of fun.
 Thanks to the application the whole process is well coordinated.
@@ -8,7 +8,6 @@ The target companies that would benefit most might be of different background su
 ## Application Presentation:
 
 <img  src="https://github.com/ptatarczuk/Ideas/blob/main/client/src/assets/app.gif"  alt="github"  width="600px"  height="400px">
-
 
 ## Built With
 Frontend: 
@@ -40,7 +39,7 @@ Other Technologies:
 <a  href="https://trello.com/"  title="trello"><img  src="https://github.com/get-icon/geticon/raw/master/icons/trello.svg"  alt="trello"  width="50px"  height="50px"></a>
 
 ## Getting Started: 
-TODO: Wystylowac i potem dopisac odpalanie przez DOCKERa -Tomek
+
 ### Prerequisites
 
 Running the Application
@@ -71,16 +70,15 @@ After completing the above steps, you can now run the application. Start the ser
 
 Now, you should have the application up and running on your local machine. If you encounter any issues, refer to the project's documentation or contact the project maintainers for further assistance.
 
-## Roadmap: Dokonczyc roadmap - Jowita
+## Roadmap:
 - [x] Add Changelog
 - [ ] Add Unit / Integration Tests
 - [ ] Add Docker
-- [ ] Add Profile Component
+- [ ] Add Profile
 - [ ] Uniform frontend style
 - [ ] Add Responsiveness 
 
 ## Authors
-TODO: Popodpinac prawidlowe linki dla Jowity, Tomka, Alexa !
 
 Jowita Druciak:
 
