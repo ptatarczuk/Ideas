@@ -86,7 +86,7 @@ Jowita Druciak:
 
 Tomek Gałązka:
 
-<a  href="https://github.com/TomekGalazka"  title="github"><img  src="https://github.com/ptatarczuk/Ideas/blob/main/server/images/github.svg"  alt="github"  width="50px"  height="50px"></a><a  href="https://github.com/TomekGalazka"  title="github"><img  src="https://github.com/get-icon/geticon/raw/master/icons/linkedin-icon.svg"  alt="github"  width="50px"  height="50px"></a> 
+<a  href="https://github.com/TomekGalazka"  title="github"><img  src="https://github.com/ptatarczuk/Ideas/blob/main/server/images/github.svg"  alt="github"  width="50px"  height="50px"></a><a  href="https://www.linkedin.com/in/tomasz-galazka-junior-fullstack-developer/"  title="linekdin"><img  src="https://github.com/get-icon/geticon/raw/master/icons/linkedin-icon.svg"  alt="linkedin"  width="50px"  height="50px"></a> 
 
 Aleksander Synoradzki:
 
