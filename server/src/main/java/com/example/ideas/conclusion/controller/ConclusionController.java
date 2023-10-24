@@ -1,6 +1,7 @@
 package com.example.ideas.conclusion.controller;
 
 import com.example.ideas.admission.controller.AdmissionCreateDTO;
+import com.example.ideas.admission.controller.AdmissionResponseDTO;
 import com.example.ideas.admission.controller.AdmissionUpdateDTO;
 import com.example.ideas.admission.model.Admission;
 import com.example.ideas.conclusion.model.Conclusion;
@@ -23,38 +24,27 @@ public class ConclusionController {
         this.conclusionService = conclusionService;
     }
 
+
     @GetMapping("/{conclusion_id}")
-    public ResponseEntity<Conclusion> getConclusionById(@PathVariable("conclusion_id") Long conclusionId) {
-        Conclusion conclusion = conclusionService.getConclusionById(conclusionId).orElse(null);
-        return conclusion != null ? ResponseEntity.ok(conclusion) : ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    public ResponseEntity<ConclusionResponseDTO> getConclusionById(@PathVariable("conclusion_id") Long conclusionId) throws EntityNotFoundException {
+        return ResponseEntity.ok(conclusionService.getConclusionById(conclusionId));
     }
 
-//    @PostMapping("/add")
-//    public ResponseEntity<String> addConclusion(@Valid @RequestBody Conclusion conclusion) {
-//        return conclusionService.addConclusion(conclusion);
-//    }
-
     @PostMapping("/add")
-    public ResponseEntity<Conclusion> addConclusion(@Valid @RequestBody ConclusionCreateDTO conclusionCreateDTO)
+    public ResponseEntity<ConclusionResponseDTO> addConclusion(@Valid @RequestBody ConclusionCreateDTO conclusionCreateDTO)
             throws DataAlreadyExistsException, EntityNotFoundException {
 
         return new ResponseEntity<>(conclusionService.addConclusion(conclusionCreateDTO), HttpStatus.CREATED);
     }
 
     @PatchMapping("/{conclusion_id}")
-    public ResponseEntity<Conclusion> updateConclusionById(
+    public ResponseEntity<ConclusionResponseDTO> updateConclusionById(
             @PathVariable("conclusion_id") Long conclusionId,
             @RequestBody ConclusionUpdateDTO conclusionUpdateDTO
     ) throws EntityNotFoundException {
         return ResponseEntity.ok(conclusionService.updateConclusionById(conclusionId, conclusionUpdateDTO));
     }
-//    @PutMapping("/{conclusion_id}")
-//    public ResponseEntity<String> updateConclusionById(
-//            @PathVariable("conclusion_id") Long conclusionId,
-//            @RequestBody Conclusion updatedConclusion
-//    ) {
-//        return conclusionService.updateConclusionById(conclusionId, updatedConclusion);
-//    }
+
 
     @DeleteMapping("/{conclusion_id}")
     public ResponseEntity<String> deleteConclusionById(@PathVariable("conclusion_id") Long conclusionId) {

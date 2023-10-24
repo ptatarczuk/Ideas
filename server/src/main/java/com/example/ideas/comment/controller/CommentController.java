@@ -19,63 +19,56 @@ import java.util.Optional;
 @RequestMapping("/comments")
 @RestController
 public class CommentController {
-    private CommentService commentService;
-    private UserService userService;
-    private ThreadService threadService;
+    private final CommentService commentService;
 
-    @Autowired
     public CommentController(CommentService commentService, UserService userService, ThreadService threadService) {
         this.commentService = commentService;
-        this.userService = userService;
-        this.threadService = threadService;
     }
 
 
     @GetMapping("/")
-    public List<Comment> getComments() {
+    public List<CommentResponseDTO> getComments() {
         return commentService.getComments();
 
     }
 
     @GetMapping("/{comment_id}")
-    public ResponseEntity<Comment> getCommentById(@PathVariable("comment_id") Long commentId) {
-        Comment comment = commentService.findCommentByCommentId(commentId).orElse(null);
-        return comment != null ? ResponseEntity.ok(comment) : ResponseEntity.notFound().build();
+    public ResponseEntity<CommentResponseDTO> getCommentById(@PathVariable("comment_id") Long commentId) throws EntityNotFoundException {
+       return ResponseEntity.ok(commentService.findCommentByCommentId(commentId));
 
     }
 
-//    @GetMapping("/user/{user_id}")
-//    public ResponseEntity<Comment> getCommentByUserId(@PathVariable("user_id") Long userId) {
-//        Comment comment = commentService.findCommentByUserId(userId).orElse(null);
-//        return comment != null ? ResponseEntity.ok(comment) : ResponseEntity.notFound().build();
-//    }
+    @GetMapping("/user/{user_id}")
+    public ResponseEntity<List<CommentResponseDTO>> getCommentsByUserId(@PathVariable("user_id") Long userId) {
+        return ResponseEntity.ok(commentService.findCommentsByUserId(userId));
+    }
 
     @GetMapping("/thread/{thread_id}")
-    public List<Comment> getCommentByThreadId(@PathVariable("thread_id") Long threadId) {
-        return commentService.getCommentsByThreadId(threadId);
+    public ResponseEntity<List<CommentResponseDTO>> getCommentsByThreadId(@PathVariable("thread_id") Long threadId) {
+        return ResponseEntity.ok(commentService.getCommentsByThreadId(threadId));
     }
 
     @PostMapping("/addComment")
-    public ResponseEntity<Comment> addComment(@Valid @RequestBody CommentCreateDTO commentCreateDTO) throws EntityNotFoundException {
+    public ResponseEntity<CommentResponseDTO> addComment(@Valid @RequestBody CommentCreateDTO commentCreateDTO) throws EntityNotFoundException {
         return new ResponseEntity<>(commentService.addComment(commentCreateDTO), HttpStatus.CREATED);
     }
 
-    @PatchMapping("/update_comment/{comment_id}")
-    public ResponseEntity<String> updateCommentById(
-            @PathVariable("comment_id") Long commentId,
-
-            @RequestBody Comment updatedComment
-    ) {
-        return commentService.updateCommentById(commentId, updatedComment);
-    }
+//    @PatchMapping("/update_comment/{comment_id}")
+//    public ResponseEntity<String> updateCommentById(
+//            @PathVariable("comment_id") Long commentId,
+//
+//            @RequestBody Comment updatedComment
+//    ) {
+//        return commentService.updateCommentById(commentId, updatedComment);
+//    }
 
     @DeleteMapping("/{comment_id}")
     public ResponseEntity<Boolean> deleteCommentById(
-            @PathVariable("comment_id") Long commentId
-//            @RequestHeader("Authorization") String token
+            @PathVariable("comment_id") Long commentId,
+            @RequestHeader("Authorization") String token
     ) throws NoAuthorizationException, EntityNotFoundException {
         return new ResponseEntity<>(commentService.deleteComment(
-//                token,
+                token,
                 commentId), HttpStatus.OK);
     }
 

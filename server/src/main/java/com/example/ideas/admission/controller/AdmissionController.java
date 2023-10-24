@@ -19,26 +19,24 @@ public class AdmissionController {
 
     private final AdmissionService admissionService;
 
-    @Autowired
     public AdmissionController(AdmissionService admissionService) {
         this.admissionService = admissionService;
     }
 
     @GetMapping("/{admission_id}")
-    public ResponseEntity<Admission> getAdmissionById(@PathVariable("admission_id") Long admissionId) {
-        Admission admission = admissionService.getAdmissionById(admissionId).orElse(null);
-        return admission != null ? ResponseEntity.ok(admission) : ResponseEntity.notFound().build();
+    public ResponseEntity<AdmissionResponseDTO> getAdmissionById(@PathVariable("admission_id") Long admissionId) throws EntityNotFoundException {
+        return ResponseEntity.ok(admissionService.getAdmissionById(admissionId));
     }
 
     @PostMapping("/add")
-    public ResponseEntity<Admission> addAdmission(@Valid @RequestBody AdmissionCreateDTO admissionCreateDTO)
+    public ResponseEntity<AdmissionResponseDTO> addAdmission(@Valid @RequestBody AdmissionCreateDTO admissionCreateDTO)
             throws DataAlreadyExistsException, EntityNotFoundException {
 
         return new ResponseEntity<>(admissionService.addAdmission(admissionCreateDTO), HttpStatus.CREATED);
     }
 
     @PatchMapping("/{admission_id}")
-    public ResponseEntity<Admission> updateAdmissionById(
+    public ResponseEntity<AdmissionResponseDTO> updateAdmissionById(
             @PathVariable("admission_id") Long admissionId,
             @RequestBody AdmissionUpdateDTO admissionUpdateDTO
     ) throws EntityNotFoundException {

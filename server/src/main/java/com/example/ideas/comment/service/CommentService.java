@@ -1,10 +1,12 @@
 package com.example.ideas.comment.service;
 
 import com.example.ideas.comment.controller.CommentCreateDTO;
+import com.example.ideas.comment.controller.CommentResponseDTO;
 import com.example.ideas.comment.model.Comment;
 import com.example.ideas.comment.repository.CommentRepository;
 import com.example.ideas.exception.EntityNotFoundException;
 import com.example.ideas.exception.NoAuthorizationException;
+import com.example.ideas.helpers.ObjectProvider;
 import com.example.ideas.security.config.JwtService;
 import com.example.ideas.thread.model.Thread;
 import com.example.ideas.thread.repository.ThreadRepository;
@@ -30,24 +32,26 @@ public class CommentService {
     private final ThreadRepository threadRepository;
     private final UserRepository userRepository;
     private final JwtService jwtService;
+    private final CommentDTOMapper commentDTOMapper;
 
-    public List<Comment> getComments() {
-        return commentRepository.findAll();
+    public List<CommentResponseDTO> getComments() {
+        return commentRepository.findAll().stream().map(commentDTOMapper).toList();
     }
 
-    public Optional<Comment> findCommentByCommentId(Long commentId) {
-        return commentRepository.findCommentByCommentId(commentId);
+    public CommentResponseDTO findCommentByCommentId(Long commentId) throws EntityNotFoundException {
+        Comment comment = ObjectProvider.getObjectFromDB(commentId, commentRepository);
+        return commentDTOMapper.apply(comment);
     }
 
-    public Optional<Comment> findCommentByUserId(Long userId) {
-        return commentRepository.findCommentByUser_UserId(userId);
+    public List<CommentResponseDTO> findCommentsByUserId(Long userId) {
+        return commentRepository.findCommentsByUser_UserId(userId).stream().map(commentDTOMapper).toList();
     }
 
-    public List<Comment> getCommentsByThreadId(Long threadId) {
-        return commentRepository.findCommentsByThreadId(threadId);
+    public List<CommentResponseDTO> getCommentsByThreadId(Long threadId) {
+        return commentRepository.findCommentsByThreadId(threadId).stream().map(commentDTOMapper).toList();
     }
 
-    public Comment addComment(CommentCreateDTO commentDTO) throws EntityNotFoundException {
+    public CommentResponseDTO addComment(CommentCreateDTO commentDTO) throws EntityNotFoundException {
         Thread thread = getObjectFromDB(commentDTO.getThreadId(), threadRepository);
         User user = getObjectFromDB(commentDTO.getUserId(), userRepository);
 
@@ -58,21 +62,21 @@ public class CommentService {
                 .user(user)
                 .build();
 
-        return commentRepository.save(comment);
+        return commentDTOMapper.apply(commentRepository.save(comment));
     }
 
     public Boolean deleteComment(
-//            String token,
+            String token,
             Long id) throws EntityNotFoundException, NoAuthorizationException {
 
         Comment comment = getObjectFromDB(id, commentRepository);
 
-//        String userEmailFromToken = jwtService.extractUsername(jwtService.getJWT(token));
-//        String userRoleFormToken = jwtService.extractUserRole(jwtService.getJWT(token));
-//
-//        if(!(comment.getUser().getEmail().equals(userEmailFromToken) || userRoleFormToken.equals("Admin"))) {
-//            throw new NoAuthorizationException("only thread author or user with role \"Admin\" can modify thread");
-//        }
+        String userEmailFromToken = jwtService.extractUsername(jwtService.getJWT(token));
+        String userRoleFormToken = jwtService.extractUserRole(jwtService.getJWT(token));
+
+        if(!(comment.getUser().getEmail().equals(userEmailFromToken) || userRoleFormToken.equals("Admin"))) {
+            throw new NoAuthorizationException("only thread author or user with role \"Admin\" can modify thread");
+        }
 
         commentRepository.delete(comment);
         return true;
@@ -84,7 +88,7 @@ public class CommentService {
         if (comment == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Provided comment with id: " + commentId + " does not exist");
         }
-        if (updatedComment.getCommentText() != null && updatedComment.getCommentText().length() > 0 && !comment.getCommentText().equals(updatedComment.getCommentText())) {
+        if (updatedComment.getCommentText() != null && !updatedComment.getCommentText().isEmpty() && !comment.getCommentText().equals(updatedComment.getCommentText())) {
             comment.setCommentText(updatedComment.getCommentText());
             comment.setCommentDate(LocalDate.now());
             return ResponseEntity.ok("Comment updated successfully");

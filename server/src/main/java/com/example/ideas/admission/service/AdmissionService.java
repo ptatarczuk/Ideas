@@ -1,11 +1,13 @@
 package com.example.ideas.admission.service;
 
 import com.example.ideas.admission.controller.AdmissionCreateDTO;
+import com.example.ideas.admission.controller.AdmissionResponseDTO;
 import com.example.ideas.admission.controller.AdmissionUpdateDTO;
 import com.example.ideas.admission.model.Admission;
 import com.example.ideas.admission.repository.AdmissionRepository;
 import com.example.ideas.exception.EntityNotFoundException;
 import com.example.ideas.exception.DataAlreadyExistsException;
+import com.example.ideas.helpers.ObjectProvider;
 import com.example.ideas.thread.model.Thread;
 import com.example.ideas.thread.repository.ThreadRepository;
 import com.example.ideas.user.model.User;
@@ -34,12 +36,14 @@ public class AdmissionService {
     private final ThreadRepository threadRepository;
     private final StageRepository stageRepository;
     private final StatusRepository statusRepository;
+    private final AdmissionDTOMapper admissionDTOMapper;
 
-    public Optional<Admission> getAdmissionById(Long admissionId) {
-        return admissionRepository.findById(admissionId);
+    public AdmissionResponseDTO getAdmissionById(Long admissionId) throws EntityNotFoundException {
+        Admission admission = ObjectProvider.getObjectFromDB(admissionId, admissionRepository);
+        return admissionDTOMapper.apply(admission);
     }
 
-    public Admission addAdmission(AdmissionCreateDTO admissionDTO) throws EntityNotFoundException, DataAlreadyExistsException {
+    public AdmissionResponseDTO addAdmission(AdmissionCreateDTO admissionDTO) throws EntityNotFoundException, DataAlreadyExistsException {
 
         Thread thread = getObjectFromDB(admissionDTO.getThreadId(), threadRepository);
         if(thread.getAdmission() != null) {
@@ -61,11 +65,11 @@ public class AdmissionService {
         thread.setStatus(status);
         threadRepository.save(thread);
 
-        return admissionRepository.save(admission);
+        return admissionDTOMapper.apply(admissionRepository.save(admission));
     }
 
     @Transactional
-    public Admission updateAdmissionById(Long admissionId, AdmissionUpdateDTO admissionDTO)
+    public AdmissionResponseDTO updateAdmissionById(Long admissionId, AdmissionUpdateDTO admissionDTO)
             throws EntityNotFoundException {
 
         Admission admission = getObjectFromDB(admissionId, admissionRepository);
@@ -88,7 +92,7 @@ public class AdmissionService {
             );
             thread.setStatus(status);
         }
-        return admission;
+        return admissionDTOMapper.apply(admission);
     }
 
     public ResponseEntity<String> deleteAdmissionById(Long admissionId) {

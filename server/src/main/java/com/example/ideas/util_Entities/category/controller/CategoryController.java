@@ -36,5 +36,4 @@ public class CategoryController {
         return category != null ? ResponseEntity.ok(category) : ResponseEntity.notFound().build();
     }
 
-
 }

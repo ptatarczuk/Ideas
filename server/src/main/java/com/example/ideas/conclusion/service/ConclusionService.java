@@ -1,11 +1,15 @@
 package com.example.ideas.conclusion.service;
 
+import com.example.ideas.admission.controller.AdmissionResponseDTO;
+import com.example.ideas.admission.model.Admission;
 import com.example.ideas.conclusion.controller.ConclusionCreateDTO;
+import com.example.ideas.conclusion.controller.ConclusionResponseDTO;
 import com.example.ideas.conclusion.controller.ConclusionUpdateDTO;
 import com.example.ideas.conclusion.model.Conclusion;
 import com.example.ideas.conclusion.repository.ConclusionRepository;
 import com.example.ideas.exception.DataAlreadyExistsException;
 import com.example.ideas.exception.EntityNotFoundException;
+import com.example.ideas.helpers.ObjectProvider;
 import com.example.ideas.thread.model.Thread;
 import com.example.ideas.thread.repository.ThreadRepository;
 import com.example.ideas.user.model.User;
@@ -34,12 +38,15 @@ public class ConclusionService {
     private final ThreadRepository threadRepository;
     private final StageRepository stageRepository;
     private final StatusRepository statusRepository;
+    private final ConclusionDTOMapper conclusionDTOMapper;
 
-    public Optional<Conclusion> getConclusionById(Long conclusionId) {
-        return conclusionRepository.findById(conclusionId);
+
+    public ConclusionResponseDTO getConclusionById(Long conclusionId) throws EntityNotFoundException {
+        Conclusion conclusion = ObjectProvider.getObjectFromDB(conclusionId, conclusionRepository);
+        return conclusionDTOMapper.apply(conclusion);
     }
 
-    public Conclusion addConclusion(ConclusionCreateDTO conclusionDTO) throws EntityNotFoundException, DataAlreadyExistsException {
+    public ConclusionResponseDTO addConclusion(ConclusionCreateDTO conclusionDTO) throws EntityNotFoundException, DataAlreadyExistsException {
 
         Thread thread = getObjectFromDB(conclusionDTO.getThreadId(), threadRepository);
         if(thread.getConclusion() != null) {
@@ -55,18 +62,18 @@ public class ConclusionService {
                 .build();
 
         Stage stage = getObjectFromDB(conclusionDTO.getStageId(), stageRepository);
-        Status status = getObjectFromDB(conclusionDTO.getStageId() == 5 ? 2L : 1L, statusRepository);
+        Status status = getObjectFromDB(2L, statusRepository);
 
         thread.setStage(stage);
         thread.setStatus(status);
         threadRepository.save(thread);
 
-        return conclusionRepository.save(conclusion);
+        return conclusionDTOMapper.apply(conclusionRepository.save(conclusion));
     }
 
 
     @Transactional
-    public Conclusion updateConclusionById(Long conclusionId, ConclusionUpdateDTO conclusionDTO)
+    public ConclusionResponseDTO updateConclusionById(Long conclusionId, ConclusionUpdateDTO conclusionDTO)
             throws EntityNotFoundException {
 
         Conclusion conclusion = getObjectFromDB(conclusionId, conclusionRepository);
@@ -89,7 +96,7 @@ public class ConclusionService {
             );
             thread.setStatus(status);
         }
-        return conclusion;
+        return conclusionDTOMapper.apply(conclusion);
     }
 
     public ResponseEntity<String> deleteConclusionById(Long conclusionId) {
