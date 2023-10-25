@@ -3,10 +3,9 @@ import {Thread} from "./Thread"
 
 
 export interface Conclusion {
-    conclusionId: number
-    content: string
-    points: number
+    conclusionId: number;
+    content: string;
     dateOfPost: string;
-    user: User
-    thread: Thread
+    userId: number; 
+    threadId: number; 
 }
