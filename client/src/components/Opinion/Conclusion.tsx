@@ -32,11 +32,11 @@ export const Conclusion: React.FC<ConclusionProps> = ({ thread, decodedToken }) 
     const [userData, setUserData] = useState<{ name: string; departmentName: string } | null>(null);
 
     useEffect(() => {
-        const userId = thread.conclusion.userId;
+        const userId = thread.conclusion?.userId;
         if (userId) {
             const data = fetchUserData(userId, setUserData);
         }
-    }, [thread.conclusion.userId]);
+    }, [thread.conclusion]);
 
     const handleAddConclusion = async (stage: string) => {
         try {

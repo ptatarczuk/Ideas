@@ -6,6 +6,6 @@ export interface Admission {
     admissionId: number
     content: string
     dateOfPost: Date
-    user: User
-    thread: Thread
+    userId: number
+    threadId: number
 }
