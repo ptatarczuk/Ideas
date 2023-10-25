@@ -202,6 +202,7 @@ export const Registration: React.FC = () => {
   }
 
   function handleRegistrationInput(event: ChangeEvent<HTMLInputElement>) {
+    console.log(event.target.value);
     const { name, value } = event.target;
     setRegFormData({ ...regFormData, [name]: value });
   }
@@ -266,26 +267,25 @@ export const Registration: React.FC = () => {
       return;
     }
     try {
-      const responseData = await register("/api/v1/auth/register", regFormData);
+      const responseData = await register("/api/v1/auth/register", {
+        name: regFormData.name,
+        email: regFormData.email,
+        password: regFormData.password,
+        roleId: regFormData.role.roleId,
+        departmentId: regFormData.department.departmentId,
+      });
       console.log("Response: ", responseData);
       const token = responseData.accessToken;
       const refreshToken = responseData.refreshToken;
       console.log(token);
       if (token) {
-        //localStorage.setItem("token", JSON.stringify(token));
         localStorage.setItem("token", token);
         localStorage.setItem("refresh_token", refreshToken);
-
         setUser(token);
       }
       const decoded = jwt_decode(token);
       console.log(decoded);
-
-      if (file) {
-        const uploadData = await sendFile("/uploadFile", file);
-        console.log(uploadData);
-      }
-
+  
       setRegFormData({
         name: "",
         email: "",
@@ -294,15 +294,14 @@ export const Registration: React.FC = () => {
         role: { roleId: 0, roleName: "" },
         department: { departmentId: 0, departmentName: "" },
       });
-
-      setFile(null);
-
+  
       navigate("/");
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Błąd:", error);
       setError("Registration failed. Please try again.");
     }
   }
+  
 
   return (
     <main className="register-form">
