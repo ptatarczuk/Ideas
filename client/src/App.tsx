@@ -12,70 +12,108 @@ import { ForgotPassword } from "./components/Password/ForgotPassword";
 import { ResetPassword } from "./components/Password/ResetPassword";
 import { ChangePassword } from "./components/Password/ChangePassword";
 import AddThread from "./components/AddThread/AddThread";
+import { ProtectedRoute } from "./components/ProtectRoute";
 
 function App() {
   return (
-    // TODO : Dorobic Protected route !
-    //TODO: ograniczyć dostęp do LOGIN dla ju zalogowanych uytkowników
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Threads />} />
-          <Route path="users" element={<UsersList />} />
-          {/* <Route
-            path="/login"
-            element={
-              <UnauthorizedRoute>
-                <Login />
-              </UnauthorizedRoute>
-            }
-          ></Route>
-          <Route
-            path="/registration"
-            element={
-              <UnauthorizedRoute>
-                <Registration />
-              </UnauthorizedRoute>
-            }
-          ></Route> */}
-          <Route path="threads" element={<Threads />} />
-          <Route path="add" element={<AddThread />} />
-          <Route path="thread/:id" element={<ThreadPage />} />
-          <Route path="*" element={<NotFound />} />
-          {/* <Route path="reset-password" element={<ForgotPassword />} /> */}
-          {/* <Route path="reset-password/:token" element={<ResetPassword />} /> */}
-          <Route path="change-password" element={<ChangePassword />} />
-        </Route>
+      <BrowserRouter>
+          <Routes>
+              <Route path="/" element={<Layout />}>
+                  <Route
+                      index
+                      element={
+                          <ProtectedRoute>
+                              <Threads />
+                          </ProtectedRoute>
+                      }
+                  />
+                  <Route
+                      path="users"
+                      element={
+                          <ProtectedRoute>
+                              <UsersList />
+                          </ProtectedRoute>
+                      }
+                  />
+                  <Route
+                      path="threads"
+                      element={
+                          <ProtectedRoute>
+                              <Threads />
+                          </ProtectedRoute>
+                      }
+                  />
+                  <Route
+                      path="add"
+                      element={
+                          <ProtectedRoute>
+                              <AddThread />
+                          </ProtectedRoute>
+                      }
+                  />
+                  <Route
+                      path="thread/:id"
+                      element={
+                          <ProtectedRoute>
+                              <ThreadPage />
+                          </ProtectedRoute>
+                      }
+                  />
+                  <Route
+                      path="*"
+                      element={
+                          <UnauthorizedRoute>
+                              <NotFound />
+                          </UnauthorizedRoute>
+                      }
+                  />
 
-        <Route path="reset-password/:token" element={<UnauthorizedRoute><ResetPassword /></UnauthorizedRoute>} />
+                  <Route
+                      path="change-password"
+                      element={
+                          <UnauthorizedRoute>
+                              <ChangePassword />
+                          </UnauthorizedRoute>
+                      }
+                  />
+              </Route>
 
-        <Route
-          path="/login"
-          element={
-            <UnauthorizedRoute>
-              <Login />
-            </UnauthorizedRoute>
-          }
-        ></Route>
-        <Route
-          path="/register"
-          element={
-            <UnauthorizedRoute>
-              <Registration />
-            </UnauthorizedRoute>
-          }
-        ></Route>
+              <Route
+                  path="reset-password/:token"
+                  element={
+                      <UnauthorizedRoute>
+                          <ResetPassword />
+                      </UnauthorizedRoute>
+                  }
+              />
 
-        <Route
-          path="/reset-password"
-          element={
-            <UnauthorizedRoute>
-              <ForgotPassword />
-            </UnauthorizedRoute>
-          }
-        ></Route>
-      </Routes>
-    </BrowserRouter>
+              <Route
+                  path="/login"
+                  element={
+                      <UnauthorizedRoute>
+                          <Login />
+                      </UnauthorizedRoute>
+                  }
+              ></Route>
+              <Route
+                  path="/register"
+                  element={
+                      <UnauthorizedRoute>
+                          <Registration />
+                      </UnauthorizedRoute>
+                  }
+              ></Route>
+
+              <Route
+                  path="/reset-password"
+                  element={
+                      <UnauthorizedRoute>
+                          <ForgotPassword />
+                      </UnauthorizedRoute>
+                  }
+              ></Route>
+          </Routes>
+      </BrowserRouter>
   );
 }
 
