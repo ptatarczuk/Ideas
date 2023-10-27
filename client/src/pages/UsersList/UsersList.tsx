@@ -23,13 +23,11 @@ import { Card } from "@mui/material";
 const UsersList: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [roles, setRoles] = useState<Role[] | null>();
-  const [selectedRole, setSelectedRole] = useState<number | undefined>();
+  const [selectedRole, setSelectedRole] = useState<string | undefined>();
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
 
   const handleRoleChange = (event: SelectChangeEvent) => {
-    setSelectedRole(
-      event.target.value ? parseInt(event.target.value) : undefined
-    );
+    setSelectedRole(event.target.value as string);
   };
 
   useEffect(() => {
@@ -65,9 +63,7 @@ const UsersList: React.FC = () => {
     if (!selectedRole) {
       setFilteredUsers(users);
     } else {
-      const filtered = users.filter(
-        (user) => user.role.roleId === selectedRole
-      );
+      const filtered = users.filter((user) => user.roles.includes(selectedRole)); // Check if the selected role is in the 'roles' array
       setFilteredUsers(filtered);
       console.log(selectedRole);
     }
@@ -81,7 +77,7 @@ const UsersList: React.FC = () => {
           <Select
             labelId="role-select-label"
             id="role-select"
-            value={selectedRole?.toString() || ""}
+            value={selectedRole || ""}
             label="Select Role"
             onChange={handleRoleChange}
           >
@@ -119,7 +115,7 @@ const UsersList: React.FC = () => {
                   {user.name}
                 </TableCell>
                 <TableCell align="right">{user.email}</TableCell>
-                <TableCell align="right">{user.role.roleName}</TableCell>
+                <TableCell align="right">{user.roles.join(", ")}</TableCell>
                 <TableCell align="right">
                   {user.department.departmentName}
                 </TableCell>

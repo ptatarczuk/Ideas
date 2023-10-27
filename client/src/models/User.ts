@@ -7,7 +7,7 @@ export interface User {
     name: string
     email: string
     password: string
-    role: Role
-    //ma być roles: string[]
+    //role: Role
+    roles: string[]
     department: Department
 }
